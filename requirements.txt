@@ -1,0 +1,5 @@
+streamlit
+selenium
+webdriver-manager
+pandas
+google-generativeai

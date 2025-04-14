@@ -1,0 +1,787 @@
+2025-04-14 13:46:38,590 - WARNING - Potential issue: Google API Key might be a placeholder or the example key. Ensure a valid key is configured.
+2025-04-14 13:46:38,592 - INFO - Gemini API configured successfully.
+2025-04-14 13:46:59,738 - WARNING - Potential issue: Google API Key might be a placeholder or the example key. Ensure a valid key is configured.
+2025-04-14 13:46:59,743 - INFO - Gemini API configured successfully.
+2025-04-14 13:47:00,123 - WARNING - Potential issue: Google API Key might be a placeholder or the example key. Ensure a valid key is configured.
+2025-04-14 13:47:00,123 - INFO - Gemini API configured successfully.
+2025-04-14 13:47:00,136 - INFO - User initiated extraction for 1 valid URLs. Max workers: 5
+2025-04-14 13:47:00,143 - INFO - Processing URL: https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm
+2025-04-14 13:47:00,144 - INFO - Processing URL: https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm
+2025-04-14 13:47:41,966 - INFO - Finished scraping https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm in 41.82 seconds. Error: None
+2025-04-14 13:47:41,968 - INFO - Scraping completed for https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm, combined HTML length: 8999. Proceeding to AI extraction.
+2025-04-14 13:47:41,969 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm
+2025-04-14 13:47:45,059 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm in 3.09 seconds.
+2025-04-14 13:47:45,062 - INFO - Received AI response for https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm.
+2025-04-14 13:47:45,063 - INFO - Successfully extracted data for https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm.
+2025-04-14 13:47:45,064 - INFO - Finished processing https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm in 44.92 seconds.
+2025-04-14 13:47:47,297 - INFO - Total batch processing finished in 47.16 seconds for 1 initial URLs.
+2025-04-14 13:50:42,185 - WARNING - Potential issue: Google API Key might be a placeholder or the example key. Ensure a valid key is configured via Streamlit secrets.
+2025-04-14 13:50:42,186 - INFO - Gemini API configured successfully.
+2025-04-14 13:50:49,103 - WARNING - Potential issue: Google API Key might be a placeholder or the example key. Ensure a valid key is configured via Streamlit secrets.
+2025-04-14 13:50:49,108 - INFO - Gemini API configured successfully.
+2025-04-14 13:50:49,213 - WARNING - Potential issue: Google API Key might be a placeholder or the example key. Ensure a valid key is configured via Streamlit secrets.
+2025-04-14 13:50:49,214 - INFO - Gemini API configured successfully.
+2025-04-14 13:50:49,218 - INFO - User initiated extraction for 1 valid URLs. Max workers: 5
+2025-04-14 13:50:49,225 - INFO - Processing URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 13:50:49,226 - INFO - Processing URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 13:50:49,228 - INFO - ====== WebDriver manager ======
+2025-04-14 13:50:52,293 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:50:52,577 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:50:52,666 - INFO - There is no [win64] chromedriver "135.0.7049.84" for browser google-chrome "135.0.7049" in cache
+2025-04-14 13:50:52,669 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:50:52,910 - INFO - WebDriver version 135.0.7049.84 selected
+2025-04-14 13:50:52,917 - INFO - Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.84/win32/chromedriver-win32.zip
+2025-04-14 13:50:52,918 - INFO - About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.84/win32/chromedriver-win32.zip
+2025-04-14 13:50:53,007 - INFO - Driver downloading response is 200
+2025-04-14 13:50:54,081 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:50:54,398 - INFO - Driver has been saved in cache [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84]
+2025-04-14 13:51:29,923 - INFO - Finished scraping https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm in 40.70 seconds. Error: None
+2025-04-14 13:51:29,924 - INFO - Scraping completed for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm, combined HTML length: 9315. Proceeding to AI extraction.
+2025-04-14 13:51:29,925 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 13:51:33,473 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm in 3.55 seconds.
+2025-04-14 13:51:33,474 - INFO - Received AI response for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm.
+2025-04-14 13:51:33,474 - INFO - Successfully extracted data for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm.
+2025-04-14 13:51:33,475 - INFO - Finished processing https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm in 44.25 seconds.
+2025-04-14 13:51:35,599 - INFO - Total batch processing finished in 46.38 seconds for 1 initial URLs.
+2025-04-14 13:51:54,918 - WARNING - Potential issue: Google API Key might be a placeholder or the example key. Ensure a valid key is configured via Streamlit secrets.
+2025-04-14 13:51:54,922 - INFO - Gemini API configured successfully.
+2025-04-14 13:51:54,928 - INFO - User initiated extraction for 1 valid URLs. Max workers: 5
+2025-04-14 13:51:54,934 - INFO - Processing URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 13:51:54,935 - INFO - Processing URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 13:51:54,937 - INFO - ====== WebDriver manager ======
+2025-04-14 13:51:58,848 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:51:58,950 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:51:59,057 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 13:52:28,430 - INFO - Finished scraping https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm in 33.49 seconds. Error: None
+2025-04-14 13:52:28,431 - INFO - Scraping completed for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm, combined HTML length: 9315. Proceeding to AI extraction.
+2025-04-14 13:52:28,431 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 13:52:31,978 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm in 3.55 seconds.
+2025-04-14 13:52:31,978 - INFO - Received AI response for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm.
+2025-04-14 13:52:31,978 - INFO - Successfully extracted data for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm.
+2025-04-14 13:52:31,978 - INFO - Finished processing https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm in 37.05 seconds.
+2025-04-14 13:52:34,005 - INFO - Total batch processing finished in 39.08 seconds for 1 initial URLs.
+2025-04-14 13:55:22,929 - WARNING - Potential issue: Google API Key might be a placeholder or the example key. Ensure a valid key is configured via Streamlit secrets.
+2025-04-14 13:55:22,938 - INFO - Gemini API configured successfully.
+2025-04-14 13:55:34,962 - WARNING - Potential issue: Google API Key might be a placeholder or the example key. Ensure a valid key is configured via Streamlit secrets.
+2025-04-14 13:55:34,965 - INFO - Gemini API configured successfully.
+2025-04-14 13:55:34,979 - INFO - User initiated extraction for 12 valid URLs. Max workers: 5
+2025-04-14 13:55:34,990 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm
+2025-04-14 13:55:34,992 - INFO - Processing URL: https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm
+2025-04-14 13:55:34,993 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm
+2025-04-14 13:55:34,995 - INFO - Processing URL: https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm
+2025-04-14 13:55:34,995 - INFO - Processing URL: https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm
+2025-04-14 13:55:34,996 - INFO - Processing URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 13:55:35,000 - INFO - Processing URL: https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm
+2025-04-14 13:55:35,003 - INFO - Processing URL: https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm
+2025-04-14 13:55:35,004 - INFO - ====== WebDriver manager ======
+2025-04-14 13:55:35,007 - INFO - Processing URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 13:55:35,009 - INFO - ====== WebDriver manager ======
+2025-04-14 13:55:35,010 - INFO - Processing URL: https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm
+2025-04-14 13:55:35,018 - INFO - ====== WebDriver manager ======
+2025-04-14 13:55:35,034 - INFO - ====== WebDriver manager ======
+2025-04-14 13:55:35,039 - INFO - ====== WebDriver manager ======
+2025-04-14 13:55:41,437 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:55:41,447 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:55:41,476 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:55:41,537 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:55:41,581 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:55:41,594 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:55:41,643 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:55:41,682 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:55:41,695 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 13:55:41,703 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 13:55:41,713 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 13:55:41,775 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 13:55:41,952 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:55:42,045 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:55:42,142 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 13:55:57,251 - ERROR - Timeout error during scraping for https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 10s or other waits). Details: timeout: Timed out receiving message from renderer: 8.983
+  (Session info: chrome=135.0.7049.85)
+Raw Error: Message: timeout: Timed out receiving message from renderer: 8.983
+  (Session info: chrome=135.0.7049.85)
+Stacktrace:
+['\tGetHandleVerifier [0x006080E3+60707]', '\tGetHandleVerifier [0x00608124+60772]', '\t(No symbol) [0x00430683]', '\t(No symbol) [0x0042121B]', '\t(No symbol) [0x00420F51]', '\t(No symbol) [0x0041EF30]', '\t(No symbol) [0x0041F9ED]', '\t(No symbol) [0x0042BF79]', '\t(No symbol) [0x0043D6E5]', '\t(No symbol) [0x00442F86]', '\t(No symbol) [0x0041FFFD]', '\t(No symbol) [0x0043D43C]', '\t(No symbol) [0x004BEB40]', '\t(No symbol) [0x0049CE46]', '\t(No symbol) [0x0046C5D3]', '\t(No symbol) [0x0046D424]', '\tGetHandleVerifier [0x0084BBC3+2435075]', '\tGetHandleVerifier [0x00847163+2416035]', '\tGetHandleVerifier [0x0086350C+2531660]', '\tGetHandleVerifier [0x0061F1B5+155125]', '\tGetHandleVerifier [0x00625B5D+182173]', '\tGetHandleVerifier [0x0060F9B8+91640]', '\tGetHandleVerifier [0x0060FB60+92064]', '\tGetHandleVerifier [0x005FA620+4704]', '\tBaseThreadInitThunk [0x76807BA9+25]', '\tRtlInitializeExceptionChain [0x777BC0CB+107]', '\tRtlClearBits [0x777BC04F+191]', '']
+2025-04-14 13:56:24,266 - INFO - Finished scraping https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm in 49.25 seconds. Error: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 10s or other waits). Details: timeout: Timed out receiving message from renderer: 8.983
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 13:56:24,267 - ERROR - Scraping failed for https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 10s or other waits). Details: timeout: Timed out receiving message from renderer: 8.983
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 13:56:24,270 - INFO - Finished processing https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm in 49.28 seconds.
+2025-04-14 13:56:24,272 - INFO - Processing URL: https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm
+2025-04-14 13:56:24,273 - INFO - Processing URL: https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm
+2025-04-14 13:56:24,277 - INFO - ====== WebDriver manager ======
+2025-04-14 13:56:38,723 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:56:38,835 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:56:38,962 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 13:56:51,941 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /session/608bb6afd755f46d76a67da6d6a41e3f
+2025-04-14 13:56:51,976 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /session/ff449571184ae3a24fcf3fcb35791392
+2025-04-14 13:56:51,977 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /session/25163a9d3d3ff6f911e0f478d97be0bf
+2025-04-14 13:56:56,266 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E4786D4DD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/ff449571184ae3a24fcf3fcb35791392
+2025-04-14 13:56:56,423 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E4786D6AD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/608bb6afd755f46d76a67da6d6a41e3f
+2025-04-14 13:56:56,668 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E4786D52D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/25163a9d3d3ff6f911e0f478d97be0bf
+2025-04-14 13:56:56,928 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E4786D4490>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/7b59d54fa90940e49c535565bdaf7ae8/elements
+2025-04-14 13:56:57,443 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E4786D7010>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/fcf766402b0527be13062f83712f4f04/elements
+2025-04-14 13:58:34,779 - WARNING - Potential issue: Google API Key might be a placeholder or the example key. Ensure a valid key is configured via Streamlit secrets.
+2025-04-14 13:58:34,779 - INFO - Gemini API configured successfully.
+2025-04-14 13:59:39,014 - INFO - Gemini API configured successfully.
+2025-04-14 13:59:39,024 - INFO - User initiated extraction for 1 valid URLs. Max workers: 10
+2025-04-14 13:59:39,034 - INFO - Processing URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 13:59:39,035 - INFO - Processing URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 13:59:39,035 - INFO - ====== WebDriver manager ======
+2025-04-14 13:59:43,816 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:59:43,945 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 13:59:44,039 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:00:16,213 - INFO - Finished scraping https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm in 37.18 seconds. Error: None
+2025-04-14 14:00:16,213 - INFO - Scraping completed for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm, combined HTML length: 9472. Proceeding to AI extraction.
+2025-04-14 14:00:16,213 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 14:00:18,733 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm in 2.52 seconds.
+2025-04-14 14:00:18,733 - INFO - Received AI response for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm.
+2025-04-14 14:00:18,733 - INFO - Successfully extracted data for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm.
+2025-04-14 14:00:18,738 - INFO - Finished processing https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm in 39.70 seconds.
+2025-04-14 14:00:20,798 - INFO - Total batch processing finished in 41.77 seconds for 1 initial URLs.
+2025-04-14 14:03:45,227 - INFO - Gemini API configured successfully.
+2025-04-14 14:03:45,238 - INFO - User initiated extraction for 1 valid URLs. Max workers: 10
+2025-04-14 14:03:45,246 - INFO - Processing URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 14:03:45,248 - INFO - Processing URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 14:03:45,255 - INFO - ====== WebDriver manager ======
+2025-04-14 14:03:49,378 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:03:49,488 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:03:56,516 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:04:15,648 - INFO - Finished scraping https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm in 30.39 seconds. Error: None
+2025-04-14 14:04:15,648 - INFO - Scraping completed for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm, combined HTML length: 9472. Proceeding to AI extraction.
+2025-04-14 14:04:15,651 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 14:04:18,061 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm in 2.41 seconds.
+2025-04-14 14:04:18,062 - INFO - Received AI response for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm.
+2025-04-14 14:04:18,063 - INFO - Successfully extracted data for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm.
+2025-04-14 14:04:18,064 - INFO - Finished processing https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm in 32.82 seconds.
+2025-04-14 14:04:20,082 - INFO - Total batch processing finished in 34.84 seconds for 1 initial URLs.
+2025-04-14 14:05:07,534 - INFO - Gemini API configured successfully.
+2025-04-14 14:05:07,540 - INFO - User initiated extraction for 1 valid URLs. Max workers: 10
+2025-04-14 14:05:07,546 - INFO - Processing URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 14:05:07,547 - INFO - Processing URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 14:05:07,549 - INFO - ====== WebDriver manager ======
+2025-04-14 14:05:10,838 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:05:10,955 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:05:11,042 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:05:39,881 - INFO - Finished scraping https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm in 32.33 seconds. Error: None
+2025-04-14 14:05:39,881 - INFO - Scraping completed for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm, combined HTML length: 9472. Proceeding to AI extraction.
+2025-04-14 14:05:39,881 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 14:05:42,349 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm in 2.47 seconds.
+2025-04-14 14:05:42,357 - INFO - Received AI response for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm.
+2025-04-14 14:05:42,357 - INFO - Successfully extracted data for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm.
+2025-04-14 14:05:42,357 - INFO - Finished processing https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm in 34.81 seconds.
+2025-04-14 14:05:44,385 - INFO - Total batch processing finished in 36.84 seconds for 1 initial URLs.
+2025-04-14 14:07:17,767 - INFO - Gemini API configured successfully.
+2025-04-14 14:07:17,767 - INFO - Gemini API configured successfully.
+2025-04-14 14:07:25,248 - INFO - Gemini API configured successfully.
+2025-04-14 14:07:25,372 - INFO - Gemini API configured successfully.
+2025-04-14 14:07:25,381 - INFO - User initiated extraction for 15 valid URLs. Max workers: 10
+2025-04-14 14:07:25,386 - INFO - Processing URL: https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm
+2025-04-14 14:07:25,388 - INFO - Processing URL: https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm
+2025-04-14 14:07:25,389 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm
+2025-04-14 14:07:25,389 - INFO - Processing URL: https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm
+2025-04-14 14:07:25,391 - INFO - Processing URL: https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm
+2025-04-14 14:07:25,391 - INFO - Processing URL: https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm
+2025-04-14 14:07:25,393 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm
+2025-04-14 14:07:25,393 - INFO - Processing URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 14:07:25,396 - INFO - Processing URL: https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm
+2025-04-14 14:07:25,397 - INFO - ====== WebDriver manager ======
+2025-04-14 14:07:25,397 - INFO - Processing URL: https://www.mudah.my/berminat-bole-pm-110786584.htm
+2025-04-14 14:07:25,400 - INFO - Processing URL: https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm
+2025-04-14 14:07:25,400 - INFO - ====== WebDriver manager ======
+2025-04-14 14:07:25,401 - INFO - Processing URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 14:07:25,402 - INFO - Processing URL: https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm
+2025-04-14 14:07:25,403 - INFO - ====== WebDriver manager ======
+2025-04-14 14:07:25,404 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm
+2025-04-14 14:07:25,406 - INFO - ====== WebDriver manager ======
+2025-04-14 14:07:25,406 - INFO - Processing URL: https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm
+2025-04-14 14:07:25,408 - INFO - Processing URL: https://www.mudah.my/berminat-bole-pm-110786584.htm
+2025-04-14 14:07:25,409 - INFO - Processing URL: https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm
+2025-04-14 14:07:25,414 - INFO - ====== WebDriver manager ======
+2025-04-14 14:07:25,416 - INFO - Processing URL: https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm
+2025-04-14 14:07:25,417 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm
+2025-04-14 14:07:25,418 - INFO - Processing URL: https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm
+2025-04-14 14:07:25,423 - INFO - ====== WebDriver manager ======
+2025-04-14 14:07:25,424 - INFO - ====== WebDriver manager ======
+2025-04-14 14:07:25,433 - INFO - ====== WebDriver manager ======
+2025-04-14 14:07:25,435 - INFO - ====== WebDriver manager ======
+2025-04-14 14:07:25,437 - INFO - ====== WebDriver manager ======
+2025-04-14 14:07:36,472 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,484 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,545 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,563 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,651 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,660 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,665 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,670 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,684 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,687 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,701 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,721 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,737 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,754 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,804 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:07:36,807 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:07:36,810 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:07:36,810 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:07:36,816 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,830 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,842 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,851 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,860 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:07:36,892 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:36,915 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:07:36,938 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:07:36,938 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:07:36,987 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:07:37,167 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:07:40,908 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:07:54,132 - ERROR - Timeout error during scraping for https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: 6.207
+  (Session info: chrome=135.0.7049.85)
+Raw Error: Message: timeout: Timed out receiving message from renderer: 6.207
+  (Session info: chrome=135.0.7049.85)
+Stacktrace:
+['\tGetHandleVerifier [0x006080E3+60707]', '\tGetHandleVerifier [0x00608124+60772]', '\t(No symbol) [0x00430683]', '\t(No symbol) [0x0042121B]', '\t(No symbol) [0x00420F51]', '\t(No symbol) [0x0041EF30]', '\t(No symbol) [0x0041F9ED]', '\t(No symbol) [0x0042BF79]', '\t(No symbol) [0x0043D6E5]', '\t(No symbol) [0x00442F86]', '\t(No symbol) [0x0041FFFD]', '\t(No symbol) [0x0043D43C]', '\t(No symbol) [0x004BEB40]', '\t(No symbol) [0x0049CE46]', '\t(No symbol) [0x0046C5D3]', '\t(No symbol) [0x0046D424]', '\tGetHandleVerifier [0x0084BBC3+2435075]', '\tGetHandleVerifier [0x00847163+2416035]', '\tGetHandleVerifier [0x0086350C+2531660]', '\tGetHandleVerifier [0x0061F1B5+155125]', '\tGetHandleVerifier [0x00625B5D+182173]', '\tGetHandleVerifier [0x0060F9B8+91640]', '\tGetHandleVerifier [0x0060FB60+92064]', '\tGetHandleVerifier [0x005FA620+4704]', '\tBaseThreadInitThunk [0x76807BA9+25]', '\tRtlInitializeExceptionChain [0x777BC0CB+107]', '\tRtlClearBits [0x777BC04F+191]', '']
+2025-04-14 14:07:54,429 - ERROR - Timeout error during scraping for https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: 6.609
+  (Session info: chrome=135.0.7049.85)
+Raw Error: Message: timeout: Timed out receiving message from renderer: 6.609
+  (Session info: chrome=135.0.7049.85)
+Stacktrace:
+['\tGetHandleVerifier [0x006080E3+60707]', '\tGetHandleVerifier [0x00608124+60772]', '\t(No symbol) [0x00430683]', '\t(No symbol) [0x0042121B]', '\t(No symbol) [0x00420F51]', '\t(No symbol) [0x0041EF30]', '\t(No symbol) [0x0041F9ED]', '\t(No symbol) [0x0042BF79]', '\t(No symbol) [0x0043D6E5]', '\t(No symbol) [0x00442F86]', '\t(No symbol) [0x0041FFFD]', '\t(No symbol) [0x0043D43C]', '\t(No symbol) [0x004BEB40]', '\t(No symbol) [0x0049CE46]', '\t(No symbol) [0x0046C5D3]', '\t(No symbol) [0x0046D424]', '\tGetHandleVerifier [0x0084BBC3+2435075]', '\tGetHandleVerifier [0x00847163+2416035]', '\tGetHandleVerifier [0x0086350C+2531660]', '\tGetHandleVerifier [0x0061F1B5+155125]', '\tGetHandleVerifier [0x00625B5D+182173]', '\tGetHandleVerifier [0x0060F9B8+91640]', '\tGetHandleVerifier [0x0060FB60+92064]', '\tGetHandleVerifier [0x005FA620+4704]', '\tBaseThreadInitThunk [0x76807BA9+25]', '\tRtlInitializeExceptionChain [0x777BC0CB+107]', '\tRtlClearBits [0x777BC04F+191]', '']
+2025-04-14 14:08:36,941 - ERROR - Timeout error during scraping for https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: -0.008
+  (Session info: chrome=135.0.7049.85)
+Raw Error: Message: timeout: Timed out receiving message from renderer: -0.008
+  (Session info: chrome=135.0.7049.85)
+Stacktrace:
+['\tGetHandleVerifier [0x006080E3+60707]', '\tGetHandleVerifier [0x00608124+60772]', '\t(No symbol) [0x00430683]', '\t(No symbol) [0x0042121B]', '\t(No symbol) [0x00420F51]', '\t(No symbol) [0x0041EF30]', '\t(No symbol) [0x0041F9ED]', '\t(No symbol) [0x0042BF79]', '\t(No symbol) [0x0043D6E5]', '\t(No symbol) [0x00442F86]', '\t(No symbol) [0x0041FFFD]', '\t(No symbol) [0x0043D43C]', '\t(No symbol) [0x004BE733]', '\t(No symbol) [0x0049CE46]', '\t(No symbol) [0x0046C5D3]', '\t(No symbol) [0x0046D424]', '\tGetHandleVerifier [0x0084BBC3+2435075]', '\tGetHandleVerifier [0x00847163+2416035]', '\tGetHandleVerifier [0x0086350C+2531660]', '\tGetHandleVerifier [0x0061F1B5+155125]', '\tGetHandleVerifier [0x00625B5D+182173]', '\tGetHandleVerifier [0x0060F9B8+91640]', '\tGetHandleVerifier [0x0060FB60+92064]', '\tGetHandleVerifier [0x005FA620+4704]', '\tBaseThreadInitThunk [0x76807BA9+25]', '\tRtlInitializeExceptionChain [0x777BC0CB+107]', '\tRtlClearBits [0x777BC04F+191]', '']
+2025-04-14 14:08:52,971 - INFO - Finished scraping https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm in 87.54 seconds. Error: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: 6.207
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:08:52,971 - ERROR - Scraping failed for https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: 6.207
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:08:52,977 - INFO - Finished processing https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm in 87.57 seconds.
+2025-04-14 14:08:52,983 - INFO - Processing URL: https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm
+2025-04-14 14:08:52,987 - INFO - Processing URL: https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm
+2025-04-14 14:08:52,993 - INFO - ====== WebDriver manager ======
+2025-04-14 14:08:53,124 - INFO - Finished scraping https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm in 87.70 seconds. Error: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: -0.008
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:08:53,127 - ERROR - Scraping failed for https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: -0.008
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:08:53,128 - INFO - Finished processing https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm in 87.73 seconds.
+2025-04-14 14:08:53,129 - INFO - Processing URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 14:08:53,131 - INFO - Processing URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 14:08:53,135 - INFO - ====== WebDriver manager ======
+2025-04-14 14:08:59,517 - INFO - Finished scraping https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm in 94.12 seconds. Error: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: 6.609
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:08:59,520 - ERROR - Scraping failed for https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: 6.609
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:08:59,520 - INFO - Finished processing https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm in 94.13 seconds.
+2025-04-14 14:08:59,520 - INFO - Processing URL: https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm
+2025-04-14 14:08:59,525 - INFO - Processing URL: https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm
+2025-04-14 14:08:59,528 - INFO - ====== WebDriver manager ======
+2025-04-14 14:09:10,212 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:09:10,312 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:09:10,399 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:09:10,792 - INFO - Finished scraping https://www.mudah.my/berminat-bole-pm-110786584.htm in 105.37 seconds. Error: None
+2025-04-14 14:09:10,793 - INFO - Scraping completed for https://www.mudah.my/berminat-bole-pm-110786584.htm, combined HTML length: 26738. Proceeding to AI extraction.
+2025-04-14 14:09:10,794 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/berminat-bole-pm-110786584.htm
+2025-04-14 14:09:11,767 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:09:11,790 - INFO - Finished scraping https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm in 106.39 seconds. Error: None
+2025-04-14 14:09:11,792 - INFO - Scraping completed for https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm, combined HTML length: 7980. Proceeding to AI extraction.
+2025-04-14 14:09:11,793 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm
+2025-04-14 14:09:11,869 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:09:11,965 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:09:12,392 - INFO - Finished scraping https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm in 106.99 seconds. Error: None
+2025-04-14 14:09:12,392 - INFO - Scraping completed for https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm, combined HTML length: 14540. Proceeding to AI extraction.
+2025-04-14 14:09:12,392 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm
+2025-04-14 14:09:12,486 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/berminat-bole-pm-110786584.htm in 1.69 seconds.
+2025-04-14 14:09:12,488 - INFO - Received AI response for https://www.mudah.my/berminat-bole-pm-110786584.htm.
+2025-04-14 14:09:12,490 - INFO - Successfully extracted data for https://www.mudah.my/berminat-bole-pm-110786584.htm.
+2025-04-14 14:09:12,491 - INFO - Finished processing https://www.mudah.my/berminat-bole-pm-110786584.htm in 107.09 seconds.
+2025-04-14 14:09:12,492 - INFO - Processing URL: https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm
+2025-04-14 14:09:12,493 - INFO - Processing URL: https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm
+2025-04-14 14:09:12,496 - INFO - ====== WebDriver manager ======
+2025-04-14 14:09:13,230 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm in 1.44 seconds.
+2025-04-14 14:09:13,231 - INFO - Received AI response for https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm.
+2025-04-14 14:09:13,232 - INFO - Successfully extracted data for https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm.
+2025-04-14 14:09:13,233 - INFO - Finished processing https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm in 107.85 seconds.
+2025-04-14 14:09:13,234 - INFO - Processing URL: https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm
+2025-04-14 14:09:13,236 - INFO - Processing URL: https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm
+2025-04-14 14:09:13,239 - INFO - ====== WebDriver manager ======
+2025-04-14 14:09:13,923 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:09:14,034 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:09:14,125 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:09:14,193 - INFO - Finished scraping https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm in 108.79 seconds. Error: None
+2025-04-14 14:09:14,194 - INFO - Scraping completed for https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm, combined HTML length: 22799. Proceeding to AI extraction.
+2025-04-14 14:09:14,195 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm
+2025-04-14 14:09:15,699 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm in 3.30 seconds.
+2025-04-14 14:09:15,700 - INFO - Received AI response for https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm.
+2025-04-14 14:09:15,701 - INFO - Successfully extracted data for https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm.
+2025-04-14 14:09:15,703 - INFO - Finished processing https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm in 110.31 seconds.
+2025-04-14 14:09:15,893 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm in 1.70 seconds.
+2025-04-14 14:09:15,896 - INFO - Received AI response for https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm.
+2025-04-14 14:09:15,896 - INFO - Successfully extracted data for https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm.
+2025-04-14 14:09:15,898 - INFO - Finished processing https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm in 110.51 seconds.
+2025-04-14 14:09:17,276 - INFO - Finished scraping https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm in 111.86 seconds. Error: None
+2025-04-14 14:09:17,278 - INFO - Scraping completed for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm, combined HTML length: 9316. Proceeding to AI extraction.
+2025-04-14 14:09:17,280 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 14:09:17,593 - INFO - Finished scraping https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm in 112.16 seconds. Error: None
+2025-04-14 14:09:17,595 - INFO - Scraping completed for https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm, combined HTML length: 14570. Proceeding to AI extraction.
+2025-04-14 14:09:17,596 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm
+2025-04-14 14:09:19,305 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm in 2.01 seconds.
+2025-04-14 14:09:19,306 - INFO - Received AI response for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm.
+2025-04-14 14:09:19,307 - INFO - Successfully extracted data for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm.
+2025-04-14 14:09:19,307 - INFO - Finished processing https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm in 113.91 seconds.
+2025-04-14 14:09:20,186 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm in 2.59 seconds.
+2025-04-14 14:09:20,188 - INFO - Received AI response for https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm.
+2025-04-14 14:09:20,189 - INFO - Successfully extracted data for https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm.
+2025-04-14 14:09:20,190 - INFO - Finished processing https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm in 114.79 seconds.
+2025-04-14 14:09:23,217 - INFO - Finished scraping https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm in 117.79 seconds. Error: None
+2025-04-14 14:09:23,218 - INFO - Scraping completed for https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm, combined HTML length: 28003. Proceeding to AI extraction.
+2025-04-14 14:09:23,220 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm
+2025-04-14 14:09:25,459 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm in 2.24 seconds.
+2025-04-14 14:09:25,468 - INFO - Received AI response for https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm.
+2025-04-14 14:09:25,469 - INFO - Successfully extracted data for https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm.
+2025-04-14 14:09:25,470 - INFO - Finished processing https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm in 120.07 seconds.
+2025-04-14 14:09:27,151 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:09:27,272 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:09:27,394 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:09:28,301 - ERROR - Timeout error during scraping for https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: 8.000
+  (Session info: chrome=135.0.7049.85)
+Raw Error: Message: timeout: Timed out receiving message from renderer: 8.000
+  (Session info: chrome=135.0.7049.85)
+Stacktrace:
+['\tGetHandleVerifier [0x006080E3+60707]', '\tGetHandleVerifier [0x00608124+60772]', '\t(No symbol) [0x00430683]', '\t(No symbol) [0x0042121B]', '\t(No symbol) [0x00420F51]', '\t(No symbol) [0x0041EF30]', '\t(No symbol) [0x0041F9ED]', '\t(No symbol) [0x0042BF79]', '\t(No symbol) [0x0043D6E5]', '\t(No symbol) [0x00442F86]', '\t(No symbol) [0x0041FFFD]', '\t(No symbol) [0x0043D43C]', '\t(No symbol) [0x004BE733]', '\t(No symbol) [0x0049CE46]', '\t(No symbol) [0x0046C5D3]', '\t(No symbol) [0x0046D424]', '\tGetHandleVerifier [0x0084BBC3+2435075]', '\tGetHandleVerifier [0x00847163+2416035]', '\tGetHandleVerifier [0x0086350C+2531660]', '\tGetHandleVerifier [0x0061F1B5+155125]', '\tGetHandleVerifier [0x00625B5D+182173]', '\tGetHandleVerifier [0x0060F9B8+91640]', '\tGetHandleVerifier [0x0060FB60+92064]', '\tGetHandleVerifier [0x005FA620+4704]', '\tBaseThreadInitThunk [0x76807BA9+25]', '\tRtlInitializeExceptionChain [0x777BC0CB+107]', '\tRtlClearBits [0x777BC04F+191]', '']
+2025-04-14 14:09:41,781 - INFO - Finished scraping https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm in 42.25 seconds. Error: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: 8.000
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:09:41,784 - ERROR - Scraping failed for https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: 8.000
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:09:41,786 - INFO - Finished processing https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm in 42.26 seconds.
+2025-04-14 14:09:46,688 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:09:46,788 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:09:46,905 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:10:11,207 - INFO - Finished scraping https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm in 78.22 seconds. Error: None
+2025-04-14 14:10:11,207 - INFO - Scraping completed for https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm, combined HTML length: 8999. Proceeding to AI extraction.
+2025-04-14 14:10:11,207 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm
+2025-04-14 14:10:12,999 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm in 1.79 seconds.
+2025-04-14 14:10:12,999 - INFO - Received AI response for https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm.
+2025-04-14 14:10:12,999 - INFO - Successfully extracted data for https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm.
+2025-04-14 14:10:13,003 - INFO - Finished processing https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm in 80.02 seconds.
+2025-04-14 14:10:13,475 - INFO - Finished scraping https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm in 80.34 seconds. Error: None
+2025-04-14 14:10:13,477 - INFO - Scraping completed for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm, combined HTML length: 9472. Proceeding to AI extraction.
+2025-04-14 14:10:13,477 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 14:10:15,807 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm in 2.33 seconds.
+2025-04-14 14:10:15,808 - INFO - Received AI response for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm.
+2025-04-14 14:10:15,809 - INFO - Successfully extracted data for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm.
+2025-04-14 14:10:15,810 - INFO - Finished processing https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm in 82.68 seconds.
+2025-04-14 14:10:22,088 - INFO - Finished scraping https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm in 68.85 seconds. Error: None
+2025-04-14 14:10:22,089 - INFO - Scraping completed for https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm, combined HTML length: 8652. Proceeding to AI extraction.
+2025-04-14 14:10:22,090 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm
+2025-04-14 14:10:23,548 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm in 1.46 seconds.
+2025-04-14 14:10:23,550 - INFO - Received AI response for https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm.
+2025-04-14 14:10:23,551 - INFO - Successfully extracted data for https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm.
+2025-04-14 14:10:23,552 - INFO - Finished processing https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm in 70.32 seconds.
+2025-04-14 14:10:29,491 - INFO - Finished scraping https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm in 77.00 seconds. Error: None
+2025-04-14 14:10:29,492 - INFO - Scraping completed for https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm, combined HTML length: 21264. Proceeding to AI extraction.
+2025-04-14 14:10:29,492 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm
+2025-04-14 14:10:31,017 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm in 1.53 seconds.
+2025-04-14 14:10:31,017 - INFO - Received AI response for https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm.
+2025-04-14 14:10:31,017 - INFO - Successfully extracted data for https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm.
+2025-04-14 14:10:31,017 - INFO - Finished processing https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm in 78.53 seconds.
+2025-04-14 14:10:33,139 - WARNING - Failed/Partial URLs (4): ['https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm', 'https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm', 'https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm', 'https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm']
+2025-04-14 14:10:33,147 - INFO - Total batch processing finished in 187.77 seconds for 15 initial URLs.
+2025-04-14 14:10:56,150 - INFO - Gemini API configured successfully.
+2025-04-14 14:10:56,167 - INFO - User initiated extraction for 15 valid URLs. Max workers: 5
+2025-04-14 14:10:56,179 - INFO - Processing URL: https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm
+2025-04-14 14:10:56,183 - INFO - Processing URL: https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm
+2025-04-14 14:10:56,183 - INFO - Processing URL: https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm
+2025-04-14 14:10:56,184 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm
+2025-04-14 14:10:56,186 - INFO - Processing URL: https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm
+2025-04-14 14:10:56,189 - INFO - Processing URL: https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm
+2025-04-14 14:10:56,191 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm
+2025-04-14 14:10:56,192 - INFO - ====== WebDriver manager ======
+2025-04-14 14:10:56,192 - INFO - Processing URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 14:10:56,193 - INFO - Processing URL: https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm
+2025-04-14 14:10:56,194 - INFO - ====== WebDriver manager ======
+2025-04-14 14:10:56,195 - INFO - Processing URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 14:10:56,196 - INFO - ====== WebDriver manager ======
+2025-04-14 14:10:56,197 - INFO - ====== WebDriver manager ======
+2025-04-14 14:10:56,200 - INFO - ====== WebDriver manager ======
+2025-04-14 14:11:02,792 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:11:02,908 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:11:02,991 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:11:03,003 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:11:03,019 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:11:03,025 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:11:03,043 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:11:03,073 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:11:03,094 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:11:03,200 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:11:03,217 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:11:03,271 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:11:03,277 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:11:03,288 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:11:03,357 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:11:16,939 - ERROR - Timeout error during scraping for https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: 6.438
+  (Session info: chrome=135.0.7049.85)
+Raw Error: Message: timeout: Timed out receiving message from renderer: 6.438
+  (Session info: chrome=135.0.7049.85)
+Stacktrace:
+['\tGetHandleVerifier [0x006080E3+60707]', '\tGetHandleVerifier [0x00608124+60772]', '\t(No symbol) [0x00430683]', '\t(No symbol) [0x0042121B]', '\t(No symbol) [0x00420F51]', '\t(No symbol) [0x0041EF30]', '\t(No symbol) [0x0041F9ED]', '\t(No symbol) [0x0042BF79]', '\t(No symbol) [0x0043D6E5]', '\t(No symbol) [0x00442F86]', '\t(No symbol) [0x0041FFFD]', '\t(No symbol) [0x0043D43C]', '\t(No symbol) [0x004BEB40]', '\t(No symbol) [0x0049CE46]', '\t(No symbol) [0x0046C5D3]', '\t(No symbol) [0x0046D424]', '\tGetHandleVerifier [0x0084BBC3+2435075]', '\tGetHandleVerifier [0x00847163+2416035]', '\tGetHandleVerifier [0x0086350C+2531660]', '\tGetHandleVerifier [0x0061F1B5+155125]', '\tGetHandleVerifier [0x00625B5D+182173]', '\tGetHandleVerifier [0x0060F9B8+91640]', '\tGetHandleVerifier [0x0060FB60+92064]', '\tGetHandleVerifier [0x005FA620+4704]', '\tBaseThreadInitThunk [0x76807BA9+25]', '\tRtlInitializeExceptionChain [0x777BC0CB+107]', '\tRtlClearBits [0x777BC04F+191]', '']
+2025-04-14 14:11:17,132 - ERROR - Timeout error during scraping for https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: 7.370
+  (Session info: chrome=135.0.7049.85)
+Raw Error: Message: timeout: Timed out receiving message from renderer: 7.370
+  (Session info: chrome=135.0.7049.85)
+Stacktrace:
+['\tGetHandleVerifier [0x006080E3+60707]', '\tGetHandleVerifier [0x00608124+60772]', '\t(No symbol) [0x00430683]', '\t(No symbol) [0x0042121B]', '\t(No symbol) [0x00420F51]', '\t(No symbol) [0x0041EF30]', '\t(No symbol) [0x0041F9ED]', '\t(No symbol) [0x0042BF79]', '\t(No symbol) [0x0043D6E5]', '\t(No symbol) [0x00442F86]', '\t(No symbol) [0x0041FFFD]', '\t(No symbol) [0x0043D43C]', '\t(No symbol) [0x004BEB40]', '\t(No symbol) [0x0049CE46]', '\t(No symbol) [0x0046C5D3]', '\t(No symbol) [0x0046D424]', '\tGetHandleVerifier [0x0084BBC3+2435075]', '\tGetHandleVerifier [0x00847163+2416035]', '\tGetHandleVerifier [0x0086350C+2531660]', '\tGetHandleVerifier [0x0061F1B5+155125]', '\tGetHandleVerifier [0x00625B5D+182173]', '\tGetHandleVerifier [0x0060F9B8+91640]', '\tGetHandleVerifier [0x0060FB60+92064]', '\tGetHandleVerifier [0x005FA620+4704]', '\tBaseThreadInitThunk [0x76807BA9+25]', '\tRtlInitializeExceptionChain [0x777BC0CB+107]', '\tRtlClearBits [0x777BC04F+191]', '']
+2025-04-14 14:11:44,865 - INFO - Finished scraping https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm in 48.67 seconds. Error: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: 7.370
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:11:44,869 - ERROR - Scraping failed for https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: 7.370
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:11:44,871 - INFO - Finished processing https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm in 48.68 seconds.
+2025-04-14 14:11:44,872 - INFO - Processing URL: https://www.mudah.my/berminat-bole-pm-110786584.htm
+2025-04-14 14:11:44,875 - INFO - Processing URL: https://www.mudah.my/berminat-bole-pm-110786584.htm
+2025-04-14 14:11:44,877 - INFO - ====== WebDriver manager ======
+2025-04-14 14:11:45,023 - INFO - Finished scraping https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm in 48.83 seconds. Error: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: 6.438
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:11:45,025 - ERROR - Scraping failed for https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: 6.438
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:11:45,026 - INFO - Finished processing https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm in 48.84 seconds.
+2025-04-14 14:11:45,028 - INFO - Processing URL: https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm
+2025-04-14 14:11:45,029 - INFO - Processing URL: https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm
+2025-04-14 14:11:45,032 - INFO - ====== WebDriver manager ======
+2025-04-14 14:11:50,927 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:11:50,952 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:11:51,018 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:11:51,039 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:11:51,092 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:11:51,122 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:11:56,708 - INFO - Finished scraping https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm in 60.51 seconds. Error: None
+2025-04-14 14:11:56,710 - INFO - Scraping completed for https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm, combined HTML length: 14155. Proceeding to AI extraction.
+2025-04-14 14:11:56,711 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm
+2025-04-14 14:11:58,515 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm in 1.80 seconds.
+2025-04-14 14:11:58,516 - INFO - Received AI response for https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm.
+2025-04-14 14:11:58,517 - INFO - Successfully extracted data for https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm.
+2025-04-14 14:11:58,518 - INFO - Finished processing https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm in 62.34 seconds.
+2025-04-14 14:11:58,520 - INFO - Processing URL: https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm
+2025-04-14 14:11:58,523 - INFO - Processing URL: https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm
+2025-04-14 14:11:58,525 - INFO - ====== WebDriver manager ======
+2025-04-14 14:11:58,552 - INFO - Finished scraping https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm in 62.36 seconds. Error: None
+2025-04-14 14:11:58,553 - INFO - Scraping completed for https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm, combined HTML length: 7980. Proceeding to AI extraction.
+2025-04-14 14:11:58,554 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm
+2025-04-14 14:11:59,855 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm in 1.30 seconds.
+2025-04-14 14:11:59,873 - INFO - Received AI response for https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm.
+2025-04-14 14:11:59,880 - INFO - Successfully extracted data for https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm.
+2025-04-14 14:11:59,885 - INFO - Finished processing https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm in 63.71 seconds.
+2025-04-14 14:11:59,893 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm
+2025-04-14 14:11:59,895 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm
+2025-04-14 14:11:59,902 - INFO - ====== WebDriver manager ======
+2025-04-14 14:12:09,939 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:12:09,990 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:12:10,034 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:12:10,120 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:12:10,183 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:12:10,426 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:12:29,249 - ERROR - Timeout error during scraping for https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: -5.549
+  (Session info: chrome=135.0.7049.85)
+Raw Error: Message: timeout: Timed out receiving message from renderer: -5.549
+  (Session info: chrome=135.0.7049.85)
+Stacktrace:
+['\tGetHandleVerifier [0x006080E3+60707]', '\tGetHandleVerifier [0x00608124+60772]', '\t(No symbol) [0x00430683]', '\t(No symbol) [0x0042121B]', '\t(No symbol) [0x00420F51]', '\t(No symbol) [0x0041EF30]', '\t(No symbol) [0x0041F9ED]', '\t(No symbol) [0x0042BF79]', '\t(No symbol) [0x0043D6E5]', '\t(No symbol) [0x00442F86]', '\t(No symbol) [0x0041FFFD]', '\t(No symbol) [0x0043D43C]', '\t(No symbol) [0x004BEB40]', '\t(No symbol) [0x0049CE46]', '\t(No symbol) [0x0046C5D3]', '\t(No symbol) [0x0046D424]', '\tGetHandleVerifier [0x0084BBC3+2435075]', '\tGetHandleVerifier [0x00847163+2416035]', '\tGetHandleVerifier [0x0086350C+2531660]', '\tGetHandleVerifier [0x0061F1B5+155125]', '\tGetHandleVerifier [0x00625B5D+182173]', '\tGetHandleVerifier [0x0060F9B8+91640]', '\tGetHandleVerifier [0x0060FB60+92064]', '\tGetHandleVerifier [0x005FA620+4704]', '\tBaseThreadInitThunk [0x76807BA9+25]', '\tRtlInitializeExceptionChain [0x777BC0CB+107]', '\tRtlClearBits [0x777BC04F+191]', '']
+2025-04-14 14:12:33,057 - INFO - Finished scraping https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm in 33.16 seconds. Error: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: -5.549
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:12:33,057 - ERROR - Scraping failed for https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 8s or other waits). Details: timeout: Timed out receiving message from renderer: -5.549
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:12:33,059 - INFO - Finished processing https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm in 33.17 seconds.
+2025-04-14 14:12:33,059 - INFO - Processing URL: https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm
+2025-04-14 14:12:33,059 - INFO - Processing URL: https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm
+2025-04-14 14:12:33,066 - INFO - ====== WebDriver manager ======
+2025-04-14 14:12:33,477 - INFO - Finished scraping https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm in 48.45 seconds. Error: None
+2025-04-14 14:12:33,478 - INFO - Scraping completed for https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm, combined HTML length: 10027. Proceeding to AI extraction.
+2025-04-14 14:12:33,480 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm
+2025-04-14 14:12:33,534 - INFO - Finished scraping https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm in 97.34 seconds. Error: None
+2025-04-14 14:12:33,536 - INFO - Scraping completed for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm, combined HTML length: 9315. Proceeding to AI extraction.
+2025-04-14 14:12:33,537 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 14:12:35,053 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm in 1.57 seconds.
+2025-04-14 14:12:35,057 - INFO - Received AI response for https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm.
+2025-04-14 14:12:35,057 - INFO - Successfully extracted data for https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm.
+2025-04-14 14:12:35,062 - INFO - Finished processing https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm in 50.03 seconds.
+2025-04-14 14:12:35,064 - INFO - Processing URL: https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm
+2025-04-14 14:12:35,066 - INFO - Processing URL: https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm
+2025-04-14 14:12:35,067 - INFO - ====== WebDriver manager ======
+2025-04-14 14:12:36,070 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm in 2.54 seconds.
+2025-04-14 14:12:36,077 - INFO - Received AI response for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm.
+2025-04-14 14:12:36,077 - INFO - Successfully extracted data for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm.
+2025-04-14 14:12:36,079 - INFO - Finished processing https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm in 99.89 seconds.
+2025-04-14 14:12:36,079 - INFO - Processing URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 14:12:36,082 - INFO - Processing URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 14:12:36,085 - INFO - ====== WebDriver manager ======
+2025-04-14 14:12:38,427 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:12:38,587 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:12:38,707 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:12:39,218 - INFO - Finished scraping https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm in 40.69 seconds. Error: None
+2025-04-14 14:12:39,220 - INFO - Scraping completed for https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm, combined HTML length: 28004. Proceeding to AI extraction.
+2025-04-14 14:12:39,220 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm
+2025-04-14 14:12:39,234 - INFO - Finished scraping https://www.mudah.my/berminat-bole-pm-110786584.htm in 54.36 seconds. Error: None
+2025-04-14 14:12:39,237 - INFO - Scraping completed for https://www.mudah.my/berminat-bole-pm-110786584.htm, combined HTML length: 26738. Proceeding to AI extraction.
+2025-04-14 14:12:39,238 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/berminat-bole-pm-110786584.htm
+2025-04-14 14:12:39,737 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:12:39,822 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:12:40,667 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:12:40,823 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:12:40,902 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:12:41,569 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:12:41,744 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/berminat-bole-pm-110786584.htm in 2.51 seconds.
+2025-04-14 14:12:41,748 - INFO - Received AI response for https://www.mudah.my/berminat-bole-pm-110786584.htm.
+2025-04-14 14:12:41,749 - INFO - Successfully extracted data for https://www.mudah.my/berminat-bole-pm-110786584.htm.
+2025-04-14 14:12:41,751 - INFO - Finished processing https://www.mudah.my/berminat-bole-pm-110786584.htm in 56.88 seconds.
+2025-04-14 14:12:41,752 - INFO - Processing URL: https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm
+2025-04-14 14:12:41,753 - INFO - Processing URL: https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm
+2025-04-14 14:12:41,756 - INFO - ====== WebDriver manager ======
+2025-04-14 14:12:42,243 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm in 3.02 seconds.
+2025-04-14 14:12:42,244 - INFO - Received AI response for https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm.
+2025-04-14 14:12:42,245 - INFO - Successfully extracted data for https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm.
+2025-04-14 14:12:42,246 - INFO - Finished processing https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm in 43.73 seconds.
+2025-04-14 14:12:42,248 - INFO - Processing URL: https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm
+2025-04-14 14:12:42,250 - INFO - Processing URL: https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm
+2025-04-14 14:12:42,253 - INFO - ====== WebDriver manager ======
+2025-04-14 14:13:01,279 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:13:01,322 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:13:01,389 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:13:01,419 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:13:01,492 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:13:01,542 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:13:38,437 - INFO - Finished scraping https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm in 65.37 seconds. Error: None
+2025-04-14 14:13:38,438 - INFO - Scraping completed for https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm, combined HTML length: 19214. Proceeding to AI extraction.
+2025-04-14 14:13:38,439 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm
+2025-04-14 14:13:38,569 - INFO - Finished scraping https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm in 63.50 seconds. Error: None
+2025-04-14 14:13:38,571 - INFO - Scraping completed for https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm, combined HTML length: 8999. Proceeding to AI extraction.
+2025-04-14 14:13:38,572 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm
+2025-04-14 14:13:40,201 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm in 1.76 seconds.
+2025-04-14 14:13:40,203 - INFO - Received AI response for https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm.
+2025-04-14 14:13:40,205 - INFO - Successfully extracted data for https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm.
+2025-04-14 14:13:40,213 - INFO - Finished processing https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm in 67.15 seconds.
+2025-04-14 14:13:40,222 - INFO - Processing URL: https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm
+2025-04-14 14:13:40,231 - INFO - Processing URL: https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm
+2025-04-14 14:13:40,252 - INFO - ====== WebDriver manager ======
+2025-04-14 14:13:41,176 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm in 2.60 seconds.
+2025-04-14 14:13:41,178 - INFO - Received AI response for https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm.
+2025-04-14 14:13:41,179 - INFO - Successfully extracted data for https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm.
+2025-04-14 14:13:41,181 - INFO - Finished processing https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm in 66.12 seconds.
+2025-04-14 14:13:41,602 - INFO - Finished scraping https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm in 65.52 seconds. Error: None
+2025-04-14 14:13:41,604 - INFO - Scraping completed for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm, combined HTML length: 9472. Proceeding to AI extraction.
+2025-04-14 14:13:41,604 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm
+2025-04-14 14:13:43,933 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm in 2.33 seconds.
+2025-04-14 14:13:43,942 - INFO - Received AI response for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm.
+2025-04-14 14:13:43,944 - INFO - Successfully extracted data for https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm.
+2025-04-14 14:13:43,945 - INFO - Finished processing https://www.mudah.my/putra-villa-condominium-taman-melati-next-to-lrt-110783237.htm in 67.86 seconds.
+2025-04-14 14:13:49,232 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:13:49,523 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:13:49,607 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:13:50,745 - INFO - Finished scraping https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm in 68.49 seconds. Error: None
+2025-04-14 14:13:50,747 - INFO - Scraping completed for https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm, combined HTML length: 21265. Proceeding to AI extraction.
+2025-04-14 14:13:50,747 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm
+2025-04-14 14:13:52,297 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm in 1.55 seconds.
+2025-04-14 14:13:52,298 - INFO - Received AI response for https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm.
+2025-04-14 14:13:52,299 - INFO - Successfully extracted data for https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm.
+2025-04-14 14:13:52,300 - INFO - Finished processing https://www.mudah.my/villa-wangsamas-condo-next-to-lrt-wangsa-walk-mall-110782305.htm in 70.05 seconds.
+2025-04-14 14:13:53,186 - INFO - Finished scraping https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm in 71.43 seconds. Error: None
+2025-04-14 14:13:53,187 - INFO - Scraping completed for https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm, combined HTML length: 8078. Proceeding to AI extraction.
+2025-04-14 14:13:53,188 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm
+2025-04-14 14:13:54,672 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm in 1.49 seconds.
+2025-04-14 14:13:54,672 - INFO - Received AI response for https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm.
+2025-04-14 14:13:54,678 - INFO - Successfully extracted data for https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm.
+2025-04-14 14:13:54,679 - INFO - Finished processing https://www.mudah.my/bukit-jalil-vista-komanwel-c-imu-apu-109711640.htm in 72.93 seconds.
+2025-04-14 14:14:13,191 - INFO - Finished scraping https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm in 32.96 seconds. Error: None
+2025-04-14 14:14:13,191 - INFO - Scraping completed for https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm, combined HTML length: 8652. Proceeding to AI extraction.
+2025-04-14 14:14:13,191 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm
+2025-04-14 14:14:14,623 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm in 1.43 seconds.
+2025-04-14 14:14:14,623 - INFO - Received AI response for https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm.
+2025-04-14 14:14:14,623 - INFO - Successfully extracted data for https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm.
+2025-04-14 14:14:14,623 - INFO - Finished processing https://www.mudah.my/condominium-beside-shopping-mall-and-near-lrt-110774828.htm in 34.40 seconds.
+2025-04-14 14:14:16,667 - WARNING - Failed/Partial URLs (3): ['https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm', 'https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm', 'https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm']
+2025-04-14 14:14:16,673 - INFO - Total batch processing finished in 200.51 seconds for 15 initial URLs.
+2025-04-14 14:14:44,829 - INFO - Gemini API configured successfully.
+2025-04-14 14:14:44,837 - INFO - User initiated extraction for 15 valid URLs. Max workers: 10
+2025-04-14 14:14:44,844 - INFO - Processing URL: https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm
+2025-04-14 14:14:44,847 - INFO - Processing URL: https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm
+2025-04-14 14:14:44,849 - INFO - Processing URL: https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm
+2025-04-14 14:14:44,853 - INFO - Processing URL: https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm
+2025-04-14 14:14:44,854 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm
+2025-04-14 14:14:44,855 - INFO - Processing URL: https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm
+2025-04-14 14:14:44,856 - INFO - ====== WebDriver manager ======
+2025-04-14 14:14:44,856 - INFO - Processing URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 14:14:44,857 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm
+2025-04-14 14:14:44,858 - INFO - Processing URL: https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm
+2025-04-14 14:14:44,858 - INFO - ====== WebDriver manager ======
+2025-04-14 14:14:44,859 - INFO - Processing URL: https://www.mudah.my/berminat-bole-pm-110786584.htm
+2025-04-14 14:14:44,862 - INFO - Processing URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 14:14:44,862 - INFO - Processing URL: https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm
+2025-04-14 14:14:44,868 - INFO - Processing URL: https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm
+2025-04-14 14:14:44,870 - INFO - ====== WebDriver manager ======
+2025-04-14 14:14:44,871 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm
+2025-04-14 14:14:44,874 - INFO - Processing URL: https://www.mudah.my/berminat-bole-pm-110786584.htm
+2025-04-14 14:14:44,874 - INFO - ====== WebDriver manager ======
+2025-04-14 14:14:44,877 - INFO - Processing URL: https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm
+2025-04-14 14:14:44,878 - INFO - Processing URL: https://www.mudah.my/direct-owner-park2-bukit-jalil-1-1-bedroom-110786083.htm
+2025-04-14 14:14:44,879 - INFO - ====== WebDriver manager ======
+2025-04-14 14:14:44,879 - INFO - Processing URL: https://www.mudah.my/sunway-velocity-two-for-rent-110784600.htm
+2025-04-14 14:14:44,882 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm
+2025-04-14 14:14:44,886 - INFO - ====== WebDriver manager ======
+2025-04-14 14:14:44,887 - INFO - Processing URL: https://www.mudah.my/plaza-metro-prima-corner-lot-fully-furnished-for-rent-110784447.htm
+2025-04-14 14:14:44,890 - INFO - ====== WebDriver manager ======
+2025-04-14 14:14:44,893 - INFO - ====== WebDriver manager ======
+2025-04-14 14:14:44,894 - INFO - ====== WebDriver manager ======
+2025-04-14 14:14:44,896 - INFO - ====== WebDriver manager ======
+2025-04-14 14:14:56,071 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,141 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,231 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,282 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,298 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:14:56,305 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,373 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,384 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,391 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,397 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,419 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,445 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,497 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,528 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,610 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,648 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,691 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,693 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,698 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:56,710 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:14:56,755 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:14:56,782 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:14:56,797 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:14:56,807 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:14:56,972 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:57,047 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:14:57,523 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:14:57,527 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:14:57,527 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:14:57,614 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:15:21,512 - ERROR - Timeout error during scraping for https://www.mudah.my/seri-cendekia-condo-near-mrt-ucsi-hospital-ukm-eko-cheras-mall-110784466.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 15s or other waits). Details: timeout: Timed out receiving message from renderer: 13.891
+  (Session info: chrome=135.0.7049.85)
+Raw Error: Message: timeout: Timed out receiving message from renderer: 13.891
+  (Session info: chrome=135.0.7049.85)
+Stacktrace:
+['\tGetHandleVerifier [0x006080E3+60707]', '\tGetHandleVerifier [0x00608124+60772]', '\t(No symbol) [0x00430683]', '\t(No symbol) [0x0042121B]', '\t(No symbol) [0x00420F51]', '\t(No symbol) [0x0041EF30]', '\t(No symbol) [0x0041F9ED]', '\t(No symbol) [0x0042BF79]', '\t(No symbol) [0x0043D6E5]', '\t(No symbol) [0x00442F86]', '\t(No symbol) [0x0041FFFD]', '\t(No symbol) [0x0043D43C]', '\t(No symbol) [0x004BEB40]', '\t(No symbol) [0x0049CE46]', '\t(No symbol) [0x0046C5D3]', '\t(No symbol) [0x0046D424]', '\tGetHandleVerifier [0x0084BBC3+2435075]', '\tGetHandleVerifier [0x00847163+2416035]', '\tGetHandleVerifier [0x0086350C+2531660]', '\tGetHandleVerifier [0x0061F1B5+155125]', '\tGetHandleVerifier [0x00625B5D+182173]', '\tGetHandleVerifier [0x0060F9B8+91640]', '\tGetHandleVerifier [0x0060FB60+92064]', '\tGetHandleVerifier [0x005FA620+4704]', '\tBaseThreadInitThunk [0x76807BA9+25]', '\tRtlInitializeExceptionChain [0x777BC0CB+107]', '\tRtlClearBits [0x777BC04F+191]', '']
+2025-04-14 14:15:24,232 - ERROR - Timeout error during scraping for https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 15s or other waits). Details: timeout: Timed out receiving message from renderer: 12.948
+  (Session info: chrome=135.0.7049.85)
+Raw Error: Message: timeout: Timed out receiving message from renderer: 12.948
+  (Session info: chrome=135.0.7049.85)
+Stacktrace:
+['\tGetHandleVerifier [0x006080E3+60707]', '\tGetHandleVerifier [0x00608124+60772]', '\t(No symbol) [0x00430683]', '\t(No symbol) [0x0042121B]', '\t(No symbol) [0x00420F51]', '\t(No symbol) [0x0041EF30]', '\t(No symbol) [0x0041F9ED]', '\t(No symbol) [0x0042BF79]', '\t(No symbol) [0x0043D6E5]', '\t(No symbol) [0x00442F86]', '\t(No symbol) [0x0041FFFD]', '\t(No symbol) [0x0043D43C]', '\t(No symbol) [0x004BEB40]', '\t(No symbol) [0x0049CE46]', '\t(No symbol) [0x0046C5D3]', '\t(No symbol) [0x0046D424]', '\tGetHandleVerifier [0x0084BBC3+2435075]', '\tGetHandleVerifier [0x00847163+2416035]', '\tGetHandleVerifier [0x0086350C+2531660]', '\tGetHandleVerifier [0x0061F1B5+155125]', '\tGetHandleVerifier [0x00625B5D+182173]', '\tGetHandleVerifier [0x0060F9B8+91640]', '\tGetHandleVerifier [0x0060FB60+92064]', '\tGetHandleVerifier [0x005FA620+4704]', '\tBaseThreadInitThunk [0x76807BA9+25]', '\tRtlInitializeExceptionChain [0x777BC0CB+107]', '\tRtlClearBits [0x777BC04F+191]', '']
+2025-04-14 14:15:27,526 - ERROR - Timeout error during scraping for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 15s or other waits). Details: timeout: Timed out receiving message from renderer: 13.568
+  (Session info: chrome=135.0.7049.85)
+Raw Error: Message: timeout: Timed out receiving message from renderer: 13.568
+  (Session info: chrome=135.0.7049.85)
+Stacktrace:
+['\tGetHandleVerifier [0x006080E3+60707]', '\tGetHandleVerifier [0x00608124+60772]', '\t(No symbol) [0x00430683]', '\t(No symbol) [0x0042121B]', '\t(No symbol) [0x00420F51]', '\t(No symbol) [0x0041EF30]', '\t(No symbol) [0x0041F9ED]', '\t(No symbol) [0x0042BF79]', '\t(No symbol) [0x0043D6E5]', '\t(No symbol) [0x00442F86]', '\t(No symbol) [0x0041FFFD]', '\t(No symbol) [0x0043D43C]', '\t(No symbol) [0x004BEB40]', '\t(No symbol) [0x0049CE46]', '\t(No symbol) [0x0046C5D3]', '\t(No symbol) [0x0046D424]', '\tGetHandleVerifier [0x0084BBC3+2435075]', '\tGetHandleVerifier [0x00847163+2416035]', '\tGetHandleVerifier [0x0086350C+2531660]', '\tGetHandleVerifier [0x0061F1B5+155125]', '\tGetHandleVerifier [0x00625B5D+182173]', '\tGetHandleVerifier [0x0060F9B8+91640]', '\tGetHandleVerifier [0x0060FB60+92064]', '\tGetHandleVerifier [0x005FA620+4704]', '\tBaseThreadInitThunk [0x76807BA9+25]', '\tRtlInitializeExceptionChain [0x777BC0CB+107]', '\tRtlClearBits [0x777BC04F+191]', '']
+2025-04-14 14:15:29,407 - ERROR - Timeout error during scraping for https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 15s or other waits). Details: timeout: Timed out receiving message from renderer: 10.409
+  (Session info: chrome=135.0.7049.85)
+Raw Error: Message: timeout: Timed out receiving message from renderer: 10.409
+  (Session info: chrome=135.0.7049.85)
+Stacktrace:
+['\tGetHandleVerifier [0x006080E3+60707]', '\tGetHandleVerifier [0x00608124+60772]', '\t(No symbol) [0x00430683]', '\t(No symbol) [0x0042121B]', '\t(No symbol) [0x00420F51]', '\t(No symbol) [0x0041EF30]', '\t(No symbol) [0x0041F9ED]', '\t(No symbol) [0x0042BF79]', '\t(No symbol) [0x0043D6E5]', '\t(No symbol) [0x00442F86]', '\t(No symbol) [0x0041FFFD]', '\t(No symbol) [0x0043D43C]', '\t(No symbol) [0x004BEB40]', '\t(No symbol) [0x0049CE46]', '\t(No symbol) [0x0046C5D3]', '\t(No symbol) [0x0046D424]', '\tGetHandleVerifier [0x0084BBC3+2435075]', '\tGetHandleVerifier [0x00847163+2416035]', '\tGetHandleVerifier [0x0086350C+2531660]', '\tGetHandleVerifier [0x0061F1B5+155125]', '\tGetHandleVerifier [0x00625B5D+182173]', '\tGetHandleVerifier [0x0060F9B8+91640]', '\tGetHandleVerifier [0x0060FB60+92064]', '\tGetHandleVerifier [0x005FA620+4704]', '\tBaseThreadInitThunk [0x76807BA9+25]', '\tRtlInitializeExceptionChain [0x777BC0CB+107]', '\tRtlClearBits [0x777BC04F+191]', '']
+2025-04-14 14:15:36,991 - ERROR - Timeout error during scraping for https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 15s or other waits). Details: timeout: Timed out receiving message from renderer: 12.346
+  (Session info: chrome=135.0.7049.85)
+Raw Error: Message: timeout: Timed out receiving message from renderer: 12.346
+  (Session info: chrome=135.0.7049.85)
+Stacktrace:
+['\tGetHandleVerifier [0x006080E3+60707]', '\tGetHandleVerifier [0x00608124+60772]', '\t(No symbol) [0x00430683]', '\t(No symbol) [0x0042121B]', '\t(No symbol) [0x00420F51]', '\t(No symbol) [0x0041EF30]', '\t(No symbol) [0x0041F9ED]', '\t(No symbol) [0x0042BF79]', '\t(No symbol) [0x0043D6E5]', '\t(No symbol) [0x00442F86]', '\t(No symbol) [0x0041FFFD]', '\t(No symbol) [0x0043D43C]', '\t(No symbol) [0x004BEB40]', '\t(No symbol) [0x0049CE46]', '\t(No symbol) [0x0046C5D3]', '\t(No symbol) [0x0046D424]', '\tGetHandleVerifier [0x0084BBC3+2435075]', '\tGetHandleVerifier [0x00847163+2416035]', '\tGetHandleVerifier [0x0086350C+2531660]', '\tGetHandleVerifier [0x0061F1B5+155125]', '\tGetHandleVerifier [0x00625B5D+182173]', '\tGetHandleVerifier [0x0060F9B8+91640]', '\tGetHandleVerifier [0x0060FB60+92064]', '\tGetHandleVerifier [0x005FA620+4704]', '\tBaseThreadInitThunk [0x76807BA9+25]', '\tRtlInitializeExceptionChain [0x777BC0CB+107]', '\tRtlClearBits [0x777BC04F+191]', '']
+2025-04-14 14:15:40,708 - INFO - Finished scraping https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm in 55.85 seconds. Error: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 15s or other waits). Details: timeout: Timed out receiving message from renderer: 12.948
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:15:40,710 - ERROR - Scraping failed for https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm: Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: 15s or other waits). Details: timeout: Timed out receiving message from renderer: 12.948
+  (Session info: chrome=135.0.7049.85)
+2025-04-14 14:15:40,712 - INFO - Finished processing https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm in 55.87 seconds.
+2025-04-14 14:15:40,716 - INFO - Processing URL: https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm
+2025-04-14 14:15:40,727 - INFO - Processing URL: https://www.mudah.my/for-rent-residensi-brickfield-110784181.htm
+2025-04-14 14:15:40,730 - INFO - ====== WebDriver manager ======
+2025-04-14 14:16:02,169 - INFO - Gemini API configured successfully.
+2025-04-14 14:16:07,627 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /session/428f4036bd23d16efb1e9c5bc390c55f
+2025-04-14 14:16:07,629 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /session/d0c3d430a1d65484a05a9e8d9f23ec82
+2025-04-14 14:16:07,629 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /session/e0a7e175bf9ab381f20286dff209108d
+2025-04-14 14:16:07,642 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /session/2ad587ad6802e6dad07dd7c9f7a9e194
+2025-04-14 14:16:07,944 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:16:11,745 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002992E3B77D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/d0c3d430a1d65484a05a9e8d9f23ec82
+2025-04-14 14:16:11,777 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002992E398A90>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/b97f430fc76876fb9bf9bac29b4cef28/elements
+2025-04-14 14:16:11,777 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002992E82FB50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/b56b522108d4e401e607200682d8c716/elements
+2025-04-14 14:16:11,932 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002992E4CE590>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/e0a7e175bf9ab381f20286dff209108d
+2025-04-14 14:16:12,057 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002992E48A610>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/2ad587ad6802e6dad07dd7c9f7a9e194
+2025-04-14 14:16:12,089 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002992B833650>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/428f4036bd23d16efb1e9c5bc390c55f
+2025-04-14 14:16:12,229 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002992E82D650>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/686a13ac281f056d023c3f26136a2705/elements
+2025-04-14 14:16:12,276 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002992E48A090>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/ac6d6b2a8d408b85788a8decb5737f18/elements
+2025-04-14 14:16:12,539 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002992E82E910>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/3dc8712052d756faeedbdd5b4412eb54/elements
+2025-04-14 14:16:40,006 - INFO - Gemini API configured successfully.
+2025-04-14 14:16:44,935 - INFO - Gemini API configured successfully.
+2025-04-14 14:16:45,077 - INFO - Gemini API configured successfully.
+2025-04-14 14:16:45,085 - INFO - User initiated extraction for 5 valid URLs. Max workers: 10
+2025-04-14 14:16:45,087 - INFO - Processing URL: https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm
+2025-04-14 14:16:45,087 - INFO - Processing URL: https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm
+2025-04-14 14:16:45,087 - INFO - Processing URL: https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm
+2025-04-14 14:16:45,094 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm
+2025-04-14 14:16:45,095 - INFO - Processing URL: https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm
+2025-04-14 14:16:45,096 - INFO - Processing URL: https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm
+2025-04-14 14:16:45,099 - INFO - Processing URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 14:16:45,102 - INFO - Processing URL: https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm
+2025-04-14 14:16:45,102 - INFO - ====== WebDriver manager ======
+2025-04-14 14:16:45,104 - INFO - Processing URL: https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm
+2025-04-14 14:16:45,105 - INFO - ====== WebDriver manager ======
+2025-04-14 14:16:45,107 - INFO - Processing URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 14:16:45,110 - INFO - ====== WebDriver manager ======
+2025-04-14 14:16:45,113 - INFO - ====== WebDriver manager ======
+2025-04-14 14:16:45,115 - INFO - ====== WebDriver manager ======
+2025-04-14 14:16:51,547 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:16:51,630 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:16:51,637 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:16:51,680 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:16:51,717 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:16:51,837 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:16:51,868 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:16:51,869 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:16:51,871 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:16:51,872 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-14 14:16:51,942 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:16:51,987 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:16:51,988 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:16:51,989 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:16:51,989 - INFO - Driver [C:\Users\estan\.wdm\drivers\chromedriver\win64\135.0.7049.84\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-14 14:18:01,592 - INFO - Finished scraping https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm in 76.47 seconds. Error: None
+2025-04-14 14:18:01,592 - INFO - Scraping completed for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm, combined HTML length: 9315. Proceeding to AI extraction.
+2025-04-14 14:18:01,592 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm
+2025-04-14 14:18:04,853 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm in 3.26 seconds.
+2025-04-14 14:18:04,855 - INFO - Received AI response for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm.
+2025-04-14 14:18:04,857 - INFO - Successfully extracted data for https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm.
+2025-04-14 14:18:04,858 - INFO - Finished processing https://www.mudah.my/residensi-brickfields-f-furnished-for-rent-sewa-110788533.htm in 79.76 seconds.
+2025-04-14 14:18:06,000 - INFO - Finished scraping https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm in 80.89 seconds. Error: None
+2025-04-14 14:18:06,000 - INFO - Scraping completed for https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm, combined HTML length: 14539. Proceeding to AI extraction.
+2025-04-14 14:18:06,000 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm
+2025-04-14 14:18:08,127 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm in 2.12 seconds.
+2025-04-14 14:18:08,128 - INFO - Received AI response for https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm.
+2025-04-14 14:18:08,129 - INFO - Successfully extracted data for https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm.
+2025-04-14 14:18:08,131 - INFO - Finished processing https://www.mudah.my/seri-cendekia-condo-tmn-connaught-cheras-ukm-hospital-leisure-mall-mrt-110753639.htm in 83.04 seconds.
+2025-04-14 14:18:11,411 - INFO - Finished scraping https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm in 86.31 seconds. Error: None
+2025-04-14 14:18:11,411 - INFO - Scraping completed for https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm, combined HTML length: 7979. Proceeding to AI extraction.
+2025-04-14 14:18:11,411 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm
+2025-04-14 14:18:12,697 - INFO - Finished scraping https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm in 87.59 seconds. Error: None
+2025-04-14 14:18:12,698 - INFO - Scraping completed for https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm, combined HTML length: 14155. Proceeding to AI extraction.
+2025-04-14 14:18:12,699 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm
+2025-04-14 14:18:12,705 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm in 1.29 seconds.
+2025-04-14 14:18:12,706 - INFO - Received AI response for https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm.
+2025-04-14 14:18:12,708 - INFO - Successfully extracted data for https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm.
+2025-04-14 14:18:12,709 - INFO - Finished processing https://www.mudah.my/near-um-midvalley-mall-and-kl-sentral-110795492.htm in 87.62 seconds.
+2025-04-14 14:18:13,294 - INFO - Finished scraping https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm in 88.18 seconds. Error: None
+2025-04-14 14:18:13,294 - INFO - Scraping completed for https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm, combined HTML length: 22798. Proceeding to AI extraction.
+2025-04-14 14:18:13,294 - INFO - Attempting to extract details using Gemini for URL: https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm
+2025-04-14 14:18:14,267 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm in 1.57 seconds.
+2025-04-14 14:18:14,267 - INFO - Received AI response for https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm.
+2025-04-14 14:18:14,267 - INFO - Successfully extracted data for https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm.
+2025-04-14 14:18:14,275 - INFO - Finished processing https://www.mudah.my/far-east-condo-kuchai-mrt-for-2-to-3-person-non-smoker-110795125.htm in 89.18 seconds.
+2025-04-14 14:18:15,317 - INFO - Gemini extraction successful and parsed for https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm in 2.03 seconds.
+2025-04-14 14:18:15,325 - INFO - Received AI response for https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm.
+2025-04-14 14:18:15,325 - INFO - Successfully extracted data for https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm.
+2025-04-14 14:18:15,327 - INFO - Finished processing https://www.mudah.my/kenwingston-platz-3r2b-fully-furnished-unit-move-in-immediately-110788549.htm in 90.23 seconds.
+2025-04-14 14:18:17,473 - INFO - Total batch processing finished in 92.39 seconds for 5 initial URLs.
+2025-04-14 14:18:47,816 - INFO - Gemini API configured successfully.
