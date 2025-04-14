@@ -49,7 +49,7 @@ except Exception as e:
     st.stop()
 
 # --- Constants ---
-MAX_CONCURRENT_WORKERS = 5
+MAX_CONCURRENT_WORKERS = 10
 
 PAGE_LOAD_TIMEOUT = 15
 BUTTON_WAIT_TIMEOUT = 2
@@ -671,7 +671,7 @@ if st.button("🔍 Extract Details from URLs", type="primary"):
         status_text = st.empty()
         processed_count = 0
 
-        spinner_message = f"⚙️ Processing {total_urls} address(es)... This may take a few minutes. Reduced parallelism ({MAX_CONCURRENT_WORKERS}) for cloud stability."
+        spinner_message = f"⚙️ Processing {total_urls} address(es)... This may take a few minutes."
         with st.spinner(spinner_message):
             with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_CONCURRENT_WORKERS) as executor:
                 future_to_url = {executor.submit(process_url, url): url for url in valid_urls}
