@@ -1,2 +1,3 @@
+# packages.txt
 chromium-driver
-chromium-browser
+chromium
