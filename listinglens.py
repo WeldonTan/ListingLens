@@ -49,7 +49,7 @@ except Exception as e:
     st.stop()
 
 # --- Constants ---
-MAX_CONCURRENT_WORKERS = 10
+MAX_CONCURRENT_WORKERS = 5
 
 PAGE_LOAD_TIMEOUT = 15
 BUTTON_WAIT_TIMEOUT = 2
