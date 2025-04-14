@@ -9,7 +9,6 @@ from selenium.common.exceptions import (
     TimeoutException, NoSuchElementException, ElementClickInterceptedException,
     StaleElementReferenceException
 )
-# --- Added imports for webdriver-manager ---
 from webdriver_manager.chrome import ChromeDriverManager
 
 
@@ -42,8 +41,8 @@ GOOGLE_API_KEY = "AIzaSyDs_GuRYRW9O7yuuc2_3eNKwsP0l9dRd58" # Replace with your a
 MAX_CONCURRENT_WORKERS = 10
 
 # Timeouts (in seconds) - From the detailed scraper
-PAGE_LOAD_TIMEOUT = 15 
-BUTTON_WAIT_TIMEOUT = 1 
+PAGE_LOAD_TIMEOUT = 15
+BUTTON_WAIT_TIMEOUT = 1
 POST_CLICK_DELAY = 1
 POST_EXPANSION_CLICK_DELAY = 1
 DELAY_BEFORE_POST_EXPANSION_SEARCH = 1
