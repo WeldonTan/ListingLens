@@ -663,7 +663,7 @@ if st.button("🔍 Extract Details from URLs", type="primary"):
         st.warning("⚠️ Please enter at least one valid web address (URL) starting with http:// or https://.")
     else:
         total_urls = len(valid_urls)
-        st.info(f"Starting extraction for {total_urls} web address(es)... (Using {MAX_CONCURRENT_WORKERS} parallel workers)")
+        st.info(f"Starting extraction for {total_urls} web address(es)...")
         logger.info(f"User initiated extraction for {total_urls} valid URLs. Max workers: {MAX_CONCURRENT_WORKERS}")
 
         all_results = []
