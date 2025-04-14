@@ -61,14 +61,17 @@ POST_SECOND_EXPANSION_CLICK_DELAY = 1
 
 COLUMN_ORDER = [
     'url', 'listing_title', 'project_name', 'price', 'area', 'state',
-    'sq_ft', 'bedrooms', 'bathrooms', 'phone_number', 'description',
+    'sq_ft', 'bedrooms', 'bathrooms',
+    'property_type', 'carpark', 'floor_range',
+    'phone_number', 'description',
     'processing_time_seconds', 'error'
 ]
 
 target_css_selectors = [
         "div.Wrapper-ucve63-0.eKOxHS", # Contact Owner block
         "div.style__ParentWrapper-iwjn3z-0.QvHGM", # Listing Details block
-        "div.Wrapper-ucve63-0.fKaMDx" # Description block
+        "div.Wrapper-ucve63-0.fKaMDx", # Description block
+        "div.Box-bx23rg-0.Flex-sc-9pwi7j-0.Wrapper-ucve63-0.kCBBkT" #Property Details
 ]
 
 # --- Gemini API Initialization ---
@@ -182,7 +185,7 @@ def extract_property_details(html_content, listing_url):
         model = genai.GenerativeModel('gemini-2.0-flash')
         prompt = f"""
         You are an expert property data extractor. Analyze the following HTML content from a property listing website
-        (potentially combined from several relevant sections like description, details, contact)
+        (potentially combined from several relevant sections like description, details, contact, and property specifics)
         and extract the following information in a JSON format:
 
         - listing_title: The full title of the property listing as it appears. Look in <title> tags or main headings (h1, h2). If not found, return "N/A".
@@ -193,6 +196,9 @@ def extract_property_details(html_content, listing_url):
         - sq_ft: The size in square feet as a number (integer). Remove "sq.ft.", "sf", etc. If not found or cannot be converted, return 0.
         - bedrooms: The number of bedrooms as a number (integer). Look for labels like "Bedrooms", "Beds", or patterns like "3R". If not found or cannot be converted, return 0.
         - bathrooms: The number of bathrooms as a number (integer). Look for labels like "Bathrooms", "Baths", or patterns like "2B". If not found or cannot be converted, return 0.
+        - property_type: The type of property (e.g., "Condominium", "Serviced Residence", "Bungalow"). Look for labels like "Property Type". If not found, return "N/A". # <<< ADD THIS
+        - carpark: The number of car park spaces as a number (integer). Look for labels like "Carpark", "Parking". If not found or cannot be converted, return 0. # <<< ADD THIS
+        - floor_range: The floor range (e.g., "High", "Mid", "Low", "5-10"). Look for labels like "Floor Range". If not found, return "N/A". # <<< ADD THIS
         - phone_number: The contact phone number. Look carefully, it might have been revealed after a button click in the original HTML (and thus present in the provided HTML, potentially multiple times). Extract the first clear phone number found (digits, possibly with +, -, or spaces). If not found, return "N/A".
         - description: A concise summary of the property description. Look for description blocks, meta description tags, or sections labeled 'Description'. Include key details, even those potentially revealed after clicking 'show more' in the original page (which should be in the provided HTML). If not found, return "N/A".
 
@@ -208,6 +214,9 @@ def extract_property_details(html_content, listing_url):
           "sq_ft": 1500,
           "bedrooms": 3,
           "bathrooms": 2,
+          "property_type": "Condominium",
+          "carpark": 2,
+          "floor_range": "High",
           "phone_number": "0123456789",
           "description": "Fully furnished 3-bedroom unit at Sky Residences. High floor with stunning KLCC view. Includes 2 car parks. Available now."
         }}
