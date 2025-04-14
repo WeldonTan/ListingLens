@@ -13,6 +13,8 @@ from selenium.common.exceptions import (
 
 import pandas as pd
 import os
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.common.exceptions import WebDriverException
 import time
 import traceback
 import google.generativeai as genai
@@ -84,19 +86,20 @@ except Exception as e:
     st.stop()
 
 # --- Selenium Options ---
-chrome_options = Options()
-chrome_options.page_load_strategy = 'eager'
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--disable-gpu")
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36")
-chrome_options.add_argument("--window-size=1920,1080")
-chrome_options.add_argument("--log-level=3")
-chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
-chrome_options.add_argument('--disable-infobars')
-chrome_options.add_argument('--disable-extensions')
-chrome_options.binary_location = "/usr/bin/chromium"
+BASE_ARGUMENTS = [
+    "--headless",
+    "--disable-gpu",
+    "--no-sandbox",
+    "--disable-dev-shm-usage",
+    "user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
+    "--window-size=1920,1080",
+    "--log-level=3",
+    "--enable-unsafe-swiftshader",
+    '--disable-infobars',
+    '--disable-extensions'
+]
+BASE_EXPERIMENTAL_OPTIONS = {'excludeSwitches': ['enable-logging']}
+BASE_PAGE_LOAD_STRATEGY = 'eager'
 
 # --- Helper Functions ---
 def format_elapsed_time(start_time: float) -> str:
@@ -270,12 +273,49 @@ def scrape_targeted_sections(url: str, target_selectors: list[str]):
     ]
 
     try:
-        print(f"{format_elapsed_time(start_time)} Initializing WebDriver for Streamlit Cloud...")
-        service = Service(executable_path="/usr/bin/chromedriver")
-        driver = webdriver.Chrome(service=service, options=chrome_options)
+        # === REVISED WEBDRIVER INITIALIZATION (No .copy()) ===
+        is_on_cloud = os.environ.get("STREAMLIT_SERVER_RUNNING_ON_CLOUD") == "true"
+
+        if is_on_cloud:
+            print(f"{format_elapsed_time(start_time)} Initializing WebDriver for Streamlit Cloud...")
+            logger.info("Detected Streamlit Cloud environment. Using fixed paths.")
+            # Create new options object for cloud
+            cloud_options = Options()
+            cloud_options.page_load_strategy = BASE_PAGE_LOAD_STRATEGY
+            for arg in BASE_ARGUMENTS:
+                cloud_options.add_argument(arg)
+            for key, value in BASE_EXPERIMENTAL_OPTIONS.items():
+                 cloud_options.add_experimental_option(key, value)
+
+            # Set binary location specifically for cloud
+            cloud_options.binary_location = "/usr/bin/chromium"
+            service = Service(executable_path="/usr/bin/chromedriver")
+            driver = webdriver.Chrome(service=service, options=cloud_options)
+        else:
+            print(f"{format_elapsed_time(start_time)} Initializing WebDriver for Local...")
+            logger.info("Detected Local environment. Using webdriver-manager.")
+            # Create new options object for local
+            local_options = Options()
+            local_options.page_load_strategy = BASE_PAGE_LOAD_STRATEGY
+            for arg in BASE_ARGUMENTS:
+                local_options.add_argument(arg)
+            for key, value in BASE_EXPERIMENTAL_OPTIONS.items():
+                 local_options.add_experimental_option(key, value)
+
+            # Ensure Chrome is installed locally
+            # webdriver-manager will download the correct driver
+            try:
+                service = Service(ChromeDriverManager().install())
+                driver = webdriver.Chrome(service=service, options=local_options)
+            except Exception as e_wdm:
+                 logger.error(f"Failed to initialize WebDriver locally using webdriver-manager: {e_wdm}", exc_info=True)
+                 raise WebDriverException(f"Local WebDriver setup failed (webdriver-manager): {e_wdm}") from e_wdm
+        # === END REVISED INITIALIZATION ===
+
         driver.set_page_load_timeout(PAGE_LOAD_TIMEOUT)
         print(f"{format_elapsed_time(start_time)} WebDriver initialized.")
 
+        # ... (rest of the function remains the same: loading page, clicking buttons, extracting data) ...
         print(f"{format_elapsed_time(start_time)} Loading page (Timeout: {PAGE_LOAD_TIMEOUT}s)...")
         driver.get(url)
         WebDriverWait(driver, PAGE_LOAD_TIMEOUT).until(
@@ -435,21 +475,26 @@ def scrape_targeted_sections(url: str, target_selectors: list[str]):
             print(f"{format_elapsed_time(start_time)} Warning: No HTML content was extracted from any target selectors.")
             logger.warning(f"No HTML content extracted for any target selector for URL: {url}")
 
+
+    # ... (rest of the except and finally blocks remain the same) ...
     except WebDriverException as e:
         raw_err_msg = f"{type(e).__name__}: {e}\n{traceback.format_exc()}"
+        # Differentiate between cloud connection errors and other WebDriver issues
         if "net::ERR_CONNECTION_REFUSED" in str(e) or "unable to connect to renderer" in str(e) or "DevToolsActivePort file doesn't exist" in str(e):
             err_msg = f"WebDriver Error (Cloud Env): Potential issue connecting to the browser instance. Check `packages.txt` & resources. Details: {type(e).__name__}"
+        elif "Local WebDriver setup failed" in str(e): # Catch the specific error raised from webdriver-manager failure
+            err_msg = f"WebDriver Error (Local Env): {e}"
         else:
             err_msg = f"WebDriver Error: {type(e).__name__} - Check Selenium setup/options. Error: {e}"
         print(f"{format_elapsed_time(start_time)} ERROR: {err_msg}")
         logger.error(f"WebDriver error during scraping for {url}: {err_msg}", exc_info=True)
-        result["error"] = f"WebDriver setup/runtime error: {type(e).__name__}"
+        result["error"] = f"WebDriver setup/runtime error: {type(e).__name__}" # Keep generic type for summary
         result["raw_error"] = raw_err_msg
     except TimeoutException as e:
         raw_err_msg = f"Message: {getattr(e, 'msg', 'N/A')}\nStacktrace:\n{getattr(e, 'stacktrace', 'N/A')}"
         err_msg = f"Timeout occurred during page load or element wait (Check PAGE_LOAD_TIMEOUT: {PAGE_LOAD_TIMEOUT}s or other waits). Details: {e.msg}"
         print(f"{format_elapsed_time(start_time)} ERROR: {err_msg}")
-        logger.error(f"Timeout error during scraping for {url}: {err_msg}\nRaw Error: {raw_err_msg}", exc_info=False)
+        logger.error(f"Timeout error during scraping for {url}: {err_msg}\nRaw Error: {raw_err_msg}", exc_info=False) # Set exc_info=False for TimeoutException as stacktrace is often less helpful
         result["error"] = err_msg
         result["raw_error"] = raw_err_msg
     except Exception as e:

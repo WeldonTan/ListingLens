@@ -2,3 +2,4 @@ streamlit
 selenium
 pandas
 google-generativeai
+webdriver-manager
