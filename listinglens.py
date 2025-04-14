@@ -179,7 +179,7 @@ def extract_property_details(html_content, listing_url):
     logger.info(f"Attempting to extract details using Gemini for URL: {listing_url}")
     gemini_start_time = time.perf_counter()
     try:
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-2.0-flash')
         prompt = f"""
         You are an expert property data extractor. Analyze the following HTML content from a property listing website
         (potentially combined from several relevant sections like description, details, contact)
