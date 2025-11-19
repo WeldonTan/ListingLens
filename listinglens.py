@@ -160,10 +160,7 @@ def extract_property_details(html_content, listing_url):
 
     for attempt in range(max_retries):
         try:
-            model = genai.GenerativeModel('gemini-2.0-flash-exp') # Updated model or fallback to 1.5/pro if needed
-            
-            # Fallback to a known stable model if the experimental one fails or use what was there
-            # model = genai.GenerativeModel('gemini-1.5-flash') 
+            model = genai.GenerativeModel('gemini-2.5-flash')
 
             prompt = constants.PROPERTY_EXTRACTION_PROMPT.format(html_content=html_content)
             

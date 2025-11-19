@@ -1,5 +1,5 @@
 # --- Configuration Constants ---
-MAX_CONCURRENT_WORKERS = 3  # Reduced for stability
+MAX_CONCURRENT_WORKERS = 6  # Reduced for stability
 
 # --- Timing Constants (Seconds) ---
 PAGE_LOAD_TIMEOUT = 10.0  # Increased for reliability
