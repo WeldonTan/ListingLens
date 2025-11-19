@@ -49,15 +49,15 @@ except Exception as e:
     st.stop()
 
 # --- Constants ---
-MAX_CONCURRENT_WORKERS = 5
+MAX_CONCURRENT_WORKERS = 3 # Reduced for stability
 
-PAGE_LOAD_TIMEOUT = 15
-BUTTON_WAIT_TIMEOUT = 2
-POST_CLICK_DELAY = 1
-POST_EXPANSION_CLICK_DELAY = 1
-DELAY_BEFORE_POST_EXPANSION_SEARCH = 1
-SECOND_EXPANSION_CLICK_DELAY = 1
-POST_SECOND_EXPANSION_CLICK_DELAY = 1
+PAGE_LOAD_TIMEOUT = 10.0 # Increased for reliability
+BUTTON_WAIT_TIMEOUT = 3.0
+POST_CLICK_DELAY = 1.5
+POST_EXPANSION_CLICK_DELAY = 1.5
+DELAY_BEFORE_POST_EXPANSION_SEARCH = 1.5
+SECOND_EXPANSION_CLICK_DELAY = 1.5
+POST_SECOND_EXPANSION_CLICK_DELAY = 1.5
 
 COLUMN_ORDER = [
     'url', 'listing_title', 'project_name', 'price', 'area', 'state',
@@ -68,10 +68,9 @@ COLUMN_ORDER = [
 ]
 
 target_css_selectors = [
-        "div.Wrapper-ucve63-0.eKOxHS", # Contact Owner block
-        "div.style__ParentWrapper-iwjn3z-0.QvHGM", # Listing Details block
-        "div.Wrapper-ucve63-0.fKaMDx", # Description block
-        "div.Box-bx23rg-0.Flex-sc-9pwi7j-0.Wrapper-ucve63-0.kCBBkT" #Property Details
+        "script[id='__NEXT_DATA__']", # Next.js Data - Priority for raw data
+        "script[type='application/ld+json']", # JSON-LD Data
+        "body" # Fallback: Analyze the entire page content. Robust but token-heavy.
 ]
 
 # --- Gemini API Initialization ---
@@ -96,7 +95,7 @@ chrome_options.add_argument("--log-level=3")
 chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
 chrome_options.add_argument('--disable-infobars')
 chrome_options.add_argument('--disable-extensions')
-chrome_options.binary_location = "/usr/bin/chromium"
+# chrome_options.binary_location = "/usr/bin/chromium" # For Streamlit Cloud, if needed
 
 # --- Helper Functions ---
 def format_elapsed_time(start_time: float) -> str:
@@ -182,7 +181,7 @@ def extract_property_details(html_content, listing_url):
     logger.info(f"Attempting to extract details using Gemini for URL: {listing_url}")
     gemini_start_time = time.perf_counter()
     try:
-        model = genai.GenerativeModel('gemini-2.0-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
         prompt = f"""
         You are an expert property data extractor. Analyze the following HTML content from a property listing website
         (potentially combined from several relevant sections like description, details, contact, and property specifics)
@@ -196,10 +195,10 @@ def extract_property_details(html_content, listing_url):
         - sq_ft: The size in square feet as a number (integer). Remove "sq.ft.", "sf", etc. If not found or cannot be converted, return 0.
         - bedrooms: The number of bedrooms as a number (integer). Look for labels like "Bedrooms", "Beds", or patterns like "3R". If not found or cannot be converted, return 0.
         - bathrooms: The number of bathrooms as a number (integer). Look for labels like "Bathrooms", "Baths", or patterns like "2B". If not found or cannot be converted, return 0.
-        - property_type: The type of property (e.g., "Condominium", "Serviced Residence", "Bungalow"). Look for labels like "Property Type". If not found, return "N/A". # <<< ADD THIS
-        - carpark: The number of car park spaces as a number (integer). Look for labels like "Carpark", "Parking". If not found or cannot be converted, return 0. # <<< ADD THIS
-        - floor_range: The floor range (e.g., "High", "Mid", "Low", "5-10"). Look for labels like "Floor Range". If not found, return "N/A". # <<< ADD THIS
-        - phone_number: The contact phone number. Look carefully, it might have been revealed after a button click in the original HTML (and thus present in the provided HTML, potentially multiple times). Extract the first clear phone number found (digits, possibly with +, -, or spaces). If not found, return "N/A".
+        - property_type: The type of property (e.g., "Condominium", "Serviced Residence", "Bungalow"). Look for labels like "Property Type". If not found, return "N/A".
+        - carpark: The number of car park spaces as a number (integer). Look for labels like "Carpark", "Parking". If not found or cannot be converted, return 0.
+        - floor_range: The floor range (e.g., "High", "Mid", "Low", "5-10"). Look for labels like "Floor Range". If not found, return "N/A".
+        - phone_number: The complete contact phone number. Look very carefully, it might be within a <p> tag (e.g., <p class="style__BaseText-sc-1m7z3v7-1 efceJJ">0133932356</p>) inside a contact button or other contact block. Extract the full phone number, including country codes if present. Prioritize the complete number over partial numbers. For Malaysia numbers, an example format is +60123456789. If not found, return "N/A".
         - description: A concise summary of the property description. Look for description blocks, meta description tags, or sections labeled 'Description'. Include key details, even those potentially revealed after clicking 'show more' in the original page (which should be in the provided HTML). If not found, return "N/A".
 
         Return ONLY the data in a valid JSON object format. Do not include ```json markdown wrappers or any text before or after the JSON object itself. Ensure all keys are present, using "N/A" or 0 as specified for missing values.
@@ -258,21 +257,31 @@ def scrape_targeted_sections(url: str, target_selectors: list[str]):
     start_time = time.time()
     result = {"url": url, "extracted_data": {selector: [] for selector in target_selectors}, "error": None, "raw_error": None}
 
+    # XPaths for buttons to click, using case-insensitive matching
     initial_button_xpaths = [
         "//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'view number')]",
+        "//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'show more')]",
+        "//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'reveal phone')]",
+        "//button[contains(text(),'01')]", # Specific for Mudah.my style buttons
+        "//button[@aria-label='Show phone number']", # Metadata based selector
         "//a[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'show more')]",
         "//span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'view number')]",
+        "//div[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'view number')]",
+        "//*[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'click to show')]",
     ]
-    expansion_button_texts = ["show more"]
+    expansion_button_texts = ["show more", "read more", "view more"]
     post_expansion_contact_xpaths = [
          "//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'show contact number')]",
-         "//a[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'show contact number')]"
+         "//a[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'show contact number')]",
+         "//div[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'show contact number')]",
     ]
 
     try:
-        print(f"{format_elapsed_time(start_time)} Initializing WebDriver for Streamlit Cloud...")
-        service = Service(executable_path="/usr/bin/chromedriver")
-        driver = webdriver.Chrome(service=service, options=chrome_options)
+        print(f"{format_elapsed_time(start_time)} Initializing WebDriver...")
+        # For Streamlit Cloud, you might need to specify the service path
+        # service = Service(executable_path="/usr/bin/chromedriver")
+        # driver = webdriver.Chrome(service=service, options=chrome_options)
+        driver = webdriver.Chrome(options=chrome_options) # Local testing
         driver.set_page_load_timeout(PAGE_LOAD_TIMEOUT)
         print(f"{format_elapsed_time(start_time)} WebDriver initialized.")
 
@@ -402,7 +411,7 @@ def scrape_targeted_sections(url: str, target_selectors: list[str]):
              logger.warning(f"No target CSS selectors provided for URL: {url}")
         extraction_start_time = time.time()
         extracted_html_dict = result["extracted_data"]
-        extraction_wait_timeout = 10
+        extraction_wait_timeout = 1.5
         for i, selector in enumerate(target_selectors):
             selector_start_time = time.time()
             try:
@@ -498,6 +507,7 @@ def process_url(url):
         else:
             combined_html = "\n\n".join(all_html_parts)
             logger.info(f"Scraping completed for {url}, combined HTML length: {len(combined_html)}. Proceeding to AI extraction.")
+            # print(f"--- DEBUG: Combined HTML for {url} (first 1000 chars) ---\n{combined_html[:1000]}\n--- END DEBUG ---")
 
             json_data_string = extract_property_details(combined_html, url)
 
@@ -541,216 +551,225 @@ def process_url(url):
     return result_dict
 
 # --- Streamlit App ---
-st.set_page_config(page_title="ListingLens - Property Extractor", layout="wide")
-
-app_style = """
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #ffffff;
-            color: #333333;
-        }
-        .main > div {
-            padding-top: 2rem;
-            padding-bottom: 2rem;
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
-        }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-        h2, h3, h4, h5, h6 {
-             color: #4682B4;
-        }
-        .stMarkdown p {
-            color: #555555;
-            line-height: 1.6;
-        }
-        .stTextArea textarea {
-            border: 1px solid #cccccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            font-size: 1rem;
-        }
-        .stTextArea label {
-            color: #4682B4;
-            font-weight: 500;
-        }
-        .stButton>button {
-            border-radius: 5px;
-            padding: 0.6rem 1.2rem;
-            font-weight: 600;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-            border: 1px solid #4682B4;
-        }
-        .stButton>button[kind="primary"] {
-            background-color: #4682B4;
-            color: white;
-        }
-        .stButton>button[kind="primary"]:hover {
-            background-color: #3a6d96;
-            border-color: #3a6d96;
-        }
-        .stButton>button[kind="primary"]:focus {
-             box-shadow: 0 0 0 2px rgba(70, 130, 180, 0.5);
-             outline: none;
-        }
-        .stDataFrame {
-            border: 1px solid #e0e0e0;
-            border-radius: 5px;
-        }
-        .stProgress > div > div > div > div {
-            background-color: #4682B4;
-        }
-        .stAlert {
-            border-radius: 5px;
-            border-left: 5px solid;
-            padding: 0.8rem 1rem;
-        }
-        .stAlert[data-baseweb="notification"][kind="info"] {
-            border-left-color: #4682B4;
-            background-color: #e7f3fe;
-        }
-        .stAlert[data-baseweb="notification"][kind="success"] {
-            border-left-color: #28a745;
-            background-color: #eaf7ec;
-        }
-        .stAlert[data-baseweb="notification"][kind="warning"] {
-            border-left-color: #ffc107;
-            background-color: #fff8e1;
-        }
-         .stAlert[data-baseweb="notification"][kind="error"] {
-            border-left-color: #dc3545;
-            background-color: #fdecea;
-        }
-        #MainMenu {visibility: hidden;}
-        .stDeployButton {visibility: hidden;}
-        footer {visibility: hidden;}
-        div[data-testid="stToolbar"] {visibility: hidden;}
-        div[data-testid="stDecoration"] {visibility: hidden;}
-        div[data-testid="stStatusWidget"] {visibility: hidden;}
-    </style>
-"""
-st.markdown(app_style, unsafe_allow_html=True)
-
-st.title("🏠 ListingLens Property Extractor")
-st.markdown("Welcome to ListingLens! Paste property listing web addresses (one per line) below. The tool will visit each page, attempt to reveal hidden details, extract relevant sections, use AI to analyze the content, and present key details in a table. You can download successful results as a CSV file.")
-
-urls_input = st.text_area(
-    "Enter Listing URLs (one per line):",
-    height=150,
-    placeholder=(
-        "e.g., https://www.property-website.com/listing123\n"
-        "https://www.another-site.com/for-sale/property-abc\n"
-        "https://www.iproperty.com.my/property/kuala-lumpur/condo-for-sale-123456/\n"
-        "https://www.edgeprop.my/listing/sale/12345/selangor/serviced-residence"
-    )
+st.set_page_config(
+    page_title="ListingLens - Intelligent Property Scraper",
+    page_icon="🏢",
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-if st.button("🔍 Extract Details from URLs", type="primary"):
-    batch_start_time = time.perf_counter()
+# Custom CSS for a modern look
+st.markdown("""
+    <style>
+    /* Global Styles */
+    .main {
+        background-color: #f8f9fa;
+    }
+    .stApp {
+        font-family: 'Inter', sans-serif;
+    }
+    
+    /* Headers */
+    h1, h2, h3 {
+        color: #1e293b;
+        font-weight: 700;
+    }
+    
+    /* Input Area */
+    .stTextArea textarea {
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+    .stTextArea textarea:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    /* Buttons */
+    .stButton > button {
+        border-radius: 8px;
+        font-weight: 600;
+        border: none;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        transition: all 0.2s;
+    }
+    .stButton > button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Cards/Containers */
+    div[data-testid="stVerticalBlock"] > div {
+        /* Minimal styling for containers if needed */
+    }
+    
+    /* Status & Metrics */
+    div[data-testid="stMetricValue"] {
+        font-size: 1.5rem;
+        color: #3b82f6;
+    }
+    
+    /* Sidebar */
+    section[data-testid="stSidebar"] {
+        background-color: #fff;
+        border-right: 1px solid #f1f5f9;
+    }
+    
+    /* Hide Streamlit Branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    </style>
+    """, unsafe_allow_html=True)
 
-    raw_urls = [url.strip() for url in urls_input.splitlines() if url.strip()]
-    valid_urls = []
-    invalid_inputs = []
-    for url in raw_urls:
-        try:
-            result = urlparse(url)
-            if all([result.scheme in ['http', 'https'], result.netloc]):
-                valid_urls.append(url)
-            else:
-                invalid_inputs.append(f"'{url}' (invalid format)")
-        except ValueError:
-            invalid_inputs.append(f"'{url}' (could not parse)")
+# Sidebar
+with st.sidebar:
+    st.title("🏢 ListingLens")
+    st.markdown("---")
+    st.markdown("### ⚙️ Configuration")
+    st.info(f"Running with **{MAX_CONCURRENT_WORKERS}** concurrent workers")
+    
+    st.markdown("### 📝 Instructions")
+    st.markdown("""
+    1. Paste **Mudah.my** listing URLs in the main input area.
+    2. Ensure each URL is on a new line.
+    3. Click **Start Extraction**.
+    4. View results in the dashboard and download as CSV.
+    """)
+    
+    st.markdown("---")
+    st.caption("Developed by Aelion Systems")
 
-    if invalid_inputs:
-        st.warning(f"⚠️ Some inputs were not valid web addresses and will be ignored: {', '.join(invalid_inputs)}")
+# Main Content
+st.title("Property Listing Intelligence")
+st.markdown("Transform raw property listings (Mudah.my only) into structured, actionable data using AI.")
 
-    if not valid_urls:
-        st.warning("⚠️ Please enter at least one valid web address (URL) starting with http:// or https://.")
+# Input Section
+with st.container():
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        urls_input = st.text_area(
+            "Target URLs",
+            height=200,
+            placeholder="https://example.com/listing/1\nhttps://example.com/listing/2",
+            help="Enter one URL per line"
+        )
+    with col2:
+        st.markdown("#### Actions")
+        start_btn = st.button("🚀 Start Extraction", type="primary", use_container_width=True)
+        if st.button("🗑️ Clear Results", use_container_width=True):
+            st.rerun()
+
+if start_btn:
+    if not urls_input.strip():
+        st.warning("⚠️ Please enter at least one URL.")
     else:
-        total_urls = len(valid_urls)
-        st.info(f"Starting extraction for {total_urls} web address(es)...")
-        logger.info(f"User initiated extraction for {total_urls} valid URLs. Max workers: {MAX_CONCURRENT_WORKERS}")
+        batch_start_time = time.perf_counter()
+        raw_urls = [url.strip() for url in urls_input.splitlines() if url.strip()]
+        
+        # Validation
+        valid_urls = []
+        invalid_inputs = []
+        for url in raw_urls:
+            try:
+                result = urlparse(url)
+                if all([result.scheme in ['http', 'https'], result.netloc]):
+                    valid_urls.append(url)
+                else:
+                    invalid_inputs.append(url)
+            except:
+                invalid_inputs.append(url)
+        
+        if invalid_inputs:
+            st.warning(f"⚠️ {len(invalid_inputs)} invalid URLs ignored.")
+            
+        if not valid_urls:
+            st.error("❌ No valid URLs found.")
+        else:
+            # Dashboard Area
+            st.divider()
+            st.subheader("🔄 Extraction Progress")
+            
+            progress_container = st.container()
+            with progress_container:
+                progress_bar = st.progress(0)
+                status_text = st.empty()
+                
+                # Metrics placeholders
+                m1, m2, m3 = st.columns(3)
+                m1.metric("Total URLs", len(valid_urls))
+                metric_processed = m2.empty()
+                metric_processed.metric("Processed", "0")
+                metric_time = m3.empty()
+                metric_time.metric("Time Elapsed", "0s")
 
-        all_results = []
-        progress_bar = st.progress(0.0)
-        status_text = st.empty()
-        processed_count = 0
-
-        spinner_message = f"⚙️ Processing {total_urls} address(es)... This may take a few minutes."
-        with st.spinner(spinner_message):
+            all_results = []
+            processed_count = 0
+            
+            # Processing Logic
             with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_CONCURRENT_WORKERS) as executor:
                 future_to_url = {executor.submit(process_url, url): url for url in valid_urls}
+                
                 for future in concurrent.futures.as_completed(future_to_url):
                     url = future_to_url[future]
                     try:
                         result = future.result()
                         all_results.append(result)
                     except Exception as exc:
-                        process_time = time.perf_counter() - batch_start_time
-                        logger.error(f"Critical exception processing {url} after ~{process_time:.2f}s: {exc}", exc_info=True)
-                        all_results.append({"url": url, "error": f"Critical processing error: {exc}", "processing_time_seconds": round(process_time, 2)})
+                        logger.error(f"Error processing {url}: {exc}")
+                        all_results.append({"url": url, "error": str(exc)})
                     finally:
                         processed_count += 1
-                        progress_percentage = min(processed_count / total_urls, 1.0)
-                        status_text.text(f"Processed {processed_count} of {total_urls} addresses...")
-                        progress_bar.progress(progress_percentage)
+                        progress = processed_count / len(valid_urls)
+                        progress_bar.progress(progress)
+                        status_text.caption(f"Processing: {url}")
+                        metric_processed.metric("Processed", f"{processed_count}/{len(valid_urls)}")
+                        elapsed = time.perf_counter() - batch_start_time
+                        metric_time.metric("Time Elapsed", f"{elapsed:.1f}s")
 
-        status_text.text(f"Extraction complete! Processed {processed_count} of {total_urls} addresses.")
-        time.sleep(2)
-        status_text.empty()
-        progress_bar.empty()
-
-        successful_extractions = [res for res in all_results if not res.get("error")]
-        failed_extractions = [res for res in all_results if res.get("error")]
-
-        st.markdown("---")
-
-        if successful_extractions:
-            st.success(f"✅ Successfully extracted details from {len(successful_extractions)} address(es).")
-            st.subheader("Extracted Property Details:")
-            df_success = pd.DataFrame(successful_extractions)
-            current_cols = df_success.columns.tolist()
-            ordered_cols = []
-            for col in COLUMN_ORDER:
-                if col in current_cols and col != 'error':
-                    ordered_cols.append(col)
-            remaining_cols = [col for col in current_cols if col not in ordered_cols and col != 'error']
-            final_cols_success = [col for col in ordered_cols + remaining_cols if col in df_success.columns]
-            df_success_display = df_success[final_cols_success].fillna('N/A')
-            st.dataframe(df_success_display)
-            csv_data = df_success_display.to_csv(index=False).encode('utf-8')
-            st.download_button(
-                label="⬇️ Download Successful Results as CSV",
-                data=csv_data,
-                file_name='property_data_successful.csv',
-                mime='text/csv',
-                key='download-csv'
-            )
-        else:
-            if total_urls > 0:
-                st.info("ℹ️ No data was successfully extracted from the provided addresses. Check errors below.")
-
-        if failed_extractions:
-            with st.expander(f"⚠️ View Processing Issues & Errors ({len(failed_extractions)} URLs)", expanded=True):
-                st.warning(f"Failed to process or extract full details for {len(failed_extractions)} address(es). See details below.")
-                df_failed = pd.DataFrame(failed_extractions)
-                current_cols_failed = df_failed.columns.tolist()
-                fail_order = ['url', 'error', 'processing_time_seconds']
-                ordered_cols_failed = [col for col in fail_order if col in current_cols_failed]
-                remaining_cols_failed = [col for col in current_cols_failed if col not in ordered_cols_failed]
-                final_cols_failed = [col for col in ordered_cols_failed + remaining_cols_failed if col in df_failed.columns]
-                df_failed_display = df_failed[final_cols_failed].fillna('N/A')
-                st.dataframe(df_failed_display, use_container_width=True)
-                logger.warning(f"Failed/Partial URLs ({len(failed_extractions)}): {[res.get('url') for res in failed_extractions]}")
-
-        batch_end_time = time.perf_counter()
-        total_duration = batch_end_time - batch_start_time
-        st.info(f"⏱️ Total processing time for the batch: {total_duration:.2f} seconds.")
-        logger.info(f"Total batch processing finished in {total_duration:.2f} seconds for {total_urls} initial URLs.")
-
-st.markdown("---")
-st.caption("ListingLens Extractor")
+            # Results Display
+            st.divider()
+            total_duration = time.perf_counter() - batch_start_time
+            status_text.empty()
+            progress_bar.progress(1.0)
+            st.success(f"✨ Extraction complete in {total_duration:.2f}s")
+            
+            successful = [r for r in all_results if not r.get("error")]
+            failed = [r for r in all_results if r.get("error")]
+            
+            tab1, tab2 = st.tabs([f"✅ Successful ({len(successful)})", f"❌ Failed ({len(failed)})"])
+            
+            with tab1:
+                if successful:
+                    df = pd.DataFrame(successful)
+                    # Reorder columns logic
+                    cols = []
+                    for c in COLUMN_ORDER:
+                        if c in df.columns and c != 'error':
+                             cols.append(c)
+                    # Add any extra columns found
+                    for c in df.columns:
+                        if c not in cols and c != 'error':
+                            cols.append(c)
+                            
+                    st.dataframe(df[cols], use_container_width=True)
+                    
+                    csv = df[cols].to_csv(index=False).encode('utf-8')
+                    st.download_button(
+                        "📥 Download CSV",
+                        data=csv,
+                        file_name="listing_data_successful.csv",
+                        mime="text/csv",
+                        type="primary"
+                    )
+                else:
+                    st.info("No successful extractions.")
+                    
+            with tab2:
+                if failed:
+                    st.error(f"{len(failed)} URLs failed to process.")
+                    df_failed = pd.DataFrame(failed)
+                    st.dataframe(df_failed, use_container_width=True)
+                else:
+                    st.success("No failures! 🎉")
