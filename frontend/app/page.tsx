@@ -75,22 +75,33 @@ export default function DashboardPage() {
   // Polling effect
   useEffect(() => {
     let interval: NodeJS.Timeout
+    let timeout: NodeJS.Timeout
+
+    const checkPollingStatus = async () => {
+        // Check if any new listings have appeared since session start
+        const response = await api.get("/listings/")
+        const newListings = response.data.filter((l: Listing) => new Date(l.created_at) > sessionStartTime)
+        
+        // If we have listings and polling is active, we might want to stop polling if we assume batch completion
+        // But for now, let's just keep polling until timeout or user navigates away
+        setListings(response.data)
+        setLastUpdated(new Date())
+    }
+
     if (polling) {
-      interval = setInterval(() => {
-        fetchListings(true)
-      }, 3000) // Poll every 3 seconds
+      interval = setInterval(checkPollingStatus, 3000) // Poll every 3 seconds
 
       // Stop polling after 10 minutes to allow for longer scrapes
-      const timeout = setTimeout(() => {
+      timeout = setTimeout(() => {
         setPolling(false)
       }, 600000) 
-
-      return () => {
-        clearInterval(interval)
-        clearTimeout(timeout)
-      }
     }
-  }, [polling])
+
+    return () => {
+        if (interval) clearInterval(interval)
+        if (timeout) clearTimeout(timeout)
+    }
+  }, [polling, sessionStartTime])
 
   const handleScrape = async () => {
     setLoading(true)

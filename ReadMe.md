@@ -109,6 +109,30 @@ ListingLens is composed of several decoupled services orchestrated via Docker Co
     docker compose up --build -d
     ```
 
+### 🐳 Docker Build Process
+
+If you modify the code and need to rebuild the Docker containers to reflect your changes:
+
+1.  **Full Rebuild (Recommended)**
+    To rebuild all services and detach:
+    ```bash
+    docker compose up --build -d
+    ```
+
+2.  **Specific Service Rebuild**
+    If you only changed code in one service (e.g., the frontend), you can rebuild just that container to save time:
+    ```bash
+    docker compose up --build -d frontend
+    ```
+    *Replace `frontend` with `backend` or `worker` as needed.*
+
+3.  **Clean Rebuild**
+    If you encounter issues, you can force a clean build by removing the containers and images first:
+    ```bash
+    docker compose down
+    docker compose up --build -d
+    ```
+
 ### Accessing the Application
 
 *   **Frontend Dashboard**: [http://localhost:3000](http://localhost:3000)
