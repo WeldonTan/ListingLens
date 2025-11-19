@@ -1,149 +1,157 @@
-# ListingLens - Property Data Extractor
+# ListingLens - Property Intelligence Dashboard
 
-ListingLens is a Streamlit-powered assistant that automates the tedious work of visiting property listing pages, revealing hidden contact details, collecting the relevant HTML, and using Google's Gemini models to summarise the content into structured data that you can analyse or download. The app orchestrates Selenium-driven browsing, AI post-processing, and convenient CSV exports so that investors, agents, and analysts can focus on decision making instead of manual data entry.
-
----
-
-## Table of Contents
-1. [Key Capabilities](#key-capabilities)
-2. [System Architecture](#system-architecture)
-3. [Requirements](#requirements)
-4. [Initial Setup](#initial-setup)
-5. [Configuring the Google Gemini API Key](#configuring-the-google-gemini-api-key)
-6. [Running the Streamlit App](#running-the-streamlit-app)
-7. [Using the App](#using-the-app)
-8. [Output & Downloads](#output--downloads)
-9. [Error Handling & Logs](#error-handling--logs)
-10. [Customisation Tips](#customisation-tips)
-11. [Troubleshooting](#troubleshooting)
-12. [Support](#support)
+**ListingLens** is an enterprise-grade property intelligence platform designed to transform unstructured real estate data into actionable insights. By leveraging advanced web scraping technologies and state-of-the-art AI, ListingLens automates the extraction, processing, and analysis of property listings, empowering users with a structured and queryable dataset.
 
 ---
 
-## Key Capabilities
-- **Automated page interaction:** Launches Chromium via Selenium, waits for the DOM to settle, clicks on buttons such as “show more” or “view number”, and retries with robust error handling so that hidden details are surfaced before extraction.
-- **Intelligent Data Extraction:** Prioritizes structured data sources like `__NEXT_DATA__` script tags and JSON-LD for high-fidelity results, falling back to full-page analysis when necessary to ensure no detail is missed.
-- **AI-powered parsing:** Sends the aggregated HTML to the `gemini-2.5-flash` model through the `google-generativeai` SDK to extract a consistent JSON payload containing title, project name, price, location, property details, phone number, and description.
-- **Batch processing:** Accepts multiple URLs (one per line) and processes them concurrently (default: 3 workers) with progress bars and status updates so you can monitor large workloads.
-- **Result dashboards:** Presents successful extractions in a sortable table and exposes a CSV download button while grouping failures with diagnostic messages for quick follow-up.
+## 🌟 Key Features
+
+*   **AI-Powered Extraction**: Utilizes Google Gemini AI to intelligently parse complex and unstructured HTML content from property listings into standardized JSON data.
+*   **Automated Scraping**: Features a robust Selenium-based scraping engine capable of navigating dynamic websites and handling user interactions to retrieve complete listing details.
+*   **Real-time Processing**: Implements an asynchronous task queue architecture using Celery and Redis to handle scraping and data processing tasks efficiently in the background.
+*   **Interactive Dashboard**: Offers a modern, user-friendly web interface built with Next.js for submitting URLs, monitoring extraction progress, and analyzing historical data.
+*   **Scalable Architecture**: Built on a microservices architecture with Docker, separating concerns between the API, workers, database, and frontend for maximum scalability and maintainability.
+*   **Data Export**: Allows users to easily export processed data into CSV format for further analysis in external tools.
 
 ---
 
-## System Architecture
-| Component | File | Responsibility |
-|-----------|------|----------------|
-| Streamlit UI & Orchestration | `listinglens.py` | Collects URLs, coordinates multi-threaded processing, renders progress indicators, tables, download buttons, and error panels. |
-| Selenium Scraper | `listinglens.py` (`scrape_targeted_sections`) | Configures headless Chromium/ChromeDriver, navigates to listings, performs scripted interactions, and extracts HTML (prioritizing structured data). |
-| AI Extraction | `listinglens.py` (`extract_property_details`) | Formats prompts for Gemini, validates JSON responses, enriches results with URL metadata, and captures AI parsing errors. |
-| Logging | Console + optional `property_scraper.log` | Emits timestamped diagnostics that mirror the terminal output to aid debugging. |
+## 🏗️ System Architecture
 
-> **Note:** `scraper.py` is a reference implementation for local experimentation and debugging.
+ListingLens is composed of several decoupled services orchestrated via Docker Compose:
 
----
+### 1. Frontend Service (`frontend`)
+*   **Tech Stack**: Next.js 14 (App Router), TypeScript, Tailwind CSS.
+*   **Role**: The user interface. It communicates with the Backend API to submit tasks and fetch data.
+*   **Features**:
+    *   **Dashboard**: Real-time view of current scraping sessions.
+    *   **History**: Archive of all previously scraped properties.
+    *   **Apple-inspired UI**: Clean, minimalist design with blue/white/black theming and subtle animations.
 
-## Requirements
-- Python 3.10 or higher.
-- Google Gemini API access with a valid API key.
-- Google Chrome/Chromium and a matching ChromeDriver binary available on the system PATH.
-- The Python dependencies listed in `requirements.txt`:
-  - `streamlit`
-  - `selenium`
-  - `pandas`
-  - `google-generativeai`
-  - `webdriver-manager`
+### 2. Backend API Service (`backend`)
+*   **Tech Stack**: FastAPI, Python 3.11, SQLAlchemy (Async), Pydantic.
+*   **Role**: The central orchestrator. It exposes RESTful endpoints for the frontend, manages database interactions, and dispatches heavy lifting tasks to the Worker.
 
----
+### 3. Worker Service (`worker`)
+*   **Tech Stack**: Celery, Python.
+*   **Role**: The powerhouse. It executes background tasks asynchronously to prevent blocking the API.
+*   **Responsibilities**:
+    *   Receiving scraping tasks from Redis.
+    *   Controlling the Selenium WebDriver.
+    *   Sending raw HTML to the Gemini AI service for extraction.
+    *   Saving structured results to the database.
 
-## Initial Setup
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/<your-org>/ListingLens.git
-   cd ListingLens
-   ```
-2. **(Optional) Create a virtual environment**
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
-   ```
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. **Ensure Chrome/Chromium is installed** and that the version matches the ChromeDriver binary your environment provides.
+### 4. Database Service (`db`)
+*   **Tech Stack**: PostgreSQL.
+*   **Role**: The persistent storage layer. Stores user data, raw listing information, and processed structured data.
 
----
+### 5. Message Broker (`redis`)
+*   **Tech Stack**: Redis.
+*   **Role**: Acts as the message broker for Celery, managing the queue of tasks between the Backend and the Worker. Also serves as a cache if needed.
 
-## Configuring the Google Gemini API Key
-ListingLens halts immediately if the `GOOGLE_API_KEY` secret is missing. Provide it via Streamlit secrets or environment variables as follows:
+### 6. Scraping Engine (`selenium-hub` & `chrome`)
+*   **Tech Stack**: Selenium Grid, Standalone Chrome.
+*   **Role**: Provides a headless browser environment for the Worker to navigate websites and render JavaScript-heavy content.
 
-- **Streamlit (recommended):** Create a `.streamlit/secrets.toml` file and add:
-  ```toml
-  GOOGLE_API_KEY = "your_api_key_here"
-  ```
-- **Streamlit Community Cloud:** Use the “Secrets” configuration panel to add the same key-value pair.
-- **Local environment variable:** Export `GOOGLE_API_KEY` before launching Streamlit.
-
-Once configured, the Gemini SDK is initialised with `genai.configure(api_key=GOOGLE_API_KEY)`.
+### 7. AI Service Integration
+*   **Provider**: Google Gemini.
+*   **Role**: Analyzes raw HTML content extracted by the scraper and converts it into a structured format (JSON) containing fields like price, location, specifications, and description.
 
 ---
 
-## Running the Streamlit App
-Launch the interactive interface with:
+## 🔄 Process Flow
+
+1.  **Task Submission**: A user pastes a list of property URLs into the Frontend dashboard.
+2.  **API Request**: The Frontend sends these URLs to the Backend API (`POST /listings/scrape`).
+3.  **Queueing**: The Backend creates a task for each URL and pushes it to the Redis message queue.
+4.  **Execution**: The Worker picks up a task from the queue.
+5.  **Scraping**: The Worker commands the Selenium Grid to launch a Chrome instance, navigate to the URL, and interact with the page (e.g., clicking "Show Phone Number" buttons) to ensure all data is visible.
+6.  **Extraction**: The Worker captures the page's HTML and sends it to the Gemini AI service.
+7.  **Structuring**: Gemini parses the HTML and returns structured data (JSON).
+8.  **Storage**: The Worker saves the structured data into the PostgreSQL database.
+9.  **Notification**: The Frontend polls the Backend for updates and displays the new data to the user as soon as it's ready.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+*   **Docker Desktop**: Required to run the containerized application.
+    *   [Mac (Apple Silicon)](https://desktop.docker.com/mac/main/arm64/Docker.dmg)
+    *   [Mac (Intel)](https://desktop.docker.com/mac/main/amd64/Docker.dmg)
+    *   [Windows/Linux](https://www.docker.com/products/docker-desktop/)
+*   **Google Gemini API Key**: Essential for the AI extraction feature.
+
+### Installation & Running
+
+1.  **Clone the Repository**
+    ```bash
+    git clone https://github.com/WeldonTan/ListingLens.git
+    cd ListingLens
+    ```
+
+2.  **Configure Environment**
+    Create a `.env` file in the root directory (or use the helper script below) and add your Gemini API key:
+    ```env
+    GEMINI_API_KEY=your_api_key_here
+    ```
+
+3.  **Run the Start Script (Recommended)**
+    This script automates the setup process, checks for Docker, and starts the services.
+    ```bash
+    ./start.sh
+    ```
+    *Note: If you encounter permission issues, run `chmod +x start.sh` first.*
+
+4.  **Manual Start (Alternative)**
+    If you prefer running Docker commands directly:
+    ```bash
+    docker compose up --build -d
+    ```
+
+### Accessing the Application
+
+*   **Frontend Dashboard**: [http://localhost:3000](http://localhost:3000)
+*   **Backend API Documentation**: [http://localhost:8000/docs](http://localhost:8000/docs)
+*   **Selenium Grid Console**: [http://localhost:4444](http://localhost:4444)
+
+---
+
+## 🔮 Future Enhancements
+
+We are constantly working to improve ListingLens. Here's what's on our roadmap:
+
+*   **Advanced Analytics**: Integration of more detailed market analysis tools, including price trend visualization and comparative market analysis (CMA).
+*   **Multi-Platform Support**: Extending scraper capabilities to support additional property listing platforms beyond the current set.
+*   **User Authentication**: Implementing a robust user authentication system (e.g., Auth0 or NextAuth) to support multi-user environments and personalized settings.
+*   **Notification System**: Adding email or Slack notifications to alert users when new listings matching their criteria are found.
+*   **Enhanced AI Capabilities**: Upgrading to more advanced AI models for even better extraction accuracy and the ability to infer missing data points.
+*   **API Rate Limiting**: Implementing rate limiting on the backend to ensure system stability and prevent abuse.
+
+---
+
+## 🛠️ Development
+
+To contribute or make changes to the codebase:
+
+### Backend Development
+The backend is located in the `backend/` directory.
 ```bash
-streamlit run listinglens.py
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload
 ```
-The command opens a local server (default: http://localhost:8501).
+
+### Frontend Development
+The frontend is located in the `frontend/` directory.
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
 ---
 
-## Using the App
-1. **Paste URLs:** Enter one listing URL per line in the text area.
-2. **Start extraction:** Click **“🔍 Extract Details from URLs”**.
-3. **Wait for processing:** Selenium loads each page, reveals hidden elements, and collects data.
-4. **Review results:** Successful entries appear in a table. Missing fields are normalised to `N/A` or `0`.
+## 📝 License
 
----
-
-## Output & Downloads
-- **Successful results table:** Shows URL, listing title, project name, pricing, area, state, square footage, bedroom/bathroom counts, property type, car parks, floor range, phone number, description, processing time, and any AI error messages.
-- **CSV export:** Use the “⬇️ Download Successful Results as CSV” button.
-- **Failure summary:** Expand the **“⚠️ View Processing Issues & Errors”** panel to inspect failures.
-
----
-
-## Error Handling & Logs
-- The UI surfaces validation warnings, timeouts, and AI parsing issues inline.
-- Selenium retries button clicks and logs stale elements.
-- Structured logs are emitted to the console and `property_scraper.log`.
-
----
-
-## Customisation Tips
-- **Adjust concurrency:** Update `MAX_CONCURRENT_WORKERS` in `listinglens.py` to control how many URLs are processed simultaneously (default: 3).
-- **Modify Selectors:** The system defaults to extracting `__NEXT_DATA__` and `application/ld+json`. You can modify `target_css_selectors` in `listinglens.py` if you need to target specific visual elements instead.
-- **Tweak timeouts:** Tune values such as `PAGE_LOAD_TIMEOUT`, `BUTTON_WAIT_TIMEOUT`, and `POST_CLICK_DELAY` to match the responsiveness of your data sources.
-
----
-
-## Troubleshooting
-| Symptom | Likely Cause | Suggested Fix |
-|---------|--------------|---------------|
-| Immediate Streamlit error stating the API key is missing | `GOOGLE_API_KEY` not set | Add the key to `.streamlit/secrets.toml`. |
-| Selenium reports `DevToolsActivePort file doesn't exist` | Chrome/Chromium mismatch | Ensure compatible versions. |
-| All rows show `No relevant HTML content found` | Page structure changed significantly | Inspect page and update selectors or fallback strategy. |
-| Gemini response cannot be parsed | Model returned non-JSON output | Retry or adjust prompt. |
-
----
-
-## Support
-For product questions or assistance, reach out to **Weldon Tan** at [weldontan.pro@gmail.com](mailto:weldontan.pro@gmail.com).
-
----
-
-## Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
-
----
-
-## Future Enhancements
-- **In-App Mudah Search:** Future versions will allow users to search for Mudah.my listings directly within the ListingLens interface.
+This project is licensed under the MIT License.

@@ -2,7 +2,7 @@
 MAX_CONCURRENT_WORKERS = 6  # Reduced for stability
 
 # --- Timing Constants (Seconds) ---
-PAGE_LOAD_TIMEOUT = 10.0  # Increased for reliability
+PAGE_LOAD_TIMEOUT = 5.0  # Increased for reliability
 BUTTON_WAIT_TIMEOUT = 3.0
 POST_CLICK_DELAY = 0.5
 POST_EXPANSION_CLICK_DELAY = 0.5

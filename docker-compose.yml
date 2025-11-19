@@ -1,0 +1,116 @@
+services:
+  # Frontend (Next.js)
+  frontend:
+    build: 
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+    depends_on:
+      - backend
+
+  # Backend (FastAPI)
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PROJECT_NAME=ListingLens
+      - POSTGRES_SERVER=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=listinglens
+      - SECRET_KEY=changethiskey
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SELENIUM_GRID_URL=http://selenium-hub:4444/wd/hub
+      - QDRANT_HOST=qdrant
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      selenium-hub:
+        condition: service_started
+      qdrant:
+        condition: service_started
+
+  # Celery Worker
+  worker:
+    build:
+      context: ./backend
+    command: celery -A app.worker.celery_app worker --loglevel=info
+    environment:
+      - PROJECT_NAME=ListingLens
+      - POSTGRES_SERVER=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=listinglens
+      - SECRET_KEY=changethiskey
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SELENIUM_GRID_URL=http://selenium-hub:4444/wd/hub
+      - QDRANT_HOST=qdrant
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+    depends_on:
+      backend:
+        condition: service_started
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      selenium-hub:
+        condition: service_started
+
+  # Database (PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=listinglens
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+
+  # Selenium Grid (Hub)
+  selenium-hub:
+    image: selenium/hub:4.16.1
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+
+  # Selenium Node (Chrome)
+  chrome:
+    image: selenium/node-chrome:4.16.1
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+
+  # Vector DB (Qdrant)
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+
+volumes:
+  postgres_data:
+  qdrant_storage:
