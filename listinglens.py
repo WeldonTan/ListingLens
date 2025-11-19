@@ -466,54 +466,92 @@ st.markdown("""
         background-color: #f8f9fa;
     }
     .stApp {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: #333;
     }
     
     /* Headers */
     h1, h2, h3 {
-        color: #1e293b;
+        color: #2c3e50;
         font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    h1 {
+        font-size: 2.5rem;
+        background: -webkit-linear-gradient(45deg, #2c3e50, #3498db);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
     
     /* Input Area */
     .stTextArea textarea {
-        border-radius: 8px;
+        border-radius: 12px;
         border: 1px solid #e2e8f0;
-        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        padding: 1rem;
+        font-size: 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
     }
     .stTextArea textarea:focus {
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
     }
     
     /* Buttons */
     .stButton > button {
-        border-radius: 8px;
+        border-radius: 12px;
         font-weight: 600;
+        padding: 0.5rem 1rem;
         border: none;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        transition: all 0.2s;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .stButton > button[kind="primary"] {
+        background: linear-gradient(90deg, #3498db, #2980b9);
+        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
     }
     .stButton > button:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     }
     
-    /* Cards/Containers */
-    div[data-testid="stVerticalBlock"] > div {
-        /* Minimal styling for containers if needed */
-    }
-    
-    /* Status & Metrics */
+    /* Metrics */
     div[data-testid="stMetricValue"] {
-        font-size: 1.5rem;
-        color: #3b82f6;
+        font-size: 1.8rem;
+        color: #2c3e50;
+        font-weight: 700;
+    }
+    div[data-testid="stMetricLabel"] {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+        font-weight: 500;
     }
     
     /* Sidebar */
     section[data-testid="stSidebar"] {
-        background-color: #fff;
-        border-right: 1px solid #f1f5f9;
+        background-color: #ffffff;
+        border-right: 1px solid #ecf0f1;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.02);
+    }
+    
+    /* DataFrame */
+    div[data-testid="stDataFrame"] {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        border: 1px solid #ecf0f1;
+    }
+    
+    /* Progress Bar */
+    .stProgress > div > div > div > div {
+        background-color: #3498db;
+    }
+    
+    /* Container Padding */
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
     }
     
     /* Hide Streamlit Branding */
@@ -527,12 +565,10 @@ st.markdown("""
 with st.sidebar:
     st.title("🏢 ListingLens")
     st.markdown("---")
-    st.markdown("### ⚙️ Configuration")
-    st.info(f"Running with **{constants.MAX_CONCURRENT_WORKERS}** concurrent workers")
     
     st.markdown("### 📝 Instructions")
     st.markdown("""
-    1. Paste **Mudah.my** listing URLs in the main input area.
+    1. Paste property listing URLs in the main input area.
     2. Ensure each URL is on a new line.
     3. Click **Start Extraction**.
     4. View results in the dashboard and download as CSV.
@@ -543,7 +579,7 @@ with st.sidebar:
 
 # Main Content
 st.title("Property Listing Intelligence")
-st.markdown("Transform raw property listings (Mudah.my only) into structured, actionable data using AI.")
+st.markdown("Transform raw property listings into structured, actionable data using AI.")
 
 # Input Section
 with st.container():
