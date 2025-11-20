@@ -133,6 +133,111 @@ If you modify the code and need to rebuild the Docker containers to reflect your
     docker compose up --build -d
     ```
 
+### ☁️ Deploying to Google Cloud Platform (GCP)
+
+You can deploy ListingLens to Google Cloud Run, a fully managed platform that scales automatically.
+
+**Prerequisites:**
+*   A Google Cloud Platform account.
+*   The [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) installed and authenticated (`gcloud init`).
+
+**Steps:**
+
+1.  **Enable Services**
+    Enable the Cloud Run and Artifact Registry APIs in your GCP project.
+    ```bash
+    gcloud services enable run.googleapis.com artifactregistry.googleapis.com
+    ```
+
+2.  **Build and Push Docker Images**
+    You'll need to build your Docker images and push them to the Google Artifact Registry.
+    *   Create a repository:
+        ```bash
+        gcloud artifacts repositories create listinglens --repository-format=docker --location=us-central1
+        ```
+    *   Configure Docker to authenticate with the registry:
+        ```bash
+        gcloud auth configure-docker us-central1-docker.pkg.dev
+        ```
+    *   Build and push the backend:
+        ```bash
+        docker build -t us-central1-docker.pkg.dev/[YOUR_PROJECT_ID]/listinglens/backend ./backend
+        docker push us-central1-docker.pkg.dev/[YOUR_PROJECT_ID]/listinglens/backend
+        ```
+    *   Build and push the frontend:
+        ```bash
+        docker build -t us-central1-docker.pkg.dev/[YOUR_PROJECT_ID]/listinglens/frontend ./frontend
+        docker push us-central1-docker.pkg.dev/[YOUR_PROJECT_ID]/listinglens/frontend
+        ```
+    *(Repeat for the worker image if deploying separately, or include worker logic in the backend image).*
+
+3.  **Deploy to Cloud Run**
+    *   **Backend**:
+        ```bash
+        gcloud run deploy listinglens-backend \
+          --image us-central1-docker.pkg.dev/[YOUR_PROJECT_ID]/listinglens/backend \
+          --platform managed \
+          --region us-central1 \
+          --allow-unauthenticated \
+          --set-env-vars GEMINI_API_KEY=[YOUR_KEY],DATABASE_URL=[YOUR_DB_URL]
+        ```
+    *   **Frontend**:
+        ```bash
+        gcloud run deploy listinglens-frontend \
+          --image us-central1-docker.pkg.dev/[YOUR_PROJECT_ID]/listinglens/frontend \
+          --platform managed \
+          --region us-central1 \
+          --allow-unauthenticated \
+          --set-env-vars NEXT_PUBLIC_API_URL=[YOUR_BACKEND_URL]
+        ```
+
+*Note: For a production setup, you'll also need a managed PostgreSQL database (like Cloud SQL) and Redis instance (Memorystore), which should be connected via the environment variables.*
+
+### 🚀 Deploying to AWS (App Runner)
+
+You can also deploy ListingLens to AWS using **App Runner**, which automates deployments from Docker images.
+
+**Prerequisites:**
+*   An AWS Account.
+*   The [AWS CLI](https://aws.amazon.com/cli/) installed and authenticated (`aws configure`).
+
+**Steps:**
+
+1.  **Create ECR Repositories**
+    Create repositories in Amazon Elastic Container Registry (ECR) for your images.
+    ```bash
+    aws ecr create-repository --repository-name listinglens/backend
+    aws ecr create-repository --repository-name listinglens/frontend
+    ```
+
+2.  **Build and Push Images**
+    *   Authenticate Docker to your ECR registry:
+        ```bash
+        aws ecr get-login-password --region [YOUR_REGION] | docker login --username AWS --password-stdin [YOUR_ACCOUNT_ID].dkr.ecr.[YOUR_REGION].amazonaws.com
+        ```
+    *   Build and push the backend:
+        ```bash
+        docker build -t [YOUR_ACCOUNT_ID].dkr.ecr.[YOUR_REGION].amazonaws.com/listinglens/backend ./backend
+        docker push [YOUR_ACCOUNT_ID].dkr.ecr.[YOUR_REGION].amazonaws.com/listinglens/backend
+        ```
+    *   Build and push the frontend:
+        ```bash
+        docker build -t [YOUR_ACCOUNT_ID].dkr.ecr.[YOUR_REGION].amazonaws.com/listinglens/frontend ./frontend
+        docker push [YOUR_ACCOUNT_ID].dkr.ecr.[YOUR_REGION].amazonaws.com/listinglens/frontend
+        ```
+
+3.  **Create App Runner Services**
+    *   Go to the [App Runner Console](https://console.aws.amazon.com/apprunner).
+    *   Click **Create service**.
+    *   **Source**: Select "Container image" and browse to your ECR image (e.g., `listinglens/backend`).
+    *   **Deployment settings**: Choose "Automatic" to deploy on every new push.
+    *   **Configuration**:
+        *   Add environment variables: `GEMINI_API_KEY`, `DATABASE_URL`, etc.
+        *   Port: 8000 (for backend).
+    *   Repeat for the Frontend service (Port 3000) and add `NEXT_PUBLIC_API_URL` environment variable pointing to your backend service URL.
+
+*Note: For production, use Amazon RDS for PostgreSQL and Amazon ElastiCache for Redis.*
+
 ### Accessing the Application
 
 *   **Frontend Dashboard**: [http://localhost:3000](http://localhost:3000)
