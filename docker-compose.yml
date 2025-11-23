@@ -2,7 +2,7 @@ services:
   # Frontend (Next.js)
   frontend:
     build: 
-      context: ./frontend
+      context: ./apps/web
     ports:
       - "3000:3000"
     environment:
@@ -13,7 +13,7 @@ services:
   # Backend (FastAPI)
   backend:
     build:
-      context: ./backend
+      context: ./apps/api
     ports:
       - "8000:8000"
     environment:
@@ -41,7 +41,7 @@ services:
   # Celery Worker
   worker:
     build:
-      context: ./backend
+      context: ./apps/api
     command: celery -A app.worker.celery_app worker --loglevel=info
     environment:
       - PROJECT_NAME=ListingLens

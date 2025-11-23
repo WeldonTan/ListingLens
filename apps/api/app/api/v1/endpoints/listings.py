@@ -1,13 +1,12 @@
 from typing import Any, List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
 
 from app.api import deps
 from app.db.session import get_db
-from app.models.listing import Listing
 from app.schemas.listing import Listing as ListingSchema, ListingScrapeRequest
 from app.worker import process_listing
+from app.services.listing_service import ListingService
 
 router = APIRouter()
 
@@ -16,19 +15,15 @@ async def read_listings(
     db: AsyncSession = Depends(get_db),
     skip: int = 0,
     limit: int = 100,
-    # current_user: User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Retrieve listings.
     """
-    result = await db.execute(select(Listing).offset(skip).limit(limit))
-    listings = result.scalars().all()
-    return listings
+    return await ListingService.get_listings(db, skip, limit)
 
 @router.post("/scrape", status_code=202)
 async def scrape_listings(
     request: ListingScrapeRequest,
-    # current_user: User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Trigger scraping for a list of URLs.
@@ -44,12 +39,11 @@ async def scrape_listings(
 async def read_listing(
     id: int,
     db: AsyncSession = Depends(get_db),
-    # current_user: User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Get listing by ID.
     """
-    listing = await db.get(Listing, id)
+    listing = await ListingService.get_listing(db, id)
     if not listing:
         raise HTTPException(status_code=404, detail="Listing not found")
     return listing
@@ -62,12 +56,9 @@ async def delete_listing(
     """
     Delete listing by ID.
     """
-    listing = await db.get(Listing, id)
-    if not listing:
+    success = await ListingService.delete_listing(db, id)
+    if not success:
         raise HTTPException(status_code=404, detail="Listing not found")
-    
-    await db.delete(listing)
-    await db.commit()
     return {"message": "Listing deleted successfully"}
 
 @router.delete("/", status_code=200)
@@ -77,8 +68,5 @@ async def delete_all_listings(
     """
     Delete all listings.
     """
-    # Use delete statement for bulk delete
-    from sqlalchemy import delete
-    await db.execute(delete(Listing))
-    await db.commit()
+    await ListingService.delete_all_listings(db)
     return {"message": "All listings deleted successfully"}

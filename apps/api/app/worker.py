@@ -3,8 +3,7 @@ from celery import Celery
 from app.core.config import settings
 from app.services.scraper import scrape_url
 from app.services.gemini import extract_property_details
-from app.models.listing import Listing
-from sqlalchemy.future import select
+from app.services.listing_service import ListingService
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
@@ -18,7 +17,7 @@ celery_app = Celery(
 #     "app.worker.process_listing": "main-queue",
 # }
 
-async def save_listing_to_db(data: dict):
+async def save_listing(data: dict):
     # Create a dedicated engine/session for this task to avoid loop mismatch in Celery
     engine = create_async_engine(
         settings.SQLALCHEMY_DATABASE_URI,
@@ -31,35 +30,7 @@ async def save_listing_to_db(data: dict):
     
     try:
         async with async_session() as session:
-            # Check if listing exists
-            result = await session.execute(select(Listing).filter(Listing.url == data['url']))
-            existing_listing = result.scalars().first()
-            
-            listing_data = {
-                "url": data.get("url"),
-                "listing_title": data.get("listing_title"),
-                "project_name": data.get("project_name"),
-                "area": data.get("area"),
-                "state": data.get("state"),
-                "price": data.get("price"),
-                "sq_ft": data.get("sq_ft"),
-                "bedrooms": data.get("bedrooms"),
-                "bathrooms": data.get("bathrooms"),
-                "property_type": data.get("property_type"),
-                "carpark": data.get("carpark"),
-                "floor_range": data.get("floor_range"),
-                "phone_number": data.get("phone_number"),
-                "description": data.get("description"),
-            }
-
-            if existing_listing:
-                for key, value in listing_data.items():
-                    setattr(existing_listing, key, value)
-            else:
-                new_listing = Listing(**listing_data)
-                session.add(new_listing)
-            
-            await session.commit()
+            await ListingService.create_or_update_listing(session, data)
     finally:
         await engine.dispose()
 
@@ -91,6 +62,6 @@ def process_listing(url: str):
          return gemini_result
 
     # 3. Save to DB
-    run_async(save_listing_to_db(gemini_result))
+    run_async(save_listing(gemini_result))
     
     return gemini_result
