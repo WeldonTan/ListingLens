@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api import deps
 from app.db.session import get_db
+from arq.jobs import Job
 from app.schemas.listing import Listing as ListingSchema, ListingScrapeRequest
 from app.services.listing_service import ListingService
 
@@ -37,6 +38,66 @@ async def scrape_listings(
             task_ids.append(job.job_id)
     
     return {"message": "Scraping started", "task_ids": task_ids}
+
+@router.post("/scrape/status")
+async def check_scrape_status(
+    request: Request,
+    task_ids: List[str],
+) -> Any:
+    """
+    Check status of scraping tasks.
+    """
+    pool = request.app.state.arq_pool
+    statuses = {}
+    
+    for task_id in task_ids:
+        try:
+            job = Job(task_id, pool)
+            status = await job.status()
+            result = None
+            if status == "complete":
+                try:
+                    result = await job.result()
+                except Exception:
+                    pass
+            
+            statuses[task_id] = {"status": status, "result": result}
+        except Exception:
+            statuses[task_id] = {"status": "unknown", "result": None}
+            
+    return statuses
+
+@router.post("/scrape/cancel")
+async def cancel_scrape_tasks(
+    request: Request,
+    task_ids: List[str],
+) -> Any:
+    """
+    Cancel scraping tasks.
+    """
+    pool = request.app.state.arq_pool
+    
+    for task_id in task_ids:
+        try:
+            job = Job(task_id, pool)
+            await job.abort(timeout=0.1)
+        except Exception:
+            pass
+            
+    return {"message": "Cancellation requested"}
+
+@router.post("/scrape/purge")
+async def purge_queue(
+    request: Request,
+) -> Any:
+    """
+    Purge the scraping queue.
+    """
+    pool = request.app.state.arq_pool
+    # Flush DB to remove all queued jobs and job results
+    # This is safe because Redis is dedicated to this app
+    await pool.execute_command("FLUSHDB")
+    return {"message": "Queue purged"}
 
 @router.get("/{id}", response_model=ListingSchema)
 async def read_listing(

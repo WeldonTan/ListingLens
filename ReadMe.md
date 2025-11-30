@@ -41,7 +41,7 @@ ListingLens is composed of several decoupled services orchestrated via Docker Co
 *   **Role**: The powerhouse. It executes background tasks asynchronously to prevent blocking the API.
 *   **Responsibilities**:
     *   **Task Consumption**: Dequeues scraping tasks from Redis.
-    *   **Browser Automation**: Uses **Selenium Grid** (hub + Chrome node) to render dynamic JavaScript content and interact with page elements.
+    *   **Browser Automation**: Uses **Crawl4AI** (Playwright-based) to render dynamic JavaScript content and interact with page elements.
     *   **AI Extraction**: Sends sanitized HTML to **Google Gemini** to extract structured fields (price, address, agent details, etc.).
     *   **Persistence**: Saves structured results to the PostgreSQL database.
 
@@ -69,7 +69,7 @@ ListingLens is composed of several decoupled services orchestrated via Docker Co
 5.  **Smart Scraping**: The Worker initializes a headless browser session (via Selenium/Playwright), navigates to the URL, and performs necessary interactions (scrolling, clicking buttons) to load full content.
 6.  **AI Analysis**: The raw HTML is processed and sent to the Gemini API with a specific prompt to extract key real estate attributes.
 7.  **Data Persistence**: The structured JSON response is validated and saved to the PostgreSQL database.
-8.  **Real-time Update**: The Frontend polls the Backend (or receives updates via WebSocket in future iterations) to display the newly scraped data to the user.
+8.  **Real-time Update**: The Frontend polls the task status endpoint (`POST /listings/scrape/status`) to track progress and displays the newly scraped data to the user once completed.
 
 ---
 

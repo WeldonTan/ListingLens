@@ -24,8 +24,8 @@ logger = structlog.get_logger()
 # Use os.getenv or settings from config.py if available.
 # Assuming env vars are set in the environment.
 HEADLESS = os.getenv("HEADLESS", "true").lower() == "true"
-DELAY_BEFORE_RETURN_HTML = float(os.getenv("DELAY_BEFORE_RETURN_HTML", "2.0"))
-MAX_CONTENT_CHARS = int(os.getenv("MAX_CONTENT_CHARS", "20000"))
+DELAY_BEFORE_RETURN_HTML = float(os.getenv("DELAY_BEFORE_RETURN_HTML", "0.5"))
+MAX_CONTENT_CHARS = int(os.getenv("MAX_CONTENT_CHARS", "100000"))
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
 GEMINI_MAX_ATTEMPTS = int(os.getenv("GEMINI_MAX_ATTEMPTS", "2"))
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
@@ -97,19 +97,19 @@ async def fetch_page_text_and_html(
     js_commands = build_js_commands()
 
     # Wait until body looks "listing-ish"
+    # Optimized: Reduced char count check and simplified wait
     wait_js = (
         "js:() => {"
         "  const txt = (document.body.innerText || '').replace(/\\s+/g, ' ');"
-        "  if (txt.length < 1000) return false;"
-        "  const hasListingWords = /(RM\\s*\\d[\\d,. ]*|sq\\.ft|bedroom|bathroom|for sale)/i.test(txt);"
-        "  return hasListingWords;"
+        "  if (txt.length < 300) return false;"
+        "  return true;"
         "}"
     )
 
     run_config = CrawlerRunConfig(
         js_code=js_commands,
         wait_for=wait_js,
-        wait_for_timeout=20000,
+        wait_for_timeout=10000,
         delay_before_return_html=DELAY_BEFORE_RETURN_HTML,
         scan_full_page=True,
         cache_mode=CacheMode.BYPASS,

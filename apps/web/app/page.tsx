@@ -21,6 +21,8 @@ import {
   X
 } from "lucide-react"
 
+import { cn } from "@/lib/utils"
+
 interface Listing {
   id: number
   url: string
@@ -40,12 +42,19 @@ interface Listing {
   created_at: string
 }
 
+interface ScrapeTask {
+  url: string
+  taskId: string
+  status: string
+  result?: any
+}
+
 export default function DashboardPage() {
   const [activeView, setActiveView] = useState<'dashboard' | 'history'>('dashboard')
   const [listings, setListings] = useState<Listing[]>([])
   const [urls, setUrls] = useState("")
   const [loading, setLoading] = useState(false)
-  const [polling, setPolling] = useState(false)
+  const [tasks, setTasks] = useState<ScrapeTask[]>([])
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date())
   const [sessionStartTime, setSessionStartTime] = useState<Date>(new Date())
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -72,44 +81,123 @@ export default function DashboardPage() {
     fetchListings()
   }, [])
 
-  useEffect(() => {
-    let interval: NodeJS.Timeout
-    let timeout: NodeJS.Timeout
-
-    const checkPollingStatus = async () => {
-        const response = await api.get("/listings/")
-        setListings(response.data)
-        setLastUpdated(new Date())
-    }
-
-    if (polling) {
-      interval = setInterval(checkPollingStatus, 3000)
-      timeout = setTimeout(() => {
-        setPolling(false)
-      }, 600000) 
-    }
-
-    return () => {
-        if (interval) clearInterval(interval)
-        if (timeout) clearTimeout(timeout)
-    }
-  }, [polling, sessionStartTime])
-
   const handleScrape = async () => {
-    setLoading(true)
-    try {
-      const urlList = urls.split("\n").filter((u) => u.trim() !== "")
-      if (urlList.length === 0) return
+    const urlList = urls.split("\n").filter((u) => u.trim() !== "")
+    if (urlList.length === 0) return
 
-      await api.post("/listings/scrape", { urls: urlList })
+    setLoading(true)
+    
+    // Optimistically set tasks
+    const optimisticTasks = urlList.map((url, index) => ({
+      url,
+      taskId: `temp-${index}-${Date.now()}`,
+      status: "initiating"
+    }))
+    setTasks(prev => [...optimisticTasks, ...prev])
+
+    try {
+      const response = await api.post("/listings/scrape", { urls: urlList })
+      
+      const newTasks = response.data.task_ids.map((id: string, index: number) => ({
+        url: urlList[index],
+        taskId: id,
+        status: "queued"
+      }))
+      
+      setTasks(prev => {
+        const kept = prev.filter(p => !p.taskId.startsWith('temp-'))
+        return [...newTasks, ...kept]
+      })
+      
       setUrls("")
-      setPolling(true)
     } catch (error) {
       console.error("Scraping failed", error)
+      setTasks(prev => prev.map(t => t.taskId.startsWith('temp-') ? { ...t, status: "failed" } : t))
     } finally {
       setLoading(false)
     }
   }
+
+  const handlePurge = async () => {
+    if (!confirm("This will stop all running and queued extraction tasks. Are you sure?")) return
+    try {
+      await api.post("/listings/scrape/purge")
+      setTasks([]) 
+    } catch (error) {
+      console.error("Failed to purge queue", error)
+    }
+  }
+
+  useEffect(() => {
+    const activeTasks = tasks.filter(t => 
+      !t.taskId.startsWith('temp-') && 
+      !['complete', 'failed', 'not_found'].includes(t.status)
+    )
+    
+    if (activeTasks.length === 0) return
+
+    const pollStatus = async () => {
+      try {
+        const taskIds = activeTasks.map(t => t.taskId)
+        const response = await api.post("/listings/scrape/status", taskIds)
+        const statusData = response.data
+        
+        let shouldRefreshListings = false
+
+        setTasks(prev => prev.map(t => {
+          if (t.taskId.startsWith('temp-')) return t 
+          
+          const data = statusData[t.taskId]
+          if (!data) return t
+          
+          // Check for error in result even if status is complete
+          let newStatus = data.status
+          if (newStatus === 'complete' && data.result?.error) {
+             newStatus = 'failed'
+          }
+          
+          if (t.status !== 'complete' && newStatus === 'complete') {
+             shouldRefreshListings = true
+          }
+
+          return {
+            ...t,
+            status: newStatus,
+            result: data.result
+          }
+        }))
+
+        if (shouldRefreshListings) {
+          fetchListings(true)
+        }
+
+      } catch (error) {
+        console.error("Failed to check status", error)
+      }
+    }
+
+    const interval = setInterval(pollStatus, 2000)
+    return () => clearInterval(interval)
+  }, [tasks])
+
+  // Cancel tasks on page unload
+  useEffect(() => {
+    const handleUnload = () => {
+      const activeTasks = tasks.filter(t => 
+        !t.taskId.startsWith('temp-') && 
+        !['complete', 'failed', 'not_found'].includes(t.status)
+      )
+      
+      if (activeTasks.length > 0) {
+        const taskIds = activeTasks.map(t => t.taskId)
+        const blob = new Blob([JSON.stringify(taskIds)], {type: 'application/json'});
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1"
+        navigator.sendBeacon(`${apiUrl}/listings/scrape/cancel`, blob);
+      }
+    }
+    window.addEventListener('beforeunload', handleUnload)
+    return () => window.removeEventListener('beforeunload', handleUnload)
+  }, [tasks])
 
   const handleDelete = async (id: number) => {
     if (!confirm("Are you sure you want to delete this listing?")) return
@@ -363,14 +451,10 @@ export default function DashboardPage() {
                 
                 <div className="flex justify-between items-center">
                    <div className="text-sm font-medium text-blue-600">
-                      {polling && (
-                        <span className="flex items-center gap-2 animate-pulse">
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          Analyzing property data...
-                        </span>
-                      )}
+                      {/* Placeholder for status text if needed */}
                    </div>
                    <div className="flex gap-4">
+                      <Button variant="ghost" onClick={handlePurge} className="text-red-500 hover:text-red-700 hover:bg-red-50">Stop All</Button>
                       <Button variant="ghost" onClick={() => setUrls("")} className="text-slate-500 hover:text-slate-900">Clear</Button>
                       <Button 
                         onClick={handleScrape} 
@@ -381,6 +465,83 @@ export default function DashboardPage() {
                       </Button>
                    </div>
                 </div>
+
+                {tasks.length > 0 && (
+                  <div className="mt-8 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 font-display flex items-center gap-2">
+                       <RefreshCw className={cn("h-4 w-4", loading ? "animate-spin" : "")} />
+                       Extraction Session
+                    </h3>
+                    <div className="space-y-3">
+                      {tasks.map((task) => (
+                        <div key={task.taskId} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col gap-3 transition-all hover:border-blue-300 hover:shadow-md animate-in fade-in zoom-in-95 duration-300">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-slate-700 truncate flex-1 mr-4 flex items-center gap-2">
+                               <ExternalLink className="h-3 w-3 text-slate-400" />
+                               {task.url}
+                            </span>
+                            <div className="flex items-center gap-2 shrink-0">
+                                {['in_progress', 'queued', 'initiating'].includes(task.status) && (
+                                  <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                                )}
+                                <span className={cn(
+                                  "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm",
+                                  task.status === 'complete' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 
+                                  task.status === 'failed' ? 'bg-red-100 text-red-700 border border-red-200' : 
+                                  ['in_progress', 'queued', 'initiating'].includes(task.status) ? 'bg-blue-50 text-blue-700 border border-blue-100' :
+                                  'bg-slate-100 text-slate-600 border border-slate-200'
+                                )}>
+                                  {task.status === 'in_progress' ? 'Analyzing...' : 
+                                   task.status === 'initiating' ? 'Initiating...' :
+                                   task.status === 'queued' ? 'Queued' :
+                                   task.status === 'complete' ? 'Completed' : 
+                                   task.status.replace('_', ' ')}
+                                </span>
+                            </div>
+                          </div>
+                          
+                          {task.result && task.status === 'complete' && (
+                            <div className="bg-slate-50/50 rounded-lg p-4 text-sm border border-slate-100 mt-1 animate-in fade-in slide-in-from-top-2">
+                               <p className="font-bold text-slate-900 font-display text-base">{task.result.listing_title || task.result.project_name || "Extracted Successfully"}</p>
+                               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3 text-xs text-slate-600">
+                                  {task.result.price && (
+                                      <div className="flex flex-col">
+                                          <span className="text-slate-400 uppercase text-[10px] font-bold">Price</span>
+                                          <span className="font-mono text-emerald-600 font-bold text-sm">RM {task.result.price.toLocaleString()}</span>
+                                      </div>
+                                  )}
+                                  {task.result.sq_ft && (
+                                      <div className="flex flex-col">
+                                          <span className="text-slate-400 uppercase text-[10px] font-bold">Size</span>
+                                          <span>{task.result.sq_ft.toLocaleString()} sqft</span>
+                                      </div>
+                                  )}
+                                  {task.result.area && (
+                                      <div className="flex flex-col">
+                                          <span className="text-slate-400 uppercase text-[10px] font-bold">Location</span>
+                                          <span>{task.result.area}</span>
+                                      </div>
+                                  )}
+                                  {task.result.phone_number && (
+                                      <div className="flex flex-col">
+                                          <span className="text-slate-400 uppercase text-[10px] font-bold">Contact</span>
+                                          <span className="text-blue-600 font-mono">{task.result.phone_number}</span>
+                                      </div>
+                                  )}
+                               </div>
+                            </div>
+                          )}
+                          {task.status === 'failed' && (
+                             <div className="text-xs text-red-600 bg-red-50 p-3 rounded-lg border border-red-100 animate-in fade-in">
+                                Extraction failed. Please verify the URL is correct and accessible.
+                             </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
               </div>
             </div>
 
@@ -417,7 +578,7 @@ export default function DashboardPage() {
                <span className="font-display font-bold text-lg">ListingLens</span>
             </div>
             <p className="text-slate-400 text-sm">
-              &copy; {new Date().getFullYear()} Aelion Systems. Internal Use Only.
+              &copy; {new Date().getFullYear()} Aelion Systems. All Rights Reserved.
             </p>
           </div>
         </div>

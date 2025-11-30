@@ -3,8 +3,14 @@ services:
   frontend:
     build: 
       context: ../apps/web
+      target: deps
+    command: npm run dev
     ports:
       - "3000:3000"
+    volumes:
+      - ../apps/web:/app
+      - /app/node_modules
+      - /app/.next
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
     depends_on:
@@ -14,8 +20,11 @@ services:
   backend:
     build:
       context: ../apps/api
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "8000:8000"
+    volumes:
+      - ../apps/api:/app
     environment:
       - PROJECT_NAME=ListingLens
       - POSTGRES_SERVER=db
@@ -40,6 +49,8 @@ services:
     build:
       context: ../apps/api
     command: arq app.worker.WorkerSettings
+    volumes:
+      - ../apps/api:/app
     environment:
       - PROJECT_NAME=ListingLens
       - POSTGRES_SERVER=db
