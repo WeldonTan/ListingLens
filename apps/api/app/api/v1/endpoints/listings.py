@@ -1,11 +1,10 @@
 from typing import Any, List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api import deps
 from app.db.session import get_db
 from app.schemas.listing import Listing as ListingSchema, ListingScrapeRequest
-from app.worker import process_listing
 from app.services.listing_service import ListingService
 
 router = APIRouter()
@@ -23,15 +22,19 @@ async def read_listings(
 
 @router.post("/scrape", status_code=202)
 async def scrape_listings(
-    request: ListingScrapeRequest,
+    request: Request,
+    scrape_req: ListingScrapeRequest,
 ) -> Any:
     """
     Trigger scraping for a list of URLs.
     """
     task_ids = []
-    for url in request.urls:
-        task = process_listing.delay(url)
-        task_ids.append(str(task.id))
+    pool = request.app.state.arq_pool
+    
+    for url in scrape_req.urls:
+        job = await pool.enqueue_job('process_listing', url)
+        if job:
+            task_ids.append(job.job_id)
     
     return {"message": "Scraping started", "task_ids": task_ids}
 

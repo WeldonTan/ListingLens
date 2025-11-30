@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Michroma } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({ 
   subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const michroma = Michroma({ 
+  weight: "400",
   subsets: ["latin"],
+  variable: "--font-michroma",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -25,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${michroma.variable} antialiased bg-slate-50 text-slate-900 font-sans`}
       >
         {children}
       </body>

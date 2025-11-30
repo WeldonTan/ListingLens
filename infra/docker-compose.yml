@@ -2,7 +2,7 @@ services:
   # Frontend (Next.js)
   frontend:
     build: 
-      context: ./apps/web
+      context: ../apps/web
     ports:
       - "3000:3000"
     environment:
@@ -13,7 +13,7 @@ services:
   # Backend (FastAPI)
   backend:
     build:
-      context: ./apps/api
+      context: ../apps/api
     ports:
       - "8000:8000"
     environment:
@@ -25,24 +25,21 @@ services:
       - SECRET_KEY=changethiskey
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - SELENIUM_GRID_URL=http://selenium-hub:4444/wd/hub
       - QDRANT_HOST=qdrant
-      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_started
-      selenium-hub:
-        condition: service_started
       qdrant:
         condition: service_started
 
-  # Celery Worker
+  # Worker (Arq)
   worker:
     build:
-      context: ./apps/api
-    command: celery -A app.worker.celery_app worker --loglevel=info
+      context: ../apps/api
+    command: arq app.worker.WorkerSettings
     environment:
       - PROJECT_NAME=ListingLens
       - POSTGRES_SERVER=db
@@ -52,17 +49,14 @@ services:
       - SECRET_KEY=changethiskey
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - SELENIUM_GRID_URL=http://selenium-hub:4444/wd/hub
       - QDRANT_HOST=qdrant
-      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
     depends_on:
       backend:
         condition: service_started
       db:
         condition: service_healthy
       redis:
-        condition: service_started
-      selenium-hub:
         condition: service_started
 
   # Database (PostgreSQL)
@@ -83,25 +77,6 @@ services:
   # Redis
   redis:
     image: redis:7-alpine
-
-  # Selenium Grid (Hub)
-  selenium-hub:
-    image: selenium/hub:4.16.1
-    ports:
-      - "4442:4442"
-      - "4443:4443"
-      - "4444:4444"
-
-  # Selenium Node (Chrome)
-  chrome:
-    image: selenium/node-chrome:4.16.1
-    shm_size: 2gb
-    depends_on:
-      - selenium-hub
-    environment:
-      - SE_EVENT_BUS_HOST=selenium-hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
 
   # Vector DB (Qdrant)
   qdrant:

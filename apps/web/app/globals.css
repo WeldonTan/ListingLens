@@ -1,46 +1,41 @@
 @import "tailwindcss";
 
+@theme {
+  --font-display: var(--font-michroma), sans-serif;
+  --font-sans: var(--font-inter), sans-serif;
+  
+  --color-slate-900: #0f172a;
+  --color-slate-50: #f8fafc;
+  --color-blue-600: #2563eb;
+  --color-cyan-300: #67e8f9;
+}
+
 :root {
-  --background: #ffffff; /* White for light mode background */
-  --foreground: #1a1a1a; /* Dark gray/near black for light mode text */
-  --primary-blue: #007aff; /* Apple-like blue */
-  --light-blue: #e0f0ff; /* Light blue for accents/hover */
-  --dark-background: #1a1a1a; /* Dark gray/near black for dark mode background */
-  --dark-foreground: #f5f5f7; /* Near white for dark mode text */
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: var(--dark-background);
-    --foreground: var(--dark-foreground);
-  }
+  --background: #ffffff;
+  --foreground: #0f172a;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), sans-serif; /* Use Geist font for consistency */
+  background-color: var(--color-slate-50);
+  color: var(--color-slate-900);
+  font-family: var(--font-sans);
 }
 
-/* Base styles for subtle hover effects */
-button, a, input, textarea, .card {
-  transition: all 0.2s ease-in-out;
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-/* Example of an Apple-like hover effect for buttons */
-button:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-button:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: none;
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out;
 }

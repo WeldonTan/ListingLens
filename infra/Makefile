@@ -13,7 +13,7 @@ logs:
 	docker-compose logs -f
 
 build:
-	docker build -t $(APP):$(GIT_SHA) .
+	docker-compose build
 
 # For development
 dev:

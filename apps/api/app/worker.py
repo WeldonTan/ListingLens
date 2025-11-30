@@ -1,67 +1,61 @@
 import asyncio
-from celery import Celery
+import structlog
+from arq.connections import RedisSettings
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+
 from app.core.config import settings
-from app.services.scraper import scrape_url
-from app.services.gemini import extract_property_details
+from app.core.logging import setup_logging
+from app.services.scraper import scrape_and_extract_listing
 from app.services.listing_service import ListingService
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker
 
-celery_app = Celery(
-    "worker",
-    broker=f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}/0",
-    backend=f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}/0"
-)
+# Configure logging at module level so it applies when arq loads the worker
+setup_logging()
+logger = structlog.get_logger()
 
-# celery_app.conf.task_routes = {
-#     "app.worker.process_listing": "main-queue",
-# }
-
-async def save_listing(data: dict):
-    # Create a dedicated engine/session for this task to avoid loop mismatch in Celery
+async def startup(ctx):
+    # Initialize DB Engine
     engine = create_async_engine(
         settings.SQLALCHEMY_DATABASE_URI,
         future=True,
         echo=False,
     )
-    async_session = sessionmaker(
+    ctx['sessionmaker'] = async_sessionmaker(
         engine, class_=AsyncSession, expire_on_commit=False
     )
-    
-    try:
-        async with async_session() as session:
-            await ListingService.create_or_update_listing(session, data)
-    finally:
+    logger.info("worker.startup", status="initialized_db")
+
+async def shutdown(ctx):
+    # Retrieve engine from sessionmaker
+    sessionmaker_instance = ctx.get('sessionmaker')
+    if sessionmaker_instance:
+        engine = sessionmaker_instance.kw['bind']
         await engine.dispose()
+    logger.info("worker.shutdown", status="disposed_db")
 
-def run_async(coro):
-    loop = asyncio.new_event_loop()
-    try:
-        asyncio.set_event_loop(loop)
-        return loop.run_until_complete(coro)
-    finally:
-        loop.close()
-
-@celery_app.task(acks_late=True)
-def process_listing(url: str):
-    # 1. Scrape
-    scrape_result = scrape_url(url)
-    if scrape_result.get("error"):
-        # Log error
-        return {"url": url, "error": scrape_result["error"]}
+async def process_listing(ctx, url: str):
+    logger.info("worker.process_listing", url=url)
     
-    html_content = scrape_result.get("html")
-    if not html_content:
-         return {"url": url, "error": "No HTML content"}
-
-    # 2. Gemini Extraction
-    # We need to run async gemini call in sync celery task
-    gemini_result = run_async(extract_property_details(html_content, url))
+    # Scrape and Extract (async)
+    result = await scrape_and_extract_listing(url)
     
-    if gemini_result.get("error"):
-         return gemini_result
+    if result.get("error"):
+        logger.error("worker.error", url=url, error=result["error"])
+        return {"url": url, "error": result["error"]}
 
-    # 3. Save to DB
-    run_async(save_listing(gemini_result))
+    # Save to DB
+    session_maker = ctx['sessionmaker']
+    async with session_maker() as session:
+        await ListingService.create_or_update_listing(session, result)
     
-    return gemini_result
+    logger.info("worker.complete", url=url)
+    return result
+
+class WorkerSettings:
+    functions = [process_listing]
+    redis_settings = RedisSettings(
+        host=settings.REDIS_HOST,
+        port=settings.REDIS_PORT
+    )
+    on_startup = startup
+    on_shutdown = shutdown
+    max_jobs = 10

@@ -46,7 +46,7 @@ class Settings(BaseSettings):
     SELENIUM_GRID_URL: str = "http://selenium-hub:4444/wd/hub"
 
     # Google Gemini
-    GOOGLE_API_KEY: str
+    GEMINI_API_KEY: str
 
     # Qdrant
     QDRANT_HOST: str

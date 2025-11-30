@@ -1,176 +1,434 @@
+import asyncio
+import json
+import os
 import time
+import re
 import structlog
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import (
-    TimeoutException, NoSuchElementException, StaleElementReferenceException, WebDriverException
+from dataclasses import dataclass, asdict
+from datetime import datetime
+
+from crawl4ai import (
+    AsyncWebCrawler,
+    BrowserConfig,
+    CrawlerRunConfig,
+    CacheMode,
 )
-from app.core.config import settings
+from google import genai
+from app.services.status_codes import STATUS_BY_NAME
 
 logger = structlog.get_logger()
 
-# --- Constants ---
-PAGE_LOAD_TIMEOUT = 30.0  # Increased for slower sites like Mudah
-BUTTON_WAIT_TIMEOUT = 5.0
-POST_CLICK_DELAY = 0.1    # Reduced for optimization
-POST_EXPANSION_CLICK_DELAY = 0.1 # Reduced for optimization
-DELAY_BEFORE_POST_EXPANSION_SEARCH = 0.1 # Reduced for optimization
-SECOND_EXPANSION_CLICK_DELAY = 0.1 # Reduced for optimization
-POST_SECOND_EXPANSION_CLICK_DELAY = 0.1 # Reduced for optimization
-EXTRACTION_WAIT_TIMEOUT = 0.1 # Reduced for optimization
-INITIAL_SETTLE_DELAY = 0.1 # Reduced for optimization
+# ----------------------------------------------------------
+# Config
+# ----------------------------------------------------------
+# Use os.getenv or settings from config.py if available.
+# Assuming env vars are set in the environment.
+HEADLESS = os.getenv("HEADLESS", "true").lower() == "true"
+DELAY_BEFORE_RETURN_HTML = float(os.getenv("DELAY_BEFORE_RETURN_HTML", "2.0"))
+MAX_CONTENT_CHARS = int(os.getenv("MAX_CONTENT_CHARS", "20000"))
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
+GEMINI_MAX_ATTEMPTS = int(os.getenv("GEMINI_MAX_ATTEMPTS", "2"))
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
 
-TARGET_CSS_SELECTORS = [
-    "script[id='__NEXT_DATA__']",
-    "script[type='application/ld+json']",
-    "body"
+# ----------------------------------------------------------
+# Gemini client
+# ----------------------------------------------------------
+def configure_gemini_client() -> genai.Client:
+    if not GEMINI_API_KEY:
+        raise RuntimeError(
+            "GEMINI_API_KEY (or GOOGLE_API_KEY) is not set."
+        )
+    return genai.Client(api_key=GEMINI_API_KEY)
+
+# ----------------------------------------------------------
+# Crawl4AI JS interactions (scroll + show more + show contact)
+# ----------------------------------------------------------
+def build_js_commands() -> list[str]:
+    """
+    1. Scroll top -> bottom to trigger lazy loading.
+    2. Click all relevant "show more" / "show contact number" / "call"/"whatsapp" buttons.
+       We handle multiple such buttons by iterating over them.
+    """
+    return [
+        "window.scrollTo(0, 0);",
+        "window.scrollTo(0, document.body.scrollHeight);",
+        """
+        (function () {
+          const buttons = Array.from(
+            document.querySelectorAll("button, a[role='button'], div[role='button']")
+          );
+
+          const wantShowMore = ["show more"];
+          const wantContact = ["show contact number", "show contact", "show phone number"];
+          const wantCall = ["call", "whatsapp", "chat"];
+
+          function clickByKeywords(keywords, flagName) {
+            buttons.forEach(btn => {
+              const txt = (btn.innerText || btn.textContent || "").toLowerCase().trim();
+              if (!txt) return;
+              if (btn.dataset[flagName]) return;
+              if (keywords.some(k => txt.includes(k))) {
+                btn.dataset[flagName] = "1";
+                try {
+                  btn.scrollIntoView({behavior:"instant", block:"center"});
+                } catch (e) {}
+                btn.click();
+              }
+            });
+          }
+
+          clickByKeywords(wantShowMore, "__clickedShowMore");
+          clickByKeywords(wantContact, "__clickedContact");
+          clickByKeywords(wantCall, "__clickedCall");
+        })();
+        """,
+    ]
+
+async def fetch_page_text_and_html(
+    url: str, crawler: AsyncWebCrawler
+) -> tuple[str, str, float]:
+    """
+    Returns: (page_text_for_gemini, raw_html, crawl_duration_sec)
+    """
+    url = url.strip()
+    if not url:
+        raise ValueError("Empty URL")
+
+    js_commands = build_js_commands()
+
+    # Wait until body looks "listing-ish"
+    wait_js = (
+        "js:() => {"
+        "  const txt = (document.body.innerText || '').replace(/\\s+/g, ' ');"
+        "  if (txt.length < 1000) return false;"
+        "  const hasListingWords = /(RM\\s*\\d[\\d,. ]*|sq\\.ft|bedroom|bathroom|for sale)/i.test(txt);"
+        "  return hasListingWords;"
+        "}"
+    )
+
+    run_config = CrawlerRunConfig(
+        js_code=js_commands,
+        wait_for=wait_js,
+        wait_for_timeout=20000,
+        delay_before_return_html=DELAY_BEFORE_RETURN_HTML,
+        scan_full_page=True,
+        cache_mode=CacheMode.BYPASS,
+        verbose=True,
+    )
+
+    logger.info("scraper.navigate", url=url)
+    t0 = time.perf_counter()
+    result = await crawler.arun(url=url, config=run_config)
+    crawl_duration = time.perf_counter() - t0
+
+    logger.info("scraper.crawled", url=url, success=result.success, status=getattr(result, 'status_code', None))
+
+    if not result.success:
+        raise RuntimeError(f"Crawl failed for {url}: {result.error_message}")
+
+    raw_html = result.html or ""
+    cleaned_html = result.cleaned_html or ""
+    raw_md = getattr(getattr(result, "markdown", None), "raw_markdown", "") or ""
+    
+    if raw_md:
+        page_text = raw_md
+    elif cleaned_html:
+        page_text = cleaned_html
+    else:
+        page_text = raw_html
+
+    return page_text, raw_html, crawl_duration
+
+# ----------------------------------------------------------
+# Schema & helpers
+# ----------------------------------------------------------
+FIELD_NAMES = [
+    "url",
+    "listing_title",
+    "project_name",
+    "area",
+    "state",
+    "price",
+    "sq_ft",
+    "bedrooms",
+    "bathrooms",
+    "property_type",
+    "carpark",
+    "floor_range",
+    "phone_number",
+    "description",
 ]
 
-INITIAL_BUTTON_XPATHS = [
-    "//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'view number')]",
-    "//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'show more')]",
-    "//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'reveal phone')]",
-    "//button[contains(text(),'01')]",
-    "//button[@aria-label='Show phone number']",
-    "//a[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'show more')]",
-    "//span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'view number')]",
-    "//div[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'view number')]",
-    "//*[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'click to show')]",
-]
+def empty_record(url: str) -> dict:
+    return {k: (url if k == "url" else None) for k in FIELD_NAMES}
 
-EXPANSION_BUTTON_TEXTS = ["show more", "read more", "view more"]
+def extract_phone_candidates_from_html(raw_html: str) -> list[str]:
+    candidates: list[str] = []
+    phone_patterns = [
+        r"\b01\d[-\s]?\d{3}[-\s]?\d{4}\b",
+        r"\b01\d\d{7,8}\b",
+        r"\b0\d{1,2}-\d{6,8}\b",
+        r"\b6\d{8,11}\b",
+    ]
+    for pat in phone_patterns:
+        for m in re.finditer(pat, raw_html):
+            val = m.group(0).strip()
+            if val not in candidates:
+                candidates.append(val)
+    return candidates
 
-POST_EXPANSION_CONTACT_XPATHS = [
-    "//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'show contact number')]",
-    "//a[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'show contact number')]",
-    "//div[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'show contact number')]",
-]
+# ----------------------------------------------------------
+# Meta logging
+# ----------------------------------------------------------
+@dataclass
+class GeminiMeta:
+    status_key: str
+    status_code: str
+    gemini_model: str | None = None
+    gemini_attempts: int = 0
+    gemini_prompt_tokens: int | None = None
+    gemini_response_tokens: int | None = None
+    gemini_total_tokens: int | None = None
+    gemini_duration_sec: float | None = None
+    crawl_duration_sec: float | None = None
+    total_duration_sec: float | None = None
+    timestamp_utc: str | None = None
 
-def click_button(driver, button_element, xpath_description, wait_timeout, post_click_delay):
-    try:
-        if button_element and button_element.is_displayed() and button_element.is_enabled():
-            try: # First, wait for the element to be clickable
-                WebDriverWait(driver, wait_timeout).until(
-                    EC.element_to_be_clickable((By.XPATH, xpath_description))
-                )
-            except TimeoutException: # If not clickable after timeout, proceed to click anyway
-                pass
+def _status_row(status_name: str) -> dict:
+    return STATUS_BY_NAME.get(status_name, STATUS_BY_NAME["UNEXPECTED_ERROR"])
 
-            try:
-                # Scroll to element and click using JavaScript for robustness
-                driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", button_element)
-                driver.execute_script("arguments[0].click();", button_element)
-                time.sleep(post_click_delay) # Short delay for DOM to settle
-                return True
-            except StaleElementReferenceException:
-                 try: # If StaleElementReferenceException, re-find the element and try again
-                     button_fresh = WebDriverWait(driver, wait_timeout).until(
-                        EC.presence_of_element_located((By.XPATH, xpath_description))
-                     )
-                     driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", button_fresh)
-                     driver.execute_script("arguments[0].click();", button_fresh)
-                     time.sleep(post_click_delay)
-                     return True
-                 except Exception:
-                     pass
-            except Exception:
-                pass
-    except Exception:
-        pass
-    return False
+def make_meta(
+    status_name: str,
+    crawl_duration_sec: float | None,
+    total_duration_sec: float | None,
+    gemini_model: str | None = None,
+    attempts: int = 0,
+    usage: dict | None = None,
+    gemini_duration_sec: float | None = None,
+) -> dict:
+    row = _status_row(status_name)
+    usage = usage or {}
+    ts = datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    meta = GeminiMeta(
+        status_key=row["cd_name"],
+        status_code=row["cd_std"],
+        gemini_model=gemini_model,
+        gemini_attempts=attempts,
+        gemini_prompt_tokens=usage.get("prompt_token_count"),
+        gemini_response_tokens=usage.get("candidates_token_count"),
+        gemini_total_tokens=usage.get("total_token_count"),
+        gemini_duration_sec=gemini_duration_sec,
+        crawl_duration_sec=crawl_duration_sec,
+        total_duration_sec=total_duration_sec,
+        timestamp_utc=ts,
+    )
+    return asdict(meta)
 
-def scrape_url(url: str):
+# ----------------------------------------------------------
+# Gemini extraction
+# ----------------------------------------------------------
+def extract_with_gemini(
+    client: genai.Client,
+    url: str,
+    page_text: str,
+    raw_html: str,
+    crawl_duration_sec: float,
+) -> tuple[dict, dict]:
+    t0_total = time.perf_counter()
+    phone_candidates = extract_phone_candidates_from_html(raw_html)
+    content = page_text[:MAX_CONTENT_CHARS]
+    hints_block = (
+        "PHONE CANDIDATES (from full HTML, may include numbers from scripts, links, or hidden widgets):\n"
+        f"{phone_candidates}\n\n"
+    )
+
+    base_prompt = f"""
+You are an assistant that extracts structured data from a SINGLE property listing page on mudah.my.
+
+Use BOTH the page content and the phone candidates list below.
+The phone candidates may come from JavaScript, links (e.g. wasap.my/6012...), or other hidden parts of the HTML.
+
+Rules for phone_number:
+- You MUST search for phone numbers anywhere in the page, including:
+  * main description text
+  * "Contact" widgets
+  * WhatsApp / tel: links
+  * any other visible or hidden text in the HTML
+- If there are both masked and full numbers (e.g. "017323****" and "0173238055"),
+  you MUST choose the full digit number (0173238055).
+- Prefer a single, Malaysian-style phone number (with or without country code).
+- You may use the PHONE CANDIDATES list to resolve masked numbers.
+- If you only see masked phone numbers (with asterisks) and NO full digit candidate at all,
+  then you may return the masked number like "017323****".
+- If genuinely no phone number is present anywhere, set phone_number to null.
+- Never invent or guess digits that do not appear on the page.
+
+General field rules:
+- Extract ONLY what is clearly supported by the content.
+- Prefer information specific to THIS listing, not generic area/project blurbs.
+- If a field is not clearly present, set it to null.
+- Do not hallucinate values.
+
+{hints_block}
+Here is the page content (after scrolling and clicking 'show more' and 'Show contact number'):
+
+---------------- PAGE CONTENT START ----------------
+{content}
+---------------- PAGE CONTENT END ----------------
+"""
+
+    response_schema = {
+        "type": "object",
+        "properties": {
+            "url": {"type": "string"},
+            "listing_title": {"type": ["string", "null"]},
+            "project_name": {"type": ["string", "null"]},
+            "area": {"type": ["string", "null"]},
+            "state": {"type": ["string", "null"]},
+            "price": {"type": ["number", "null"]},
+            "sq_ft": {"type": ["number", "null"]},
+            "bedrooms": {"type": ["number", "null"]},
+            "bathrooms": {"type": ["number", "null"]},
+            "property_type": {"type": ["string", "null"]},
+            "carpark": {"type": ["number", "null"]},
+            "floor_range": {"type": ["string", "null"]},
+            "phone_number": {"type": ["string", "null"]},
+            "description": {"type": ["string", "null"]},
+        },
+        "required": ["url"],
+    }
+
+    config = {
+        "response_mime_type": "application/json",
+        "response_json_schema": response_schema,
+    }
+
+    attempts = 0
+    last_error: Exception | None = None
+    usage: dict | None = None
+    gemini_duration: float | None = None
+
+    while attempts < GEMINI_MAX_ATTEMPTS:
+        attempts += 1
+        logger.info("gemini.attempt", url=url, attempt=attempts)
+        t0 = time.perf_counter()
+        try:
+            response = client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=base_prompt,
+                config=config,
+            )
+            gemini_duration = time.perf_counter() - t0
+            usage_meta = getattr(response, "usage_metadata", None)
+            if usage_meta:
+                usage = {
+                    "prompt_token_count": getattr(usage_meta, "prompt_token_count", None),
+                    "candidates_token_count": getattr(usage_meta, "candidates_token_count", None),
+                    "total_token_count": getattr(usage_meta, "total_token_count", None),
+                }
+
+            raw = (response.text or "").strip()
+            data = json.loads(raw)
+            record = empty_record(url)
+            for k in FIELD_NAMES:
+                if k == "url":
+                    record[k] = url
+                else:
+                    val = data.get(k, None)
+                    # Helper to clean numeric fields if they come as strings
+                    if k in ["price", "sq_ft", "bedrooms", "bathrooms", "carpark"] and isinstance(val, str):
+                        # Remove everything except digits and dots
+                        val_clean = re.sub(r"[^\d.]", "", val)
+                        try:
+                            if val_clean:
+                                if "." in val_clean:
+                                    val = float(val_clean)
+                                else:
+                                    val = int(val_clean)
+                            else:
+                                val = 0
+                        except ValueError:
+                            val = 0
+                    
+                    record[k] = val
+
+            total_duration = time.perf_counter() - t0_total
+            meta = make_meta(
+                status_name="SUCCESS",
+                crawl_duration_sec=crawl_duration_sec,
+                total_duration_sec=total_duration,
+                gemini_model=GEMINI_MODEL,
+                attempts=attempts,
+                usage=usage,
+                gemini_duration_sec=gemini_duration,
+            )
+            return record, meta
+
+        except Exception as e:
+            last_error = e
+            logger.warning("gemini.error", url=url, error=str(e), attempt=attempts)
+            continue
+
+    total_duration = time.perf_counter() - t0_total
+    logger.error("gemini.failed", url=url, error=str(last_error))
+    meta = make_meta(
+        status_name="GEMINI_CALL_FAILED",
+        crawl_duration_sec=crawl_duration_sec,
+        total_duration_sec=total_duration,
+        gemini_model=GEMINI_MODEL,
+        attempts=attempts,
+        usage=usage,
+        gemini_duration_sec=gemini_duration,
+    )
+    return empty_record(url), meta
+
+# ----------------------------------------------------------
+# Main Exported Function
+# ----------------------------------------------------------
+async def scrape_and_extract_listing(url: str) -> dict:
     logger.info("scraper.start", url=url)
     
-    chrome_options = Options()
-    chrome_options.page_load_strategy = 'eager'
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36")
-    chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument("--log-level=3")
-    chrome_options.add_argument("--ignore-certificate-errors")
-    chrome_options.add_argument("--allow-running-insecure-content")
-    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    
-    driver = None
-    extracted_html_list = []
-    error = None
+    # Initialize client
+    try:
+        client = configure_gemini_client()
+    except Exception as e:
+        logger.error("scraper.init_error", error=str(e))
+        return {"url": url, "error": str(e)}
+
+    browser_conf = BrowserConfig(
+        headless=HEADLESS,
+        verbose=True,
+        viewport_width=1280,
+        viewport_height=720,
+    )
 
     try:
-        driver = webdriver.Remote(
-            command_executor=settings.SELENIUM_GRID_URL,
-            options=chrome_options
-        )
-        driver.set_page_load_timeout(PAGE_LOAD_TIMEOUT)
-
-        driver.get(url)
-        WebDriverWait(driver, PAGE_LOAD_TIMEOUT).until(
-            EC.presence_of_element_located((By.TAG_NAME, 'body'))
-        )
-        
-        time.sleep(INITIAL_SETTLE_DELAY)
-
-        # Interaction Logic (Simplified for brevity but keeping core logic)
-        expansion_buttons_clicked = []
-        for xpath in INITIAL_BUTTON_XPATHS:
-            is_expansion = any(txt in xpath.lower() for txt in EXPANSION_BUTTON_TEXTS)
+        async with AsyncWebCrawler(config=browser_conf) as crawler:
             try:
-                buttons = driver.find_elements(By.XPATH, xpath)
-                for i, btn in enumerate(buttons):
-                    specific_xpath = f"({xpath})[{i+1}]"
-                    if click_button(driver, btn, specific_xpath, BUTTON_WAIT_TIMEOUT, POST_CLICK_DELAY):
-                        if is_expansion:
-                            expansion_buttons_clicked.append(specific_xpath)
-            except Exception:
-                pass
+                page_text, raw_html, crawl_duration = await fetch_page_text_and_html(url, crawler)
+            except Exception as e:
+                logger.error("scraper.crawl_error", url=url, error=str(e))
+                meta = make_meta(
+                    status_name="CRAWL_FAILED",
+                    crawl_duration_sec=None,
+                    total_duration_sec=None,
+                    gemini_model=GEMINI_MODEL,
+                    attempts=0,
+                    usage=None,
+                    gemini_duration_sec=None,
+                )
+                rec = empty_record(url)
+                rec["meta"] = meta
+                # Include error message in return for worker to see
+                rec["error"] = str(e)
+                return rec
 
-        if expansion_buttons_clicked:
-             time.sleep(SECOND_EXPANSION_CLICK_DELAY)
-             for specific_xpath in expansion_buttons_clicked:
-                 try:
-                     btn = driver.find_element(By.XPATH, specific_xpath)
-                     click_button(driver, btn, specific_xpath, BUTTON_WAIT_TIMEOUT, POST_SECOND_EXPANSION_CLICK_DELAY)
-                 except Exception:
-                     pass
-        
-        time.sleep(DELAY_BEFORE_POST_EXPANSION_SEARCH)
-        
-        for xpath in POST_EXPANSION_CONTACT_XPATHS:
-             try:
-                buttons = driver.find_elements(By.XPATH, xpath)
-                for i, btn in enumerate(buttons):
-                    specific_xpath = f"({xpath})[{i+1}]"
-                    click_button(driver, btn, specific_xpath, BUTTON_WAIT_TIMEOUT, POST_EXPANSION_CLICK_DELAY)
-             except Exception:
-                 pass
-
-        # Extraction
-        for selector in TARGET_CSS_SELECTORS:
-            try:
-                elements = driver.find_elements(By.CSS_SELECTOR, selector)
-                for element in elements:
-                    if element.is_displayed() or selector == "script[type='application/ld+json']" or selector == "script[id='__NEXT_DATA__']":
-                        html = element.get_attribute('outerHTML')
-                        if html:
-                            extracted_html_list.append(html.strip())
-            except Exception:
-                pass
+            record, meta = extract_with_gemini(client, url, page_text, raw_html, crawl_duration)
+            record["meta"] = meta
+            
+            logger.info("scraper.complete", url=url, status=meta['status_key'])
+            return record
 
     except Exception as e:
-        error = str(e)
-        logger.error("scraper.error", url=url, error=error)
-    finally:
-        if driver:
-            try:
-                driver.quit()
-            except Exception:
-                pass
-
-    combined_html = "\n\n".join(extracted_html_list) if extracted_html_list else None
-    return {"url": url, "html": combined_html, "error": error}
+        logger.error("scraper.system_error", url=url, error=str(e))
+        return {"url": url, "error": str(e)}

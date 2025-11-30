@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Navigate to the directory where this script resides (infra/)
+cd "$(dirname "$0")"
+
 echo "🚀 Starting ListingLens..."
 
 # Check if Docker is installed
@@ -24,7 +27,7 @@ if [ ! -f .env ]; then
     echo "⚠️  No .env file found. Creating one from .env.example..."
     cp .env.example .env
     echo "✅ .env file created."
-    echo "⚠️  IMPORTANT: Please open the .env file and add your GOOGLE_API_KEY before continuing."
+    echo "⚠️  IMPORTANT: Please open the .env file and add your GEMINI_API_KEY before continuing."
     echo "   (You can edit it in VS Code)"
     read -p "Press Enter once you have added your API Key..."
 fi
