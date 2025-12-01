@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from app.db.base import Base
 from app.main import app
 from app.core.config import settings
+from unittest.mock import patch
 from app.db.session import get_db
 
 # Setup for testing database
@@ -38,7 +39,7 @@ async def client_fixture(db_session: AsyncSession):
             pass # Mock flushing database
     
     class MockJob:
-        def __init__(self, job_id):
+        def __init__(self, job_id, *args, **kwargs):
             self.job_id = job_id
         
         async def status(self):
@@ -52,8 +53,10 @@ async def client_fixture(db_session: AsyncSession):
 
     app.state.arq_pool = MockArqPool()
 
-    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
-        yield client
+    # Patch arq Job to use MockJob
+    with patch("app.api.v1.endpoints.listings.Job", side_effect=MockJob):
+        async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
+            yield client
     
     # Clean up overrides
     app.dependency_overrides = {}
