@@ -57,16 +57,18 @@ class Settings(BaseSettings):
     WORKER_JOB_TIMEOUT: int = 300
     WORKER_KEEP_RESULT: int = 3600
 
+    # Extra fields from .env to ignore validation errors
+    GEMINI_MODEL: str | None = None
+    MAX_CONTENT_CHARS: int | None = None
+    OUTPUT_FILE: str | None = None
+    EXTRA_CLICK_SELECTORS: str | None = None
+    NEXT_PUBLIC_API_URL: str | None = None
+    COMPOSE_PROJECT_NAME: str | None = None
+
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=True,
         extra="ignore"
     )
-    
-    # Fallback/Explicit config for ensuring extra fields are ignored
-    class Config:
-        extra = "ignore"
-        case_sensitive = True
-        env_file = ".env"
 
 settings = Settings()
