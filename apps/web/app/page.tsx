@@ -5,12 +5,12 @@ import readXlsxFile from 'read-excel-file'
 import * as XLSX from 'xlsx'
 import { Button } from "@/components/ui/button"
 import { api } from "@/lib/api"
-import { 
-  Database, 
-  Download, 
-  RefreshCw, 
-  Search, 
-  Trash2, 
+import {
+  Database,
+  Download,
+  RefreshCw,
+  Search,
+  Trash2,
   ExternalLink,
   Building2,
   MapPin,
@@ -87,8 +87,8 @@ export default function DashboardPage() {
 
   const displayListings = listings
   const totalListings = displayListings.length
-  const avgPrice = displayListings.length > 0 
-    ? displayListings.reduce((acc, curr) => acc + (curr.price || 0), 0) / displayListings.length 
+  const avgPrice = displayListings.length > 0
+    ? displayListings.reduce((acc, curr) => acc + (curr.price || 0), 0) / displayListings.length
     : 0
   const uniqueStates = new Set(displayListings.map(l => l.state).filter(Boolean)).size
 
@@ -105,7 +105,7 @@ export default function DashboardPage() {
       console.error("Failed to read Excel file", error);
       alert("Failed to read Excel file. Please ensure it's a valid XLSX file with URLs in the first column.");
     }
-    
+
     // Reset file input
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -157,7 +157,7 @@ export default function DashboardPage() {
     if (urlList.length === 0) return
 
     setLoading(true)
-    
+
     // Optimistically set tasks
     const optimisticTasks = urlList.map((url, index) => ({
       url,
@@ -168,18 +168,18 @@ export default function DashboardPage() {
 
     try {
       const response = await api.post("/listings/scrape", { urls: urlList })
-      
+
       const newTasks = response.data.task_ids.map((id: string, index: number) => ({
         url: urlList[index],
         taskId: id,
         status: "queued"
       }))
-      
+
       setTasks(prev => {
         const kept = prev.filter(p => !p.taskId.startsWith('temp-'))
         return [...newTasks, ...kept]
       })
-      
+
       setUrls("")
     } catch (error) {
       console.error("Scraping failed", error)
@@ -193,18 +193,18 @@ export default function DashboardPage() {
     if (!confirm("This will stop all running and queued extraction tasks. Are you sure?")) return
     try {
       await api.post("/listings/scrape/purge")
-      setTasks([]) 
+      setTasks([])
     } catch (error) {
       console.error("Failed to purge queue", error)
     }
   }
 
   useEffect(() => {
-    const activeTasks = tasks.filter(t => 
-      !t.taskId.startsWith('temp-') && 
+    const activeTasks = tasks.filter(t =>
+      !t.taskId.startsWith('temp-') &&
       !['complete', 'failed', 'not_found'].includes(t.status)
     )
-    
+
     if (activeTasks.length === 0) return
 
     const pollStatus = async () => {
@@ -212,23 +212,23 @@ export default function DashboardPage() {
         const taskIds = activeTasks.map(t => t.taskId)
         const response = await api.post("/listings/scrape/status", taskIds)
         const statusData = response.data
-        
+
         let shouldRefreshListings = false
 
         setTasks(prev => prev.map(t => {
-          if (t.taskId.startsWith('temp-')) return t 
-          
+          if (t.taskId.startsWith('temp-')) return t
+
           const data = statusData[t.taskId]
           if (!data) return t
-          
+
           // Check for error in result even if status is complete
           let newStatus = data.status
           if (newStatus === 'complete' && data.result?.error) {
-             newStatus = 'failed'
+            newStatus = 'failed'
           }
-          
+
           if (t.status !== 'complete' && newStatus === 'complete') {
-             shouldRefreshListings = true
+            shouldRefreshListings = true
           }
 
           return {
@@ -254,14 +254,14 @@ export default function DashboardPage() {
   // Cancel tasks on page unload
   useEffect(() => {
     const handleUnload = () => {
-      const activeTasks = tasks.filter(t => 
-        !t.taskId.startsWith('temp-') && 
+      const activeTasks = tasks.filter(t =>
+        !t.taskId.startsWith('temp-') &&
         !['complete', 'failed', 'not_found'].includes(t.status)
       )
-      
+
       if (activeTasks.length > 0) {
         const taskIds = activeTasks.map(t => t.taskId)
-        const blob = new Blob([JSON.stringify(taskIds)], {type: 'application/json'});
+        const blob = new Blob([JSON.stringify(taskIds)], { type: 'application/json' });
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1"
         navigator.sendBeacon(`${apiUrl}/listings/scrape/cancel`, blob);
       }
@@ -293,8 +293,8 @@ export default function DashboardPage() {
   const handleDownloadCSV = () => {
     if (listings.length === 0) return
     const headers = [
-      "ID", "Title", "Project Name", "Price", "State", "Area", 
-      "Type", "Sq Ft", "Beds", "Baths", "Carpark", "Floor Range", 
+      "ID", "Title", "Project Name", "Price", "State", "Area",
+      "Type", "Sq Ft", "Beds", "Baths", "Carpark", "Floor Range",
       "Phone", "Description", "URL"
     ]
     const rows = listings.map(l => [
@@ -307,7 +307,7 @@ export default function DashboardPage() {
     const link = document.createElement("a")
     const url = URL.createObjectURL(blob)
     link.setAttribute("href", url)
-    link.setAttribute("download", `listings_export_${new Date().toISOString().slice(0,10)}.csv`)
+    link.setAttribute("download", `listings_export_${new Date().toISOString().slice(0, 10)}.csv`)
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -316,8 +316,8 @@ export default function DashboardPage() {
   const handleDownloadXLSX = () => {
     if (listings.length === 0) return;
     const headers = [
-      "ID", "Title", "Project Name", "Price", "State", "Area", 
-      "Type", "Sq Ft", "Beds", "Baths", "Carpark", "Floor Range", 
+      "ID", "Title", "Project Name", "Price", "State", "Area",
+      "Type", "Sq Ft", "Beds", "Baths", "Carpark", "Floor Range",
       "Phone", "Description", "URL"
     ];
     const rows = listings.map(l => ({
@@ -341,7 +341,7 @@ export default function DashboardPage() {
     const worksheet = XLSX.utils.json_to_sheet(rows, { header: headers });
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Listings");
-    XLSX.writeFile(workbook, `listings_export_${new Date().toISOString().slice(0,10)}.xlsx`);
+    XLSX.writeFile(workbook, `listings_export_${new Date().toISOString().slice(0, 10)}.xlsx`);
   };
 
   const handleDownloadContentXLSX = () => {
@@ -372,72 +372,76 @@ export default function DashboardPage() {
     const worksheet = XLSX.utils.json_to_sheet(rows);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Generated Content");
-    XLSX.writeFile(workbook, `content_export_${new Date().toISOString().slice(0,10)}.xlsx`);
+    XLSX.writeFile(workbook, `content_export_${new Date().toISOString().slice(0, 10)}.xlsx`);
   };
 
   const ListingsTable = ({ data }: { data: Listing[] }) => (
-    <div className="overflow-x-auto rounded-lg border border-slate-100 shadow-sm">
-      <table className="w-full text-sm text-left whitespace-nowrap bg-white">
-        <thead className="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-100 font-display tracking-wider">
+    <div className="overflow-x-auto rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 bg-white">
+      <table className="w-full text-sm text-left whitespace-nowrap">
+        <thead className="text-xs text-slate-500 uppercase bg-slate-50/50 border-b border-slate-100 font-display tracking-wider">
           <tr>
-            <th className="px-6 py-4 font-bold">Title / Project</th>
-            <th className="px-6 py-4 font-bold">Price</th>
-            <th className="px-6 py-4 font-bold">Location</th>
-            <th className="px-6 py-4 font-bold">Specs</th>
-            <th className="px-6 py-4 font-bold">Details</th>
-            <th className="px-6 py-4 font-bold">Contact</th>
-            <th className="px-6 py-4 font-bold text-right">Action</th>
+            <th className="px-8 py-6 font-bold">Title / Project</th>
+            <th className="px-6 py-6 font-bold">Price</th>
+            <th className="px-6 py-6 font-bold">Location</th>
+            <th className="px-6 py-6 font-bold">Specs</th>
+            <th className="px-6 py-6 font-bold">Details</th>
+            <th className="px-6 py-6 font-bold">Contact</th>
+            <th className="px-8 py-6 font-bold text-right">Action</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100 font-sans">
           {data.length > 0 ? (
             data.map((listing) => (
-              <tr key={listing.id} className="bg-white hover:bg-slate-50/80 transition-colors">
-                <td className="px-6 py-4">
-                  <div className="font-semibold text-slate-900 truncate max-w-[200px]" title={listing.listing_title}>
+              <tr key={listing.id} className="bg-white hover:bg-blue-50/30 transition-colors group">
+                <td className="px-8 py-6">
+                  <div className="font-bold text-slate-900 truncate max-w-[240px] text-base mb-1" title={listing.listing_title}>
                     {listing.listing_title || "Untitled Property"}
                   </div>
-                  <div className="text-xs text-blue-600 truncate max-w-[200px] font-medium">{listing.project_name}</div>
+                  <div className="text-xs text-blue-600 truncate max-w-[240px] font-bold uppercase tracking-wider bg-blue-50 px-2 py-1 rounded w-fit">{listing.project_name}</div>
                 </td>
-                <td className="px-6 py-4 font-bold text-slate-900 font-display">
+                <td className="px-6 py-6 font-bold text-slate-900 font-display text-base">
                   {listing.price ? `RM ${listing.price.toLocaleString()}` : "-"}
                 </td>
-                <td className="px-6 py-4">
-                  <div className="text-slate-700">{listing.area}</div>
-                  <div className="text-xs text-slate-400 uppercase tracking-wide">{listing.state}</div>
+                <td className="px-6 py-6">
+                  <div className="text-slate-700 font-medium mb-1">{listing.area}</div>
+                  <div className="text-xs text-slate-400 uppercase tracking-wide font-bold">{listing.state}</div>
                 </td>
-                <td className="px-6 py-4 text-slate-600">
-                  <div className="flex flex-col gap-1 text-xs font-medium">
-                    <span>{listing.sq_ft ? `${listing.sq_ft} sqft` : "-"}</span>
-                    <span className="text-slate-400">
-                      {listing.bedrooms || "?"} Beds • {listing.bathrooms || "?"} Baths • {listing.carpark || "?"} Carparks
+                <td className="px-6 py-6 text-slate-600">
+                  <div className="flex flex-col gap-1.5 text-xs font-medium">
+                    <span className="text-slate-900 font-bold">{listing.sq_ft ? `${listing.sq_ft} sqft` : "-"}</span>
+                    <span className="text-slate-500 flex items-center gap-1">
+                      {listing.bedrooms || "?"} Beds • {listing.bathrooms || "?"} Baths
                     </span>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-slate-600">
-                   <div className="flex flex-col gap-1 text-xs font-medium">
-                      <span>{listing.property_type || "-"}</span>
-                      <span className="text-slate-400">
-                        {listing.tenure || "?"} • {listing.furnishing || "?"}
-                      </span>
-                   </div>
+                <td className="px-6 py-6 text-slate-600">
+                  <div className="flex flex-col gap-1.5 text-xs font-medium">
+                    <span className="text-slate-900">{listing.property_type || "-"}</span>
+                    <span className="text-slate-400">
+                      {listing.tenure || "?"}
+                    </span>
+                  </div>
                 </td>
-                <td className="px-6 py-4 text-sm text-slate-600 font-mono">
-                   {listing.phone_number || "-"}
+                <td className="px-6 py-6 text-sm text-slate-600 font-mono">
+                  {listing.phone_number ? (
+                    <span className="bg-slate-100 px-2 py-1 rounded text-slate-700 font-medium">{listing.phone_number}</span>
+                  ) : "-"}
                 </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex justify-end gap-2">
-                    <a 
-                      href={listing.url} 
-                      target="_blank" 
+                <td className="px-8 py-6 text-right">
+                  <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <a
+                      href={listing.url}
+                      target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                      className="inline-flex items-center justify-center p-2.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
+                      title="View Original"
                     >
                       <ExternalLink className="h-4 w-4" />
                     </a>
                     <button
                       onClick={() => handleDelete(listing.id)}
-                      className="inline-flex items-center justify-center p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                      className="inline-flex items-center justify-center p-2.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                      title="Delete"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -447,12 +451,15 @@ export default function DashboardPage() {
             ))
           ) : (
             <tr>
-              <td colSpan={7} className="px-6 py-12 text-center text-slate-400">
-                <div className="flex flex-col items-center gap-4">
-                  <div className="p-4 bg-slate-50 rounded-full">
-                    <Database className="h-8 w-8 text-slate-300" />
+              <td colSpan={7} className="px-6 py-24 text-center text-slate-400">
+                <div className="flex flex-col items-center gap-6">
+                  <div className="p-6 bg-slate-50 rounded-full border border-slate-100">
+                    <Database className="h-10 w-10 text-slate-300" />
                   </div>
-                  <p className="font-medium">No data available yet.</p>
+                  <div>
+                    <p className="font-bold text-slate-900 text-lg">No data available yet.</p>
+                    <p className="text-sm mt-1">Start an extraction to see results here.</p>
+                  </div>
                 </div>
               </td>
             </tr>
@@ -471,16 +478,16 @@ export default function DashboardPage() {
             <Building2 className="h-8 w-8 text-blue-600" />
             <span className="font-display font-bold text-2xl tracking-wide text-slate-900">ListingLens</span>
           </div>
-          
+
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
-            <button 
+            <button
               onClick={() => setActiveView('dashboard')}
               className={`text-sm uppercase tracking-widest font-bold font-display transition-colors hover:text-blue-600 ${activeView === 'dashboard' ? 'text-blue-600' : 'text-slate-600'}`}
             >
               Dashboard
             </button>
-            <button 
+            <button
               onClick={() => setActiveView('history')}
               className={`text-sm uppercase tracking-widest font-bold font-display transition-colors hover:text-blue-600 ${activeView === 'history' ? 'text-blue-600' : 'text-slate-600'}`}
             >
@@ -499,23 +506,23 @@ export default function DashboardPage() {
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
-        
+
         {/* Mobile Nav */}
         {mobileMenuOpen && (
           <div className="absolute top-24 left-0 w-full bg-white border-b border-slate-200 shadow-xl p-6 flex flex-col gap-4 md:hidden animate-slide-up">
-            <button 
+            <button
               onClick={() => { setActiveView('dashboard'); setMobileMenuOpen(false); }}
               className={`text-left text-sm uppercase tracking-widest font-bold font-display p-2 ${activeView === 'dashboard' ? 'text-blue-600' : 'text-slate-600'}`}
             >
               Dashboard
             </button>
-            <button 
+            <button
               onClick={() => { setActiveView('history'); setMobileMenuOpen(false); }}
               className={`text-left text-sm uppercase tracking-widest font-bold font-display p-2 ${activeView === 'history' ? 'text-blue-600' : 'text-slate-600'}`}
             >
               History
             </button>
-            <button 
+            <button
               onClick={() => { setActiveView('generate'); setMobileMenuOpen(false); }}
               className={`text-left text-sm uppercase tracking-widest font-bold font-display p-2 ${activeView === 'generate' ? 'text-blue-600' : 'text-slate-600'}`}
             >
@@ -528,36 +535,36 @@ export default function DashboardPage() {
       {/* Main Content */}
       <main className="pt-32 pb-24 container mx-auto px-6 animate-fade-in">
         {/* Hero Section */}
-        <div className="mb-12 flex flex-col md:flex-row justify-between md:items-end gap-6 border-b border-slate-200 pb-8">
+        <div className="mb-16 flex flex-col md:flex-row justify-between md:items-end gap-8 border-b border-slate-200 pb-10">
           <div>
-            <h1 className="text-4xl md:text-6xl font-display font-bold text-slate-900 mb-2 tracking-tight">
+            <h1 className="text-5xl md:text-7xl font-display font-bold text-slate-900 mb-4 tracking-tight leading-tight">
               {activeView === 'dashboard' ? 'Overview' : activeView === 'history' ? 'Archives' : 'Content Generator'}
             </h1>
-            <p className="text-lg text-slate-600 max-w-2xl leading-relaxed">
-              {activeView === 'dashboard' 
-                ? 'Real-time property intelligence and extraction engine.' 
+            <p className="text-xl text-slate-600 max-w-2xl leading-relaxed font-light">
+              {activeView === 'dashboard'
+                ? 'Real-time property intelligence and extraction engine.'
                 : activeView === 'history'
-                ? 'Complete historical record of all processed property data.'
-                : 'Generate engaging marketing copy for your listings.'}
+                  ? 'Complete historical record of all processed property data.'
+                  : 'Generate engaging marketing copy for your listings.'}
             </p>
           </div>
           <div className="flex gap-4">
-             <Button 
-                onClick={handleDownloadXLSX} 
-                disabled={displayListings.length === 0} 
-                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl px-6 py-2 shadow-lg shadow-emerald-600/20 transition-all hover:-translate-y-0.5"
-             >
-                <FileText className="h-4 w-4 mr-2" />
-                Export Excel
-             </Button>
-             <Button 
-                onClick={handleDownloadCSV} 
-                disabled={displayListings.length === 0} 
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl px-6 py-2 shadow-lg shadow-blue-600/20 transition-all hover:-translate-y-0.5"
-             >
-                <Download className="h-4 w-4 mr-2" />
-                Export CSV
-             </Button>
+            <Button
+              onClick={handleDownloadXLSX}
+              disabled={displayListings.length === 0}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl px-8 py-6 shadow-lg shadow-emerald-600/20 transition-all hover:-translate-y-1 hover:shadow-xl"
+            >
+              <FileText className="h-5 w-5 mr-2" />
+              Export Excel
+            </Button>
+            <Button
+              onClick={handleDownloadCSV}
+              disabled={displayListings.length === 0}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl px-8 py-6 shadow-lg shadow-blue-600/20 transition-all hover:-translate-y-1 hover:shadow-xl"
+            >
+              <Download className="h-5 w-5 mr-2" />
+              Export CSV
+            </Button>
           </div>
         </div>
 
@@ -566,138 +573,144 @@ export default function DashboardPage() {
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { label: "Total Properties", value: totalListings, icon: Home, color: "text-blue-600", bg: "bg-blue-50" },
-                { label: "Average Price", value: avgPrice ? `RM ${avgPrice.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "N/A", icon: DollarSign, color: "text-emerald-600", bg: "bg-emerald-50" },
-                { label: "States Covered", value: uniqueStates, icon: MapPin, color: "text-purple-600", bg: "bg-purple-50" }
+                { label: "Total Properties", value: totalListings, icon: Home, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100" },
+                { label: "Average Price", value: avgPrice ? `RM ${avgPrice.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "N/A", icon: DollarSign, color: "text-emerald-600", bg: "bg-emerald-50", border: "border-emerald-100" },
+                { label: "States Covered", value: uniqueStates, icon: MapPin, color: "text-purple-600", bg: "bg-purple-50", border: "border-purple-100" }
               ].map((stat, i) => (
-                <div key={i} className="bg-white p-8 rounded-2xl border border-slate-100 shadow-lg hover:-translate-y-1 transition-transform duration-300">
-                  <div className={`w-12 h-12 ${stat.bg} rounded-xl flex items-center justify-center mb-4`}>
-                    <stat.icon className={`h-6 w-6 ${stat.color}`} />
+                <div key={i} className={`bg-white p-8 rounded-3xl border ${stat.border} shadow-xl shadow-slate-200/50 hover:-translate-y-2 transition-all duration-300 group`}>
+                  <div className={`w-14 h-14 ${stat.bg} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                    <stat.icon className={`h-7 w-7 ${stat.color}`} />
                   </div>
-                  <p className="text-sm font-bold uppercase tracking-wider text-slate-400 font-display">{stat.label}</p>
-                  <h3 className="text-3xl font-bold text-slate-900 mt-1 font-display">{stat.value}</h3>
+                  <p className="text-xs font-bold uppercase tracking-widest text-slate-400 font-display mb-2">{stat.label}</p>
+                  <h3 className="text-4xl font-bold text-slate-900 font-display tracking-tight">{stat.value}</h3>
                 </div>
               ))}
             </div>
 
             {/* Input Section */}
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-lg p-8 md:p-10 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-cyan-300"></div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-blue-50 rounded-lg">
-                  <Search className="h-6 w-6 text-blue-600" />
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 p-8 md:p-12 relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400"></div>
+              <div className="flex items-center gap-4 mb-8">
+                <div className="p-3 bg-blue-50 rounded-2xl border border-blue-100">
+                  <Search className="h-8 w-8 text-blue-600" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold font-display text-slate-900">New Extraction</h2>
-                  <p className="text-slate-500">Paste listing URLs to begin analysis</p>
+                  <h2 className="text-3xl font-bold font-display text-slate-900 tracking-tight">New Extraction</h2>
+                  <p className="text-slate-500 font-medium">Paste listing URLs to begin analysis</p>
                 </div>
               </div>
-              
-              <div className="space-y-6">
-                <textarea
-                  className="w-full min-h-[150px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-y"
-                  value={urls}
-                  onChange={(e) => setUrls(e.target.value)}
-                  placeholder="https://www.mudah.my/..."
-                  disabled={loading}
-                />
-                
-                <div className="flex justify-between items-center">
-                   <div className="text-sm font-medium text-blue-600">
-                        <input
-                          type="file"
-                          ref={fileInputRef}
-                          onChange={handleFileChange}
-                          className="hidden"
-                          accept=".xlsx"
-                        />
-                        <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="border-slate-200 hover:bg-slate-100 text-slate-600">
-                          <FileUp className="h-4 w-4 mr-2" />
-                          Import Excel
-                        </Button>
-                   </div>
-                   <div className="flex gap-4">
-                      <Button variant="ghost" onClick={handlePurge} className="text-red-500 hover:text-red-700 hover:bg-red-50">Stop All</Button>
-                      <Button variant="ghost" onClick={() => setUrls("")} className="text-slate-500 hover:text-slate-900">Clear</Button>
-                      <Button 
-                        onClick={handleScrape} 
-                        disabled={loading || !urls.trim()}
-                        className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-6 rounded-xl font-semibold text-lg shadow-xl shadow-slate-900/10 transition-all hover:scale-105"
-                      >
-                        {loading ? <Loader2 className="animate-spin" /> : "Start Extraction"}
-                      </Button>
-                   </div>
+
+              <div className="space-y-8">
+                <div className="relative">
+                  <textarea
+                    className="w-full min-h-[180px] rounded-2xl border-2 border-slate-100 bg-slate-50/50 p-6 text-sm font-mono focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all resize-y placeholder:text-slate-400 text-slate-700 shadow-inner"
+                    value={urls}
+                    onChange={(e) => setUrls(e.target.value)}
+                    placeholder="https://www.mudah.my/..."
+                    disabled={loading}
+                  />
+                  <div className="absolute bottom-4 right-4 text-xs font-bold text-slate-400 uppercase tracking-wider bg-white/80 backdrop-blur px-2 py-1 rounded-md border border-slate-100">
+                    {urls.split('\n').filter(u => u.trim()).length} URLs
+                  </div>
+                </div>
+
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                  <div className="text-sm font-medium text-blue-600 w-full md:w-auto">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      className="hidden"
+                      accept=".xlsx"
+                    />
+                    <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="w-full md:w-auto border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-slate-900 h-12 px-6 rounded-xl font-semibold">
+                      <FileUp className="h-4 w-4 mr-2" />
+                      Import Excel
+                    </Button>
+                  </div>
+                  <div className="flex gap-3 w-full md:w-auto justify-end">
+                    <Button variant="ghost" onClick={handlePurge} className="text-red-500 hover:text-red-600 hover:bg-red-50 h-12 px-6 rounded-xl font-semibold">Stop All</Button>
+                    <Button variant="ghost" onClick={() => setUrls("")} className="text-slate-500 hover:text-slate-700 hover:bg-slate-100 h-12 px-6 rounded-xl font-semibold">Clear</Button>
+                    <Button
+                      onClick={handleScrape}
+                      disabled={loading || !urls.trim()}
+                      className="bg-slate-900 hover:bg-slate-800 text-white px-10 py-6 rounded-xl font-bold text-lg shadow-xl shadow-slate-900/20 transition-all hover:scale-105 hover:shadow-2xl active:scale-95"
+                    >
+                      {loading ? <Loader2 className="animate-spin h-6 w-6" /> : "Start Extraction"}
+                    </Button>
+                  </div>
                 </div>
 
                 {tasks.length > 0 && (
-                  <div className="mt-8 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 font-display flex items-center gap-2">
-                       <RefreshCw className={cn("h-4 w-4", loading ? "animate-spin" : "")} />
-                       Extraction Session
+                  <div className="mt-12 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 font-display flex items-center gap-3 pl-1">
+                      <RefreshCw className={cn("h-4 w-4", loading ? "animate-spin" : "")} />
+                      Extraction Session
                     </h3>
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       {tasks.map((task) => (
-                        <div key={task.taskId} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col gap-3 transition-all hover:border-blue-300 hover:shadow-md animate-in fade-in zoom-in-95 duration-300">
+                        <div key={task.taskId} className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex flex-col gap-4 transition-all hover:border-blue-200 hover:shadow-md animate-in fade-in zoom-in-95 duration-300 group">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-slate-700 truncate flex-1 mr-4 flex items-center gap-2">
-                               <ExternalLink className="h-3 w-3 text-slate-400" />
-                               {task.url}
+                            <span className="text-sm font-medium text-slate-600 truncate flex-1 mr-4 flex items-center gap-3 font-mono bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+                              <ExternalLink className="h-3 w-3 text-slate-400" />
+                              {task.url}
                             </span>
                             <div className="flex items-center gap-2 shrink-0">
-                                {['in_progress', 'queued', 'initiating'].includes(task.status) && (
-                                  <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
-                                )}
-                                <span className={cn(
-                                  "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm",
-                                  task.status === 'complete' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 
-                                  task.status === 'failed' ? 'bg-red-100 text-red-700 border border-red-200' : 
-                                  ['in_progress', 'queued', 'initiating'].includes(task.status) ? 'bg-blue-50 text-blue-700 border border-blue-100' :
-                                  'bg-slate-100 text-slate-600 border border-slate-200'
-                                )}>
-                                  {task.status === 'in_progress' ? 'Analyzing...' : 
-                                   task.status === 'initiating' ? 'Initiating...' :
-                                   task.status === 'queued' ? 'Queued' :
-                                   task.status === 'complete' ? 'Completed' : 
-                                   task.status.replace('_', ' ')}
-                                </span>
+                              {['in_progress', 'queued', 'initiating'].includes(task.status) && (
+                                <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                              )}
+                              <span className={cn(
+                                "px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider shadow-sm border",
+                                task.status === 'complete' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' :
+                                  task.status === 'failed' ? 'bg-red-50 text-red-700 border-red-100' :
+                                    ['in_progress', 'queued', 'initiating'].includes(task.status) ? 'bg-blue-50 text-blue-700 border-blue-100' :
+                                      'bg-slate-50 text-slate-600 border-slate-200'
+                              )}>
+                                {task.status === 'in_progress' ? 'Analyzing...' :
+                                  task.status === 'initiating' ? 'Initiating...' :
+                                    task.status === 'queued' ? 'Queued' :
+                                      task.status === 'complete' ? 'Completed' :
+                                        task.status.replace('_', ' ')}
+                              </span>
                             </div>
                           </div>
-                          
+
                           {task.result && task.status === 'complete' && (
-                            <div className="bg-slate-50/50 rounded-lg p-4 text-sm border border-slate-100 mt-1 animate-in fade-in slide-in-from-top-2">
-                               <p className="font-bold text-slate-900 font-display text-base">{task.result.listing_title || task.result.project_name || "Extracted Successfully"}</p>
-                               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3 text-xs text-slate-600">
-                                  {task.result.price && (
-                                      <div className="flex flex-col">
-                                          <span className="text-slate-400 uppercase text-[10px] font-bold">Price</span>
-                                          <span className="font-mono text-emerald-600 font-bold text-sm">RM {task.result.price.toLocaleString()}</span>
-                                      </div>
-                                  )}
-                                  {task.result.sq_ft && (
-                                      <div className="flex flex-col">
-                                          <span className="text-slate-400 uppercase text-[10px] font-bold">Size</span>
-                                          <span>{task.result.sq_ft.toLocaleString()} sqft</span>
-                                      </div>
-                                  )}
-                                  {task.result.area && (
-                                      <div className="flex flex-col">
-                                          <span className="text-slate-400 uppercase text-[10px] font-bold">Location</span>
-                                          <span>{task.result.area}</span>
-                                      </div>
-                                  )}
-                                  {task.result.phone_number && (
-                                      <div className="flex flex-col">
-                                          <span className="text-slate-400 uppercase text-[10px] font-bold">Contact</span>
-                                          <span className="text-blue-600 font-mono">{task.result.phone_number}</span>
-                                      </div>
-                                  )}
-                               </div>
+                            <div className="bg-slate-50/80 rounded-xl p-5 text-sm border border-slate-200/60 mt-1 animate-in fade-in slide-in-from-top-2">
+                              <p className="font-bold text-slate-900 font-display text-lg mb-4">{task.result.listing_title || task.result.project_name || "Extracted Successfully"}</p>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-xs text-slate-600">
+                                {task.result.price && (
+                                  <div className="flex flex-col gap-1">
+                                    <span className="text-slate-400 uppercase text-[10px] font-bold tracking-wider">Price</span>
+                                    <span className="font-mono text-emerald-600 font-bold text-base">RM {task.result.price.toLocaleString()}</span>
+                                  </div>
+                                )}
+                                {task.result.sq_ft && (
+                                  <div className="flex flex-col gap-1">
+                                    <span className="text-slate-400 uppercase text-[10px] font-bold tracking-wider">Size</span>
+                                    <span className="font-medium text-slate-700 text-sm">{task.result.sq_ft.toLocaleString()} sqft</span>
+                                  </div>
+                                )}
+                                {task.result.area && (
+                                  <div className="flex flex-col gap-1">
+                                    <span className="text-slate-400 uppercase text-[10px] font-bold tracking-wider">Location</span>
+                                    <span className="font-medium text-slate-700 text-sm">{task.result.area}</span>
+                                  </div>
+                                )}
+                                {task.result.phone_number && (
+                                  <div className="flex flex-col gap-1">
+                                    <span className="text-slate-400 uppercase text-[10px] font-bold tracking-wider">Contact</span>
+                                    <span className="text-blue-600 font-mono font-medium text-sm bg-blue-50 px-2 py-0.5 rounded w-fit">{task.result.phone_number}</span>
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           )}
                           {task.status === 'failed' && (
-                             <div className="text-xs text-red-600 bg-red-50 p-3 rounded-lg border border-red-100 animate-in fade-in">
-                                Extraction failed. Please verify the URL is correct and accessible.
-                             </div>
+                            <div className="text-xs text-red-600 bg-red-50 p-4 rounded-xl border border-red-100 animate-in fade-in font-medium flex items-center gap-2">
+                              <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+                              Extraction failed. Please verify the URL is correct and accessible.
+                            </div>
                           )}
                         </div>
                       ))}
@@ -710,47 +723,47 @@ export default function DashboardPage() {
           </div>
         ) : activeView === 'history' ? (
           <div className="bg-white rounded-2xl border border-slate-100 shadow-lg p-8">
-             <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-bold font-display text-slate-900">Full History</h2>
-                <Button variant="destructive" onClick={handleClearHistory} className="bg-red-50 text-red-600 hover:bg-red-100 border-none shadow-none">
-                   <Trash2 className="h-4 w-4 mr-2" /> Clear All
-                </Button>
-             </div>
-             <ListingsTable data={listings} />
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-2xl font-bold font-display text-slate-900">Full History</h2>
+              <Button variant="destructive" onClick={handleClearHistory} className="bg-red-50 text-red-600 hover:bg-red-100 border-none shadow-none">
+                <Trash2 className="h-4 w-4 mr-2" /> Clear All
+              </Button>
+            </div>
+            <ListingsTable data={listings} />
           </div>
         ) : (
           <div className="space-y-12">
             {/* Generator Input */}
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-lg p-8 md:p-10 relative overflow-hidden">
-               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 to-pink-400"></div>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-purple-50 rounded-lg">
-                    <Wand2 className="h-6 w-6 text-purple-600" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold font-display text-slate-900">AI Content Generator</h2>
-                    <p className="text-slate-500">Generate copy for the {listings.length} listings in the current session.</p>
-                  </div>
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 p-8 md:p-12 relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-purple-500 via-pink-500 to-rose-400"></div>
+              <div className="flex items-center gap-4 mb-8">
+                <div className="p-3 bg-purple-50 rounded-2xl border border-purple-100">
+                  <Wand2 className="h-8 w-8 text-purple-600" />
                 </div>
+                <div>
+                  <h2 className="text-3xl font-bold font-display text-slate-900 tracking-tight">AI Content Generator</h2>
+                  <p className="text-slate-500 font-medium">Generate copy for the {listings.length} listings in the current session.</p>
+                </div>
+              </div>
 
-                <div className="space-y-6">
-                  <textarea
-                    className="w-full min-h-[100px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all resize-y"
-                    value={generationInstruction}
-                    onChange={(e) => setGenerationInstruction(e.target.value)}
-                    placeholder="e.g., Follow up with the owner for interest to sell or rent..."
-                    disabled={isGenerating}
-                  />
-                  <div className="flex justify-end">
-                    <Button 
-                      onClick={handleGenerate} 
-                      disabled={isGenerating || listings.length === 0}
-                      className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-6 rounded-xl font-semibold text-lg shadow-xl shadow-purple-600/10 transition-all hover:scale-105"
-                    >
-                      {isGenerating ? <Loader2 className="animate-spin" /> : "Generate"}
-                    </Button>
-                  </div>
+              <div className="space-y-8">
+                <textarea
+                  className="w-full min-h-[150px] rounded-2xl border-2 border-slate-100 bg-slate-50/50 p-6 text-sm font-mono focus:outline-none focus:ring-4 focus:ring-purple-100 focus:border-purple-500 transition-all resize-y placeholder:text-slate-400 text-slate-700 shadow-inner"
+                  value={generationInstruction}
+                  onChange={(e) => setGenerationInstruction(e.target.value)}
+                  placeholder="e.g., Follow up with the owner for interest to sell or rent..."
+                  disabled={isGenerating}
+                />
+                <div className="flex justify-end">
+                  <Button
+                    onClick={handleGenerate}
+                    disabled={isGenerating || listings.length === 0}
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-10 py-6 rounded-xl font-bold text-lg shadow-xl shadow-purple-600/20 transition-all hover:scale-105 hover:shadow-2xl active:scale-95"
+                  >
+                    {isGenerating ? <Loader2 className="animate-spin h-6 w-6" /> : "Generate Content"}
+                  </Button>
                 </div>
+              </div>
             </div>
 
             {/* Generation Results */}
@@ -761,8 +774,8 @@ export default function DashboardPage() {
                     <Sparkles className="h-5 w-5 text-purple-500" />
                     Generated Content
                   </h3>
-                  <Button 
-                    onClick={handleDownloadContentXLSX} 
+                  <Button
+                    onClick={handleDownloadContentXLSX}
                     disabled={isGenerating || generatedContent.filter(c => c.status === 'completed').length === 0}
                     variant="outline"
                     className="border-emerald-200 hover:bg-emerald-100 text-emerald-600"
@@ -772,29 +785,29 @@ export default function DashboardPage() {
                   </Button>
                 </div>
                 {listings.map(listing => {
-                    const content = generatedContent.find(c => c.id === listing.id);
-                    if (!content) return null;
-                    return (
-                        <div key={listing.id} className="bg-white rounded-2xl border border-slate-100 shadow-lg p-8">
-                          <div className="flex justify-between items-start">
-                            <h4 className="font-bold text-blue-600 font-display text-lg mb-2 flex-1">{listing.listing_title || 'Untitled'}</h4>
-                            <div className="flex items-center gap-2">
-                                {content.status === 'generating' && (
-                                  <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
-                                )}
-                                <span className={cn(
-                                  "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm",
-                                  content.status === 'completed' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 
-                                  content.status === 'failed' ? 'bg-red-100 text-red-700 border border-red-200' : 
-                                  'bg-blue-50 text-blue-700 border border-blue-100'
-                                )}>
-                                  {content.status}
-                                </span>
-                            </div>
-                          </div>
-                          <div className="prose prose-sm max-w-none text-slate-700 whitespace-pre-wrap mt-2">{content.generated_text}</div>
+                  const content = generatedContent.find(c => c.id === listing.id);
+                  if (!content) return null;
+                  return (
+                    <div key={listing.id} className="bg-white rounded-2xl border border-slate-100 shadow-lg p-8">
+                      <div className="flex justify-between items-start">
+                        <h4 className="font-bold text-blue-600 font-display text-lg mb-2 flex-1">{listing.listing_title || 'Untitled'}</h4>
+                        <div className="flex items-center gap-2">
+                          {content.status === 'generating' && (
+                            <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                          )}
+                          <span className={cn(
+                            "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm",
+                            content.status === 'completed' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' :
+                              content.status === 'failed' ? 'bg-red-100 text-red-700 border border-red-200' :
+                                'bg-blue-50 text-blue-700 border border-blue-100'
+                          )}>
+                            {content.status}
+                          </span>
                         </div>
-                    )
+                      </div>
+                      <div className="prose prose-sm max-w-none text-slate-700 whitespace-pre-wrap mt-2">{content.generated_text}</div>
+                    </div>
+                  )
                 })}
               </div>
             )}
@@ -807,8 +820,8 @@ export default function DashboardPage() {
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-2 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all">
-               <Building2 className="h-6 w-6" />
-               <span className="font-display font-bold text-lg">ListingLens</span>
+              <Building2 className="h-6 w-6" />
+              <span className="font-display font-bold text-lg">ListingLens</span>
             </div>
             <p className="text-slate-400 text-sm">
               &copy; {new Date().getFullYear()} Aelion Systems. All Rights Reserved.

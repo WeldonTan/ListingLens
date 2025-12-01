@@ -5,9 +5,13 @@
   --font-sans: var(--font-inter), sans-serif;
   
   --color-slate-900: #0f172a;
+  --color-slate-800: #1e293b;
   --color-slate-50: #f8fafc;
   --color-blue-600: #2563eb;
+  --color-blue-500: #3b82f6;
   --color-cyan-300: #67e8f9;
+  --color-emerald-600: #059669;
+  --color-purple-600: #7c3aed;
 }
 
 :root {
