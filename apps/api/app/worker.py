@@ -58,4 +58,6 @@ class WorkerSettings:
     )
     on_startup = startup
     on_shutdown = shutdown
-    max_jobs = 3
+    max_jobs = settings.WORKER_MAX_JOBS
+    job_timeout = settings.WORKER_JOB_TIMEOUT
+    keep_result = settings.WORKER_KEEP_RESULT

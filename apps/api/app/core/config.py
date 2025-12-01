@@ -52,6 +52,11 @@ class Settings(BaseSettings):
     QDRANT_HOST: str
     QDRANT_PORT: int = 6333
 
+    # Worker
+    WORKER_MAX_JOBS: int = 1
+    WORKER_JOB_TIMEOUT: int = 300
+    WORKER_KEEP_RESULT: int = 3600
+
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)
 
 settings = Settings()

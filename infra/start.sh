@@ -22,14 +22,11 @@ fi
 
 echo "✅ Docker is up and running."
 
-# Check for .env file
-if [ ! -f .env ]; then
-    echo "⚠️  No .env file found. Creating one from .env.example..."
-    cp .env.example .env
-    echo "✅ .env file created."
-    echo "⚠️  IMPORTANT: Please open the .env file and add your GEMINI_API_KEY before continuing."
-    echo "   (You can edit it in VS Code)"
-    read -p "Press Enter once you have added your API Key..."
+# Check for encrypted .env file and decrypt if it exists
+if [ -f .env.encrypted ]; then
+    echo " decrypting .env file..."
+    python3 decrypt.py
+    echo "✅ .env file decrypted."
 fi
 
 # Run Docker Compose

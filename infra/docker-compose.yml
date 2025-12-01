@@ -40,7 +40,7 @@ services:
       db:
         condition: service_healthy
       redis:
-        condition: service_started
+        condition: service_healthy
       qdrant:
         condition: service_started
 
@@ -68,7 +68,7 @@ services:
       db:
         condition: service_healthy
       redis:
-        condition: service_started
+        condition: service_healthy
 
   # Database (PostgreSQL)
   db:
@@ -88,6 +88,11 @@ services:
   # Redis
   redis:
     image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   # Vector DB (Qdrant)
   qdrant:

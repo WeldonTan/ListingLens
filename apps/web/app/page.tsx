@@ -1,6 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
+import readXlsxFile from 'read-excel-file'
+import * as XLSX from 'xlsx'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { api } from "@/lib/api"
@@ -18,7 +20,11 @@ import {
   Home,
   Loader2,
   Menu,
-  X
+  X,
+  FileUp,
+  Wand2,
+  Sparkles,
+  FileText
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -40,6 +46,14 @@ interface Listing {
   phone_number: string
   description: string
   created_at: string
+  tenure: string
+  furnishing: string
+  completion_year: number
+}
+
+interface GeneratedContent {
+  id: number
+  generated_text: string
 }
 
 interface ScrapeTask {
@@ -50,22 +64,72 @@ interface ScrapeTask {
 }
 
 export default function DashboardPage() {
-  const [activeView, setActiveView] = useState<'dashboard' | 'history'>('dashboard')
+  const [activeView, setActiveView] = useState<'dashboard' | 'history' | 'generate'>('dashboard')
   const [listings, setListings] = useState<Listing[]>([])
   const [urls, setUrls] = useState("")
   const [loading, setLoading] = useState(false)
   const [tasks, setTasks] = useState<ScrapeTask[]>([])
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date())
-  const [sessionStartTime, setSessionStartTime] = useState<Date>(new Date())
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [generationInstruction, setGenerationInstruction] = useState("Write a brief, engaging property description for a social media post.")
+  const [generatedContent, setGeneratedContent] = useState<GeneratedContent[]>([])
+  const [isGenerating, setIsGenerating] = useState(false)
 
-  const sessionListings = listings.filter(l => new Date(l.created_at) > sessionStartTime)
-  const displayListings = activeView === 'dashboard' ? sessionListings : listings
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const displayListings = listings
   const totalListings = displayListings.length
   const avgPrice = displayListings.length > 0 
     ? displayListings.reduce((acc, curr) => acc + (curr.price || 0), 0) / displayListings.length 
     : 0
   const uniqueStates = new Set(displayListings.map(l => l.state).filter(Boolean)).size
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const rows = await readXlsxFile(file);
+      // Assuming URLs are in the first column
+      const fileUrls = rows.map(row => row[0]).filter(url => typeof url === 'string' && url.startsWith('http')).join('\n');
+      setUrls(prev => prev ? `${prev}\n${fileUrls}` : fileUrls);
+    } catch (error) {
+      console.error("Failed to read Excel file", error);
+      alert("Failed to read Excel file. Please ensure it's a valid XLSX file with URLs in the first column.");
+    }
+    
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleGenerate = async () => {
+    if (listings.length === 0 || !generationInstruction.trim()) return;
+
+    setIsGenerating(true);
+    const initialContent = listings.map(l => ({ id: l.id, generated_text: "Generating...", status: "generating" }));
+    setGeneratedContent(initialContent as any);
+
+    const generationPromises = listings.map(listing =>
+      api.post("/listings/generate-copy", {
+        listing_ids: [listing.id],
+        instruction: generationInstruction,
+      }).then(response => {
+        setGeneratedContent(prev =>
+          prev.map(c => c.id === listing.id ? { ...response.data[0], status: "completed" } : c)
+        );
+      }).catch(error => {
+        console.error(`Failed to generate content for listing ${listing.id}`, error);
+        setGeneratedContent(prev =>
+          prev.map(c => c.id === listing.id ? { ...c, generated_text: "Generation failed.", status: "failed" } : c)
+        );
+      })
+    );
+
+    await Promise.all(generationPromises);
+    setIsGenerating(false);
+  };
 
   const fetchListings = async (silent = false) => {
     try {
@@ -242,6 +306,68 @@ export default function DashboardPage() {
     document.body.removeChild(link)
   }
 
+  const handleDownloadXLSX = () => {
+    if (listings.length === 0) return;
+    const headers = [
+      "ID", "Title", "Project Name", "Price", "State", "Area", 
+      "Type", "Sq Ft", "Beds", "Baths", "Carpark", "Floor Range", 
+      "Phone", "Description", "URL"
+    ];
+    const rows = listings.map(l => ({
+      ID: l.id,
+      Title: l.listing_title,
+      "Project Name": l.project_name,
+      Price: l.price,
+      State: l.state,
+      Area: l.area,
+      Type: l.property_type,
+      "Sq Ft": l.sq_ft,
+      Beds: l.bedrooms,
+      Baths: l.bathrooms,
+      Carpark: l.carpark,
+      "Floor Range": l.floor_range,
+      Phone: l.phone_number,
+      Description: l.description,
+      URL: l.url
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(rows, { header: headers });
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Listings");
+    XLSX.writeFile(workbook, `listings_export_${new Date().toISOString().slice(0,10)}.xlsx`);
+  };
+
+  const handleDownloadContentXLSX = () => {
+    if (generatedContent.length === 0) return;
+
+    const rows = listings.map(listing => {
+      const content = generatedContent.find(c => c.id === listing.id);
+      return {
+        ID: listing.id,
+        Title: listing.listing_title,
+        "Project Name": listing.project_name,
+        Price: listing.price,
+        State: listing.state,
+        Area: listing.area,
+        Type: listing.property_type,
+        "Sq Ft": listing.sq_ft,
+        Beds: listing.bedrooms,
+        Baths: listing.bathrooms,
+        Carpark: listing.carpark,
+        "Floor Range": listing.floor_range,
+        Phone: listing.phone_number,
+        Description: listing.description,
+        URL: listing.url,
+        "Generated Content": content ? content.generated_text : "N/A",
+      };
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Generated Content");
+    XLSX.writeFile(workbook, `content_export_${new Date().toISOString().slice(0,10)}.xlsx`);
+  };
+
   const ListingsTable = ({ data }: { data: Listing[] }) => (
     <div className="overflow-x-auto rounded-lg border border-slate-100 shadow-sm">
       <table className="w-full text-sm text-left whitespace-nowrap bg-white">
@@ -251,7 +377,7 @@ export default function DashboardPage() {
             <th className="px-6 py-4 font-bold">Price</th>
             <th className="px-6 py-4 font-bold">Location</th>
             <th className="px-6 py-4 font-bold">Specs</th>
-            <th className="px-6 py-4 font-bold">Type</th>
+            <th className="px-6 py-4 font-bold">Details</th>
             <th className="px-6 py-4 font-bold">Contact</th>
             <th className="px-6 py-4 font-bold text-right">Action</th>
           </tr>
@@ -277,14 +403,17 @@ export default function DashboardPage() {
                   <div className="flex flex-col gap-1 text-xs font-medium">
                     <span>{listing.sq_ft ? `${listing.sq_ft} sqft` : "-"}</span>
                     <span className="text-slate-400">
-                      {listing.bedrooms || "?"} Beds • {listing.bathrooms || "?"} Baths
+                      {listing.bedrooms || "?"} Beds • {listing.bathrooms || "?"} Baths • {listing.carpark || "?"} Carparks
                     </span>
                   </div>
                 </td>
-                <td className="px-6 py-4">
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wider font-bold bg-blue-50 text-blue-600 border border-blue-100">
-                    {listing.property_type || "Unknown"}
-                  </span>
+                <td className="px-6 py-4 text-slate-600">
+                   <div className="flex flex-col gap-1 text-xs font-medium">
+                      <span>{listing.property_type || "-"}</span>
+                      <span className="text-slate-400">
+                        {listing.tenure || "?"} • {listing.furnishing || "?"}
+                      </span>
+                   </div>
                 </td>
                 <td className="px-6 py-4 text-sm text-slate-600 font-mono">
                    {listing.phone_number || "-"}
@@ -350,6 +479,12 @@ export default function DashboardPage() {
             >
               History
             </button>
+            <button
+              onClick={() => setActiveView('generate')}
+              className={`text-sm uppercase tracking-widest font-bold font-display transition-colors hover:text-blue-600 ${activeView === 'generate' ? 'text-blue-600' : 'text-slate-600'}`}
+            >
+              Content Gen
+            </button>
           </nav>
 
           {/* Mobile Menu Toggle */}
@@ -373,6 +508,12 @@ export default function DashboardPage() {
             >
               History
             </button>
+            <button 
+              onClick={() => { setActiveView('generate'); setMobileMenuOpen(false); }}
+              className={`text-left text-sm uppercase tracking-widest font-bold font-display p-2 ${activeView === 'generate' ? 'text-blue-600' : 'text-slate-600'}`}
+            >
+              Content Gen
+            </button>
           </div>
         )}
       </header>
@@ -383,27 +524,32 @@ export default function DashboardPage() {
         <div className="mb-12 flex flex-col md:flex-row justify-between md:items-end gap-6 border-b border-slate-200 pb-8">
           <div>
             <h1 className="text-4xl md:text-6xl font-display font-bold text-slate-900 mb-2 tracking-tight">
-              {activeView === 'dashboard' ? 'Overview' : 'Archives'}
+              {activeView === 'dashboard' ? 'Overview' : activeView === 'history' ? 'Archives' : 'Content Generator'}
             </h1>
             <p className="text-lg text-slate-600 max-w-2xl leading-relaxed">
               {activeView === 'dashboard' 
                 ? 'Real-time property intelligence and extraction engine.' 
-                : 'Complete historical record of all processed property data.'}
+                : activeView === 'history'
+                ? 'Complete historical record of all processed property data.'
+                : 'Generate engaging marketing copy for your listings.'}
             </p>
           </div>
           <div className="flex gap-4">
-             {activeView === 'dashboard' && (
-                 <Button variant="outline" onClick={() => setSessionStartTime(new Date())} className="border-slate-200 hover:bg-slate-100 text-slate-600">
-                    <RefreshCw className="h-4 w-4 mr-2" /> Reset Session
-                 </Button>
-              )}
+             <Button 
+                onClick={handleDownloadXLSX} 
+                disabled={displayListings.length === 0} 
+                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl px-6 py-2 shadow-lg shadow-emerald-600/20 transition-all hover:-translate-y-0.5"
+             >
+                <FileText className="h-4 w-4 mr-2" />
+                Export Excel
+             </Button>
              <Button 
                 onClick={handleDownloadCSV} 
                 disabled={displayListings.length === 0} 
                 className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl px-6 py-2 shadow-lg shadow-blue-600/20 transition-all hover:-translate-y-0.5"
              >
                 <Download className="h-4 w-4 mr-2" />
-                Export Data
+                Export CSV
              </Button>
           </div>
         </div>
@@ -451,7 +597,17 @@ export default function DashboardPage() {
                 
                 <div className="flex justify-between items-center">
                    <div className="text-sm font-medium text-blue-600">
-                      {/* Placeholder for status text if needed */}
+                        <input
+                          type="file"
+                          ref={fileInputRef}
+                          onChange={handleFileChange}
+                          className="hidden"
+                          accept=".xlsx"
+                        />
+                        <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="border-slate-200 hover:bg-slate-100 text-slate-600">
+                          <FileUp className="h-4 w-4 mr-2" />
+                          Import Excel
+                        </Button>
                    </div>
                    <div className="flex gap-4">
                       <Button variant="ghost" onClick={handlePurge} className="text-red-500 hover:text-red-700 hover:bg-red-50">Stop All</Button>
@@ -544,19 +700,8 @@ export default function DashboardPage() {
 
               </div>
             </div>
-
-            {/* Recent Results */}
-            <div>
-              <h3 className="text-xl font-bold font-display text-slate-900 mb-6 flex items-center gap-3">
-                 Session Results
-                 <span className="text-xs font-sans font-normal text-slate-400 bg-slate-100 px-2 py-1 rounded-full">
-                    {sessionListings.length} Items
-                 </span>
-              </h3>
-              <ListingsTable data={sessionListings} />
-            </div>
           </div>
-        ) : (
+        ) : activeView === 'history' ? (
           <div className="bg-white rounded-2xl border border-slate-100 shadow-lg p-8">
              <div className="flex justify-between items-center mb-8">
                 <h2 className="text-2xl font-bold font-display text-slate-900">Full History</h2>
@@ -565,6 +710,87 @@ export default function DashboardPage() {
                 </Button>
              </div>
              <ListingsTable data={listings} />
+          </div>
+        ) : (
+          <div className="space-y-12">
+            {/* Generator Input */}
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-lg p-8 md:p-10 relative overflow-hidden">
+               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 to-pink-400"></div>
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 bg-purple-50 rounded-lg">
+                    <Wand2 className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold font-display text-slate-900">AI Content Generator</h2>
+                    <p className="text-slate-500">Generate copy for the {listings.length} listings in the current session.</p>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <textarea
+                    className="w-full min-h-[100px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all resize-y"
+                    value={generationInstruction}
+                    onChange={(e) => setGenerationInstruction(e.target.value)}
+                    placeholder="e.g., Follow up with the owner for interest to sell or rent..."
+                    disabled={isGenerating}
+                  />
+                  <div className="flex justify-end">
+                    <Button 
+                      onClick={handleGenerate} 
+                      disabled={isGenerating || listings.length === 0}
+                      className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-6 rounded-xl font-semibold text-lg shadow-xl shadow-purple-600/10 transition-all hover:scale-105"
+                    >
+                      {isGenerating ? <Loader2 className="animate-spin" /> : "Generate"}
+                    </Button>
+                  </div>
+                </div>
+            </div>
+
+            {/* Generation Results */}
+            {(isGenerating || generatedContent.length > 0) && (
+              <div className="space-y-8">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-xl font-bold font-display text-slate-900 flex items-center gap-3">
+                    <Sparkles className="h-5 w-5 text-purple-500" />
+                    Generated Content
+                  </h3>
+                  <Button 
+                    onClick={handleDownloadContentXLSX} 
+                    disabled={isGenerating || generatedContent.filter(c => (c as any).status === 'completed').length === 0}
+                    variant="outline"
+                    className="border-emerald-200 hover:bg-emerald-100 text-emerald-600"
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    Export Content
+                  </Button>
+                </div>
+                {listings.map(listing => {
+                    const content = generatedContent.find(c => c.id === listing.id) as any;
+                    if (!content) return null;
+                    return (
+                        <div key={listing.id} className="bg-white rounded-2xl border border-slate-100 shadow-lg p-8">
+                          <div className="flex justify-between items-start">
+                            <h4 className="font-bold text-blue-600 font-display text-lg mb-2 flex-1">{listing.listing_title || 'Untitled'}</h4>
+                            <div className="flex items-center gap-2">
+                                {content.status === 'generating' && (
+                                  <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                                )}
+                                <span className={cn(
+                                  "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm",
+                                  content.status === 'completed' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 
+                                  content.status === 'failed' ? 'bg-red-100 text-red-700 border border-red-200' : 
+                                  'bg-blue-50 text-blue-700 border border-blue-100'
+                                )}>
+                                  {content.status}
+                                </span>
+                            </div>
+                          </div>
+                          <div className="prose prose-sm max-w-none text-slate-700 whitespace-pre-wrap mt-2">{content.generated_text}</div>
+                        </div>
+                    )
+                })}
+              </div>
+            )}
           </div>
         )}
       </main>

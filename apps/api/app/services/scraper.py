@@ -157,6 +157,9 @@ FIELD_NAMES = [
     "floor_range",
     "phone_number",
     "description",
+    "tenure",
+    "furnishing",
+    "completion_year",
 ]
 
 def empty_record(url: str) -> dict:
@@ -294,6 +297,9 @@ Here is the page content (after scrolling and clicking 'show more' and 'Show con
             "floor_range": {"type": ["string", "null"]},
             "phone_number": {"type": ["string", "null"]},
             "description": {"type": ["string", "null"]},
+            "tenure": {"type": ["string", "null"]},
+            "furnishing": {"type": ["string", "null"]},
+            "completion_year": {"type": ["number", "null"]},
         },
         "required": ["url"],
     }
@@ -336,7 +342,7 @@ Here is the page content (after scrolling and clicking 'show more' and 'Show con
                 else:
                     val = data.get(k, None)
                     # Helper to clean numeric fields if they come as strings
-                    if k in ["price", "sq_ft", "bedrooms", "bathrooms", "carpark"] and isinstance(val, str):
+                    if k in ["price", "sq_ft", "bedrooms", "bathrooms", "carpark", "completion_year"] and isinstance(val, str):
                         # Remove everything except digits and dots
                         val_clean = re.sub(r"[^\d.]", "", val)
                         try:
@@ -432,3 +438,33 @@ async def scrape_and_extract_listing(url: str) -> dict:
     except Exception as e:
         logger.error("scraper.system_error", url=url, error=str(e))
         return {"url": url, "error": str(e)}
+
+async def generate_listing_content(listing_data: dict, instruction: str) -> str:
+    """
+    Generate content for a listing using Gemini.
+    """
+    try:
+        client = configure_gemini_client()
+        
+        prompt = f"""
+You are a professional real estate copywriter.
+Instruction: {instruction}
+
+Listing Details:
+{json.dumps(listing_data, indent=2)}
+
+Write a compelling description or content based on the instruction.
+Keep it under 1000 words.
+Do not include any preamble or markdown code blocks (unless requested).
+Just return the text.
+"""
+        
+        response = client.models.generate_content(
+            model=GEMINI_MODEL,
+            contents=prompt,
+        )
+        
+        return (response.text or "").strip()
+    except Exception as e:
+        logger.error("gemini.generate_error", error=str(e))
+        return f"Error generating content: {str(e)}"

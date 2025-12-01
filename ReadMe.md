@@ -8,12 +8,12 @@ This project follows the **Aelion Systems Engineering Playbook**, emphasizing de
 
 ## 🌟 Key Features
 
-*   **AI-Powered Extraction**: Utilizes **Google Gemini AI** (via `gemini-2.5-flash-lite`) to intelligently parse complex and unstructured HTML content from property listings into standardized JSON data.
-*   **Automated Scraping**: Features a robust **Crawl4AI** (Playwright-based) scraping engine capable of navigating dynamic websites, handling user interactions (like clicking "Show Phone Number"), and managing headless browser sessions via Selenium Grid.
-*   **Real-time Processing**: Implements a high-performance asynchronous task queue architecture using **Arq** and **Redis** to handle scraping and data processing tasks efficiently in the background without blocking the main API.
-*   **Interactive Dashboard**: Offers a modern, user-friendly web interface built with **Next.js 16**, **React 19**, **Vite**, and **Tailwind CSS v4**. It allows for submitting URLs, monitoring extraction progress in real-time, and analyzing historical data.
-*   **Scalable Architecture**: Built on a microservices architecture with Docker, separating concerns between the API, workers, database, and frontend for maximum scalability and maintainability.
-*   **Data Export**: Allows users to easily export processed data into CSV format for further analysis in external tools.
+*   **AI-Powered Extraction & Content Generation**: Utilizes **Google Gemini AI** to not only parse unstructured HTML into standardized JSON but also to generate engaging marketing copy for listings.
+*   **Automated Scraping**: Employs a robust **Crawl4AI** (Playwright-based) scraping engine that navigates dynamic websites, handles interactions like clicking "Show Phone Number," and manages headless browser sessions.
+*   **Real-time Processing**: Features a high-performance asynchronous task queue using **Arq** and **Redis**, allowing for efficient background processing of scraping and content generation tasks without blocking the API.
+*   **Interactive Dashboard**: A modern web interface built with **Next.js 16**, **React 19**, and **Tailwind CSS v4**, providing real-time progress monitoring for both extraction and content generation.
+*   **Scalable Architecture**: A microservices-based system orchestrated with Docker, ensuring separation of concerns for scalability and maintainability.
+*   **Flexible Data Export**: Enables users to export processed data and generated content into both **CSV and Excel** formats for seamless integration with external tools.
 
 ---
 
@@ -123,12 +123,25 @@ ListingLens is composed of several decoupled services orchestrated via Docker Co
     ```
 
 2.  **Configure Environment**
-    Create a `.env` file in the `infra/` directory (or use the helper script below) and add your Gemini API key:
+    Create a `.env` file in the `infra/` directory for local development:
     ```env
     GEMINI_API_KEY=your_api_key_here
     ```
+    Once you have created the `.env` file, run the following command to create an encrypted version of it:
+    ```bash
+    python3 infra/encrypt.py
+    ```
 
-3.  **Run the Start Script (Recommended)**
+3.  **Configure GitHub Secrets for CI/CD**
+    For the CI/CD pipeline to work, you must add your `ENV_PASSPHRASE` as a secret in your GitHub repository:
+    1.  Go to your repository on GitHub.
+    2.  Navigate to **Settings** > **Secrets and variables** > **Actions**.
+    3.  Click **New repository secret**.
+    4.  Name the secret `ENV_PASSPHRASE`.
+    5.  Paste the passphrase you used to encrypt the `.env` file into the value field.
+    6.  Click **Add secret**.
+
+4.  **Run the Start Script (Recommended)**
     This script automates the setup process, checks for Docker, and starts the services.
     ```bash
     infra/start.sh

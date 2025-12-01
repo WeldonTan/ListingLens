@@ -22,7 +22,9 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-hook-form": "^7.66.1",
+    "read-excel-file": "^6.0.1",
     "tailwind-merge": "^3.4.0",
+    "xlsx": "^0.18.5",
     "zod": "^4.1.12"
   },
   "devDependencies": {

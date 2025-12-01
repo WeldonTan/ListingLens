@@ -14,6 +14,11 @@ class ListingService:
     @staticmethod
     async def get_listing(db: AsyncSession, id: int) -> Optional[Listing]:
         return await db.get(Listing, id)
+    
+    @staticmethod
+    async def get_listings_by_ids(db: AsyncSession, ids: List[int]) -> List[Listing]:
+        result = await db.execute(select(Listing).filter(Listing.id.in_(ids)))
+        return result.scalars().all()
 
     @staticmethod
     async def create_or_update_listing(db: AsyncSession, data: dict) -> Listing:
@@ -36,6 +41,9 @@ class ListingService:
             "floor_range": data.get("floor_range"),
             "phone_number": data.get("phone_number"),
             "description": data.get("description"),
+            "tenure": data.get("tenure"),
+            "furnishing": data.get("furnishing"),
+            "completion_year": data.get("completion_year"),
         }
 
         if existing_listing:

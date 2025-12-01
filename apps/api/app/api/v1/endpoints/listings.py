@@ -1,12 +1,15 @@
+import asyncio
 from typing import Any, List
 from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api import deps
 from app.db.session import get_db
 from arq.jobs import Job
-from app.schemas.listing import Listing as ListingSchema, ListingScrapeRequest
+from app.schemas.listing import Listing as ListingSchema, ListingScrapeRequest, ListingGenerateRequest
 from app.services.listing_service import ListingService
+from app.services.scraper import generate_listing_content
 
 router = APIRouter()
 
@@ -134,3 +137,25 @@ async def delete_all_listings(
     """
     await ListingService.delete_all_listings(db)
     return {"message": "All listings deleted successfully"}
+
+@router.post("/generate-copy", status_code=200)
+async def generate_copy(
+    req: ListingGenerateRequest,
+    db: AsyncSession = Depends(get_db),
+) -> Any:
+    """
+    Generate copy for a list of listings.
+    """
+    listings = await ListingService.get_listings_by_ids(db, req.listing_ids)
+    if not listings:
+        raise HTTPException(status_code=404, detail="No listings found for the given IDs")
+
+    async def generate_for_listing(listing):
+        listing_data = jsonable_encoder(ListingSchema.from_orm(listing))
+        generated_text = await generate_listing_content(listing_data, req.instruction)
+        return {"id": listing.id, "generated_text": generated_text}
+
+    tasks = [generate_for_listing(listing) for listing in listings]
+    results = await asyncio.gather(*tasks)
+    
+    return results

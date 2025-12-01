@@ -23,5 +23,9 @@ COPY . .
 # Expose port
 EXPOSE 8000
 
+# Set build-time argument and environment variable for Gemini API Key
+ARG GEMINI_API_KEY
+ENV GEMINI_API_KEY=${GEMINI_API_KEY}
+
 # Command to run the application
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

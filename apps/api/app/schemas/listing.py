@@ -17,6 +17,9 @@ class ListingBase(BaseModel):
     floor_range: Optional[str] = None
     phone_number: Optional[str] = None
     description: Optional[str] = None
+    tenure: Optional[str] = None
+    furnishing: Optional[str] = None
+    completion_year: Optional[int] = None
 
 class ListingCreate(ListingBase):
     pass
@@ -37,3 +40,7 @@ class Listing(ListingInDBBase):
 
 class ListingScrapeRequest(BaseModel):
     urls: list[str]
+
+class ListingGenerateRequest(BaseModel):
+    listing_ids: list[int]
+    instruction: str
