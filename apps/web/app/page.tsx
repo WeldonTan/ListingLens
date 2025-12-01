@@ -117,8 +117,8 @@ export default function DashboardPage() {
     if (listings.length === 0 || !generationInstruction.trim()) return;
 
     setIsGenerating(true);
-    const initialContent: GeneratedContent[] = listings.map(l => ({ id: l.id, generated_text: "Generating...", status: "generating" }));
-    setGeneratedContent(initialContent);
+    const initialContent = listings.map(l => ({ id: l.id, generated_text: "Generating...", status: "generating" }));
+    setGeneratedContent(initialContent as any);
 
     const generationPromises = listings.map(listing =>
       api.post("/listings/generate-copy", {
@@ -140,7 +140,7 @@ export default function DashboardPage() {
     setIsGenerating(false);
   };
 
-  const fetchListings = async () => { // Removed unused 'silent' parameter
+  const fetchListings = async () => {
     try {
       const response = await api.get("/listings/")
       setListings(response.data)
@@ -219,7 +219,7 @@ export default function DashboardPage() {
         setTasks(prev => prev.map(t => {
           if (t.taskId.startsWith('temp-')) return t 
           
-          const data: { status: string, result?: ScrapeResult } = statusData[t.taskId]
+          const data = statusData[t.taskId]
           if (!data) return t
           
           // Check for error in result even if status is complete
@@ -773,7 +773,7 @@ export default function DashboardPage() {
                   </Button>
                 </div>
                 {listings.map(listing => {
-                    const content = generatedContent.find(c => c.id === listing.id);
+                    const content = generatedContent.find(c => c.id === listing.id) as any;
                     if (!content) return null;
                     return (
                         <div key={listing.id} className="bg-white rounded-2xl border border-slate-100 shadow-lg p-8">
