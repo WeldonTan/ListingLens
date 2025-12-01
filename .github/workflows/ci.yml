@@ -23,7 +23,7 @@ jobs:
         cache: 'pip'
 
     - name: Decrypt .env file
-      run: openssl enc -d -aes-256-cbc -in infra/.env.encrypted -out infra/.env -k ${{ secrets.ENV_PASSPHRASE }}
+      run: openssl enc -d -aes-256-cbc -in ../../infra/.env.encrypted -out ../../infra/.env -k ${{ secrets.ENV_PASSPHRASE }}
 
     - name: Install dependencies
       run: |
@@ -35,9 +35,9 @@ jobs:
       run: |
         # Export env vars from .env file
         set -a
-        source infra/.env
+        source ../../infra/.env
         set +a
-        pytest apps/api/tests/
+        pytest tests/
 
   frontend-build:
     runs-on: ubuntu-latest
