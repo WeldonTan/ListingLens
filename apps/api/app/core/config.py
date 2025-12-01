@@ -57,6 +57,16 @@ class Settings(BaseSettings):
     WORKER_JOB_TIMEOUT: int = 300
     WORKER_KEEP_RESULT: int = 3600
 
-    model_config = SettingsConfigDict(env_file=".env", case_sensitive=True, extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=True,
+        extra="ignore"
+    )
+    
+    # Fallback/Explicit config for ensuring extra fields are ignored
+    class Config:
+        extra = "ignore"
+        case_sensitive = True
+        env_file = ".env"
 
 settings = Settings()
