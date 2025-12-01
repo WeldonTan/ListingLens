@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { api } from "@/lib/api"
 import { 
-  LayoutDashboard, 
   Database, 
   Download, 
   RefreshCw, 
@@ -54,13 +53,24 @@ interface Listing {
 interface GeneratedContent {
   id: number
   generated_text: string
+  status: string // Added status field
+}
+
+interface ScrapeResult {
+  listing_title?: string
+  project_name?: string
+  price?: number
+  sq_ft?: string
+  area?: string
+  phone_number?: string
+  error?: string
 }
 
 interface ScrapeTask {
   url: string
   taskId: string
   status: string
-  result?: any
+  result?: ScrapeResult // Changed type from any
 }
 
 export default function DashboardPage() {
@@ -69,7 +79,6 @@ export default function DashboardPage() {
   const [urls, setUrls] = useState("")
   const [loading, setLoading] = useState(false)
   const [tasks, setTasks] = useState<ScrapeTask[]>([])
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date())
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [generationInstruction, setGenerationInstruction] = useState("Write a brief, engaging property description for a social media post.")
   const [generatedContent, setGeneratedContent] = useState<GeneratedContent[]>([])
@@ -108,8 +117,8 @@ export default function DashboardPage() {
     if (listings.length === 0 || !generationInstruction.trim()) return;
 
     setIsGenerating(true);
-    const initialContent = listings.map(l => ({ id: l.id, generated_text: "Generating...", status: "generating" }));
-    setGeneratedContent(initialContent as any);
+    const initialContent: GeneratedContent[] = listings.map(l => ({ id: l.id, generated_text: "Generating...", status: "generating" }));
+    setGeneratedContent(initialContent);
 
     const generationPromises = listings.map(listing =>
       api.post("/listings/generate-copy", {
@@ -131,11 +140,10 @@ export default function DashboardPage() {
     setIsGenerating(false);
   };
 
-  const fetchListings = async (silent = false) => {
+  const fetchListings = async () => { // Removed unused 'silent' parameter
     try {
       const response = await api.get("/listings/")
       setListings(response.data)
-      setLastUpdated(new Date())
     } catch (error) {
       console.error("Failed to fetch listings", error)
     }
@@ -211,7 +219,7 @@ export default function DashboardPage() {
         setTasks(prev => prev.map(t => {
           if (t.taskId.startsWith('temp-')) return t 
           
-          const data = statusData[t.taskId]
+          const data: { status: string, result?: ScrapeResult } = statusData[t.taskId]
           if (!data) return t
           
           // Check for error in result even if status is complete
@@ -232,7 +240,7 @@ export default function DashboardPage() {
         }))
 
         if (shouldRefreshListings) {
-          fetchListings(true)
+          fetchListings()
         }
 
       } catch (error) {
@@ -267,7 +275,7 @@ export default function DashboardPage() {
     if (!confirm("Are you sure you want to delete this listing?")) return
     try {
       await api.delete(`/listings/${id}`)
-      fetchListings(true)
+      fetchListings()
     } catch (error) {
       console.error("Failed to delete listing", error)
     }
@@ -277,7 +285,7 @@ export default function DashboardPage() {
     if (!confirm("Are you sure you want to delete ALL history? This cannot be undone.")) return
     try {
       await api.delete("/listings/")
-      fetchListings(true)
+      fetchListings()
     } catch (error) {
       console.error("Failed to clear history", error)
     }
@@ -765,7 +773,7 @@ export default function DashboardPage() {
                   </Button>
                 </div>
                 {listings.map(listing => {
-                    const content = generatedContent.find(c => c.id === listing.id) as any;
+                    const content = generatedContent.find(c => c.id === listing.id);
                     if (!content) return null;
                     return (
                         <div key={listing.id} className="bg-white rounded-2xl border border-slate-100 shadow-lg p-8">
