@@ -99,7 +99,7 @@ jobs:
       run: python infra/decrypt.py
 
     - name: Start services with Docker Compose
-      run: docker-compose -f infra/docker-compose.yml up -d
+      run: docker compose -f infra/docker-compose.yml up -d
       
     - name: Wait for API to be ready
       run: |
@@ -114,7 +114,7 @@ jobs:
       run: python apps/api/load_test.py
 
     - name: Stop services
-      run: docker-compose -f infra/docker-compose.yml down
+      run: docker compose -f infra/docker-compose.yml down
 
   docker-build:
     needs: [backend-test, frontend-build, e2e-load-test] # Add e2e-load-test as a dependency
