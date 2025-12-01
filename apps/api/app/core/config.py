@@ -57,6 +57,6 @@ class Settings(BaseSettings):
     WORKER_JOB_TIMEOUT: int = 300
     WORKER_KEEP_RESULT: int = 3600
 
-    model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)
+    model_config = SettingsConfigDict(env_file=".env", case_sensitive=True, extra="ignore")
 
 settings = Settings()
