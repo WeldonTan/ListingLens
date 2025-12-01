@@ -148,7 +148,7 @@ ListingLens is composed of several decoupled services orchestrated via Docker Co
     ```
     *Note: If you encounter permission issues, run `chmod +x infra/start.sh` first.*
 
-4.  **Manual Start (Alternative)**
+5.  **Manual Start (Alternative)**
     If you prefer running Docker commands directly:
     ```bash
     cd infra
@@ -171,6 +171,14 @@ uvicorn app.main:app --reload
 To run the worker manually:
 ```bash
 arq app.worker.WorkerSettings
+```
+
+### Running Tests
+To run the backend tests:
+```bash
+cd apps/api
+pip install pytest pytest-asyncio httpx
+pytest tests/
 ```
 
 ### Frontend Development
