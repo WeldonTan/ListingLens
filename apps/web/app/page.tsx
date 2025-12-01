@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from "react"
 import readXlsxFile from 'read-excel-file'
 import * as XLSX from 'xlsx'
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { api } from "@/lib/api"
 import { 
   Database, 
@@ -117,8 +116,8 @@ export default function DashboardPage() {
     if (listings.length === 0 || !generationInstruction.trim()) return;
 
     setIsGenerating(true);
-    const initialContent = listings.map(l => ({ id: l.id, generated_text: "Generating...", status: "generating" }));
-    setGeneratedContent(initialContent as any);
+    const initialContent: GeneratedContent[] = listings.map(l => ({ id: l.id, generated_text: "Generating...", status: "generating" }));
+    setGeneratedContent(initialContent);
 
     const generationPromises = listings.map(listing =>
       api.post("/listings/generate-copy", {
@@ -764,7 +763,7 @@ export default function DashboardPage() {
                   </h3>
                   <Button 
                     onClick={handleDownloadContentXLSX} 
-                    disabled={isGenerating || generatedContent.filter(c => (c as any).status === 'completed').length === 0}
+                    disabled={isGenerating || generatedContent.filter(c => c.status === 'completed').length === 0}
                     variant="outline"
                     className="border-emerald-200 hover:bg-emerald-100 text-emerald-600"
                   >
@@ -773,7 +772,7 @@ export default function DashboardPage() {
                   </Button>
                 </div>
                 {listings.map(listing => {
-                    const content = generatedContent.find(c => c.id === listing.id) as any;
+                    const content = generatedContent.find(c => c.id === listing.id);
                     if (!content) return null;
                     return (
                         <div key={listing.id} className="bg-white rounded-2xl border border-slate-100 shadow-lg p-8">
