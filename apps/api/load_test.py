@@ -3,6 +3,7 @@ import aiohttp
 import time
 import json
 import random
+import sys # Import sys for exit codes
 
 API_URL = "http://localhost:8000/api/v1"
 
@@ -45,6 +46,7 @@ async def main():
         
         if not task_ids:
             print("No task IDs received.")
+            sys.exit(1) # Exit with error code
             return
 
         print(f"Submitted {len(task_ids)} tasks. Monitoring progress...")
@@ -74,10 +76,12 @@ async def main():
             
             if complete == len(task_ids):
                 print("All tasks completed!")
+                sys.exit(0) # Exit with success code
                 break
             
             if elapsed > 300: # 5 minutes timeout
                 print("Timeout reached.")
+                sys.exit(1) # Exit with error code
                 break
                 
             await asyncio.sleep(2)

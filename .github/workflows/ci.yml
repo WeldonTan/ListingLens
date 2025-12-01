@@ -28,9 +28,9 @@ jobs:
         pip install -r requirements.txt
         pip install pytest httpx
 
-    # - name: Run Tests
-    #   run: |
-    #     pytest
+    - name: Run Backend Unit/Integration Tests
+      run: |
+        pytest apps/api/tests/
 
   frontend-build:
     runs-on: ubuntu-latest
@@ -57,8 +57,51 @@ jobs:
     - name: Lint
       run: npm run lint
 
-  docker-build:
+    - name: Run Frontend Tests
+      run: |
+        echo "No dedicated frontend tests found in package.json. Running lint as placeholder."
+        npm run lint # Placeholder: Replace with actual frontend tests (e.g., `npm test` or `npm run cypress`) when available.
+
+  e2e-load-test:
     needs: [backend-test, frontend-build]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install Python dependencies for load test
+      run: |
+        python -m pip install --upgrade pip
+        pip install aiohttp
+
+    - name: Decrypt .env file for docker-compose
+      run: openssl enc -d -aes-256-cbc -in infra/.env.encrypted -out infra/.env -k ${{ secrets.ENV_PASSPHRASE }}
+
+    - name: Start services with Docker Compose
+      run: docker-compose -f infra/docker-compose.yml up -d
+      
+    - name: Wait for API to be ready
+      run: |
+        for i in $(seq 1 10); do
+          curl -s http://localhost:8000/api/v1/health && break
+          echo "Waiting for API... ($i/10)"
+          sleep 5
+        done
+        curl http://localhost:8000/api/v1/health
+
+    - name: Run Load Test
+      run: python apps/api/load_test.py
+
+    - name: Stop services
+      run: docker-compose -f infra/docker-compose.yml down
+
+  docker-build:
+    needs: [backend-test, frontend-build, e2e-load-test] # Add e2e-load-test as a dependency
     runs-on: ubuntu-latest
     
     steps:
