@@ -2,8 +2,6 @@
 
 **ListingLens** is an enterprise-grade property intelligence platform designed to transform unstructured real estate data into actionable insights. By leveraging advanced web scraping technologies and state-of-the-art AI, ListingLens automates the extraction, processing, and analysis of property listings, empowering users with a structured and queryable dataset.
 
-This project follows the **Aelion Systems Engineering Playbook**, emphasizing defensible, auditable, and safe-by-default systems.
-
 ---
 
 ## 🌟 Key Features
@@ -27,7 +25,7 @@ ListingLens is composed of several decoupled services orchestrated via Docker Co
 *   **Features**:
     *   **Dashboard**: Real-time view of current scraping sessions with status updates.
     *   **History**: Archive of all previously scraped properties with search and filtering.
-    *   **Design System**: Implements Aelion Systems design guidelines with **Michroma** (headings), **Inter** (body) fonts, and a technical slate/blue aesthetic.
+    *   **Design System**: Implements a modern design system with **Michroma** (headings), **Inter** (body) fonts, and a technical slate/blue aesthetic.
 
 ### 2. Backend API Service (`backend`)
 *   **Tech Stack**: FastAPI, Python 3.11+, SQLAlchemy 2.0 (Async), Pydantic v2.
@@ -97,8 +95,7 @@ ListingLens is composed of several decoupled services orchestrated via Docker Co
 │   └── .env
 ├── documentation/      # Detailed Documentation
 │   ├── SYSTEM_OVERVIEW.md
-│   ├── UI_UX_Design_System.md
-│   └── aelion_engineering_playbook.md
+│   └── UI_UX_Design_System.md
 └── ReadMe.md           # This file
 ```
 
