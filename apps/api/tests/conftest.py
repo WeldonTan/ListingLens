@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from app.db.base import Base
 from app.main import app
 from app.core.config import settings
+from app.db.session import get_db
 
 # Setup for testing database
 # Use an in-memory SQLite database for tests
@@ -26,7 +27,7 @@ async def db_session_fixture():
 @pytest_asyncio.fixture(name="client")
 async def client_fixture(db_session: AsyncSession):
     # Override get_db dependency for tests
-    app.dependency_overrides[settings.get_db] = lambda: db_session
+    app.dependency_overrides[get_db] = lambda: db_session
     
     # Mock Arq pool for tests
     class MockArqPool:
