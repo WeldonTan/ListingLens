@@ -1,4 +1,5 @@
 import pytest
+import pytest_asyncio
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
@@ -13,7 +14,7 @@ DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 engine = create_async_engine(DATABASE_URL, echo=False)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, class_=AsyncSession)
 
-@pytest.fixture(name="db_session")
+@pytest_asyncio.fixture(name="db_session")
 async def db_session_fixture():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
@@ -22,7 +23,7 @@ async def db_session_fixture():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
 
-@pytest.fixture(name="client")
+@pytest_asyncio.fixture(name="client")
 async def client_fixture(db_session: AsyncSession):
     # Override get_db dependency for tests
     app.dependency_overrides[settings.get_db] = lambda: db_session
