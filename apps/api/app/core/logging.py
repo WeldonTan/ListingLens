@@ -1,6 +1,10 @@
-import sys
-import structlog
 import logging
+import sys
+
+import structlog
+
+from app.core.config import settings
+
 
 def setup_logging():
     # Basic config for standard logging to allow structlog to handle it
@@ -10,8 +14,15 @@ def setup_logging():
         level=logging.INFO,
     )
 
+    renderer = (
+        structlog.processors.JSONRenderer()
+        if settings.LOG_JSON
+        else structlog.dev.ConsoleRenderer()
+    )
+
     structlog.configure(
         processors=[
+            structlog.contextvars.merge_contextvars,
             structlog.stdlib.filter_by_level,
             structlog.stdlib.add_logger_name,
             structlog.stdlib.add_log_level,
@@ -19,9 +30,7 @@ def setup_logging():
             structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M:%S"),
             structlog.processors.StackInfoRenderer(),
             structlog.processors.format_exc_info,
-            # Use ConsoleRenderer for development (readable colors)
-            # Switch to JSONRenderer for production if needed
-            structlog.dev.ConsoleRenderer()
+            renderer,
         ],
         context_class=dict,
         logger_factory=structlog.stdlib.LoggerFactory(),

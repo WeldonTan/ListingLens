@@ -39,7 +39,7 @@ class Listing(ListingInDBBase):
     pass
 
 class ListingScrapeRequest(BaseModel):
-    urls: list[str]
+    urls: list[HttpUrl]
 
 class ListingGenerateRequest(BaseModel):
     listing_ids: list[int]

@@ -1,5 +1,5 @@
 from typing import List, Union
-from pydantic import AnyHttpUrl, field_validator
+from pydantic import AnyHttpUrl, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000"]'
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
+    BACKEND_CORS_ALLOW_CREDENTIALS: bool = False
+    ENVIRONMENT: str = "local"
+    LOG_JSON: bool = False
 
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")
     @classmethod
@@ -18,6 +21,12 @@ class Settings(BaseSettings):
         elif isinstance(v, (list, str)):
             return v
         raise ValueError(v)
+
+    @model_validator(mode="after")
+    def validate_cors_configuration(self):
+        if not self.BACKEND_CORS_ORIGINS:
+            raise ValueError("BACKEND_CORS_ORIGINS must not be empty for security reasons.")
+        return self
 
     # Database
     POSTGRES_SERVER: str
@@ -37,6 +46,13 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
+    # Abuse protections
+    RATE_LIMIT_SUBMISSION_CALLS: int = 10
+    RATE_LIMIT_STATUS_CALLS: int = 30
+    RATE_LIMIT_WINDOW_SECONDS: int = 60
+    MAX_SCRAPE_URLS_PER_REQUEST: int = 50
+    MAX_GENERATE_IDS_PER_REQUEST: int = 50
 
     # Redis
     REDIS_HOST: str
