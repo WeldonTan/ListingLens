@@ -138,6 +138,29 @@ ListingLens is composed of several decoupled services orchestrated via Docker Co
     5.  Paste the passphrase you used to encrypt the `.env` file into the value field.
     6.  Click **Add secret**.
 
+### Security & Access Controls
+
+*   **CORS allowlist is required:** Set `BACKEND_CORS_ORIGINS` to a comma-separated list of trusted origins (for example `http://localhost:3000,http://127.0.0.1:3000`). The API will refuse to start if this value is empty.
+*   **Credentials policy:** Set `BACKEND_CORS_ALLOW_CREDENTIALS=false` unless you explicitly need cookies/authorization headers across origins. Wildcard origins are blocked when credentials are enabled.
+*   **Environment hardening:** Set `ENVIRONMENT=production` in deployments to disable FastAPI docs in production and rely on the generated OpenAPI JSON instead.
+*   **Authenticated calls:** All listing and queue routes now require a valid bearer token from `/api/v1/login/access-token`. Destructive actions (delete, purge queue, cancel jobs) additionally require a superuser account.
+*   **Distributed rate limits:** Job submission and copy-generation endpoints are capped at 10 requests/minute per user; status checks are limited to 30 requests/minute per user. Limits are enforced via Redis so they remain consistent across replicas (configure with `RATE_LIMIT_*` settings).
+*   **Input safety rails:** Scrape requests validate HTTPS/HTTP URLs, deduplicate entries, and enforce a max of 50 URLs per call (`MAX_SCRAPE_URLS_PER_REQUEST`). Copy-generation requests cap listing IDs at 50 (`MAX_GENERATE_IDS_PER_REQUEST`).
+*   **Security headers & request tracing:** Responses include HSTS, CSP, permissions, and cache-control headers. Each request receives an `X-Request-ID` for cross-service correlation and structured latency logging.
+*   **Health endpoints:** `/api/v1/health` offers a liveness check; `/api/v1/health/full` validates connectivity to Postgres and Redis for readiness probes.
+*   **Structured logging:** Set `LOG_JSON=true` in production to emit JSON logs enriched with `request_id`, status codes, and timing for centralized ingestion.
+
+Example token retrieval and authenticated request:
+
+```bash
+RESPONSE=$(curl -s -X POST "http://localhost:8000/api/v1/login/access-token" \
+  -d 'username=admin@example.com' -d 'password=yourpassword' \
+  -H 'Content-Type: application/x-www-form-urlencoded')
+
+TOKEN="$(jq -r .access_token <<<"${RESPONSE}")"
+curl -H "Authorization: Bearer ${TOKEN}" "http://localhost:8000/api/v1/listings"
+```
+
 4.  **Run the Start Script (Recommended)**
     This script automates the setup process, checks for Docker, and starts the services.
     ```bash
